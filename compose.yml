@@ -2,12 +2,12 @@ version: "3"
 
 services:
   app:
-    image: node:19
+    image: node:20
     container_name: formulix-app
     command: npm start
     working_dir: /app
     ports:
-      - 5173:5173
+      - 1111:5173
     volumes:
       - .:/app
       - /app/node_modules
