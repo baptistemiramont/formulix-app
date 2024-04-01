@@ -1,0 +1,18 @@
+@font-face {
+	font-family: "League Spartan";
+	src:
+		url("../fonts/LeagueSpartan/LeagueSpartan.woff2") format("woff2"),
+		url("../fonts/LeagueSpartan/LeagueSpartan.woff") format("woff"),
+		url("../fonts/LeagueSpartan/LeagueSpartan.ttf") format("truetype");
+	font-weight: 200 900;
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Quicksand";
+	src: url("../fonts/Quicksand/Quicksand.ttf") format("truetype");
+	font-weight: 300 700;
+	font-display: swap;
+	font-style: normal;
+}
