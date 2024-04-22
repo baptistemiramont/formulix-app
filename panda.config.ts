@@ -20,7 +20,7 @@ export const textStyles = defineTextStyles({
 		value: {
 			color: "neutral.100",
 			fontFamily: "League Spartan",
-			lineHeight: "1.5",
+			lineHeight: "1.25",
 		},
 	},
 });
