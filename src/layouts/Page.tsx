@@ -1,7 +1,7 @@
 import { Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { css } from "../../styled-system/css";
 import { Header } from "./Header";
+import { Footer } from "./Footer";
 
 export const Page = () => {
 	const mainStyle = css({
@@ -28,8 +28,8 @@ export const Page = () => {
 			<Header />
 			<main className={mainStyle}>
 				<Outlet />
-				<TanStackRouterDevtools />
 			</main>
+			<Footer />
 		</>
 	);
 };

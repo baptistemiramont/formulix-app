@@ -31,6 +31,11 @@ export default defineConfig({
 	exclude: [],
 	theme: {
 		extend: {
+			tokens: {
+				colors: {
+					primary: { value: "#e10600 " },
+				},
+			},
 			textStyles,
 		},
 	},

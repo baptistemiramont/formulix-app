@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { css } from "../../styled-system/css/css";
 import { useMediaQuery } from "../hooks";
 import { Icon } from "@iconify/react";
@@ -28,10 +29,16 @@ export const Header = () => {
 	const ulStyle = css({
 		display: "grid",
 		gap: 4,
-		gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+		gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 		lg: {
 			display: "flex",
 			gap: 6,
+		},
+	});
+
+	const linkStyle = css({
+		"&:.active p": {
+			color: "primary",
 		},
 	});
 
@@ -55,12 +62,17 @@ export const Header = () => {
 	const logoTextStyle = css({
 		fontSize: "2xl",
 		fontWeight: 600,
-		fontFamily: "ClashGrotesk",
+		fontFamily: "League Spartan",
 	});
 
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
 
 	const links = [
+		{
+			href: "/",
+			icon: <Icon icon="mdi-home" className={iconStyle} />,
+			label: "Home",
+		},
 		{
 			href: "/drivers",
 			icon: <Icon icon="mdi-racing-helmet" className={iconStyle} />,
@@ -76,10 +88,10 @@ export const Header = () => {
 	const linksList = links.map((link) => {
 		return (
 			<li key={link.href}>
-				<a href={link.href}>
+				<Link to={link.href} className={linkStyle}>
 					{!isDesktop && link.icon}
 					<p className={labelStyle}>{link.label}</p>
-				</a>
+				</Link>
 			</li>
 		);
 	});
@@ -87,9 +99,9 @@ export const Header = () => {
 	return (
 		<header className={headerStyle}>
 			{isDesktop && (
-				<a href="/" className={logoTextStyle} title="Back to home page">
+				<Link to="/" className={logoTextStyle} title="Back to home page">
 					FMX
-				</a>
+				</Link>
 			)}
 			<nav>
 				<ul className={ulStyle}>{linksList}</ul>
