@@ -6,7 +6,11 @@ import { css } from "../../styled-system/css";
 import { Loader } from "@/components/Loader";
 
 export const Teams = () => {
-	const { data, isLoading, error } = useQuery({
+	const {
+		data: teams,
+		isLoading,
+		error,
+	} = useQuery({
 		queryKey: ["teams"],
 		queryFn: getTeams,
 	});
@@ -15,21 +19,36 @@ export const Teams = () => {
 
 	if (error) return "An error has occurred: " + error.message;
 
-	const { data: teamData } = data;
-
-	const teams = teamData.map((team: TeamType) => (
+	const teamsList = teams.map((team: TeamType) => (
 		<TeamCard key={team.id} team={team} />
 	));
+
+	const pageStyle = {
+		container: css({
+			paddingY: 12,
+			display: "grid",
+			gap: 6,
+		}),
+	};
 
 	const teamListStyle = css({
 		display: "grid",
 		gap: 6,
+		md: {
+			gridTemplateColumns: "repeat(2, 1fr)",
+		},
+		lg: {
+			gridTemplateColumns: "repeat(3, 1fr)",
+		},
+		xl: {
+			gridTemplateColumns: "repeat(4, 1fr)",
+		},
 	});
 
 	return (
-		<div>
+		<div className={pageStyle.container}>
 			<h1>Teams</h1>
-			<ul className={teamListStyle}>{teams}</ul>
+			<ul className={teamListStyle}>{teamsList}</ul>
 		</div>
 	);
 };

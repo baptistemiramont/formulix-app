@@ -1,10 +1,18 @@
+import { TeamType } from "@/types/team";
+
 export const getTeams = async () => {
 	try {
 		const response = await fetch(`${import.meta.env.VITE_API_URL}/teams`);
 
-		const data = await response.json();
+		const { data } = await response.json();
 
-		return data;
+		const teams = data.map((team: TeamType) => {
+			team.favicon = import.meta.env.VITE_SERVER_URL + team.favicon;
+
+			return team;
+		});
+
+		return teams;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			throw new Error(error.message);
@@ -16,7 +24,13 @@ export const getTeams = async () => {
 
 export const getTeam = async (id: number) => {
 	try {
-		return await fetch(`${import.meta.env.VITE_API_URL}/teams/${id}`);
+		const response = await fetch(`${import.meta.env.VITE_API_URL}/teams/${id}`);
+
+		const { data: team } = await response.json();
+
+		team.favicon = import.meta.env.VITE_SERVER_URL + team.favicon;
+
+		return team;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			throw new Error(error.message);
