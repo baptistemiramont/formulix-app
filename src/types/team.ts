@@ -1,5 +1,3 @@
-import { DriverType } from "./driver";
-
 export type TeamType = {
 	id: number;
 	name: string;
@@ -8,5 +6,4 @@ export type TeamType = {
 	worldChampionships: number;
 	firstTeamEntry: number;
 	favicon: string;
-	Drivers: DriverType[];
 };

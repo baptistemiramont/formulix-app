@@ -1,12 +1,27 @@
 import { TeamType } from "@/types/team";
+import { z } from "zod";
 
-export const getTeams = async () => {
+const teamSchema = z.object({
+	id: z.number(),
+	name: z.string(),
+	fullName: z.string(),
+	slug: z.string(),
+	worldChampionships: z.number(),
+	firstTeamEntry: z.number(),
+	favicon: z.string(),
+});
+
+export const getTeams = async (): Promise<TeamType[]> => {
 	try {
 		const response = await fetch(`${import.meta.env.VITE_API_URL}/teams`);
 
 		const { data } = await response.json();
 
-		const teams = data.map((team: TeamType) => team);
+		const { success, data: teams } = z.array(teamSchema).safeParse(data);
+
+		if (!success) {
+			throw new Error("Invalid data format");
+		}
 
 		return teams;
 	} catch (error: unknown) {
@@ -18,11 +33,17 @@ export const getTeams = async () => {
 	}
 };
 
-export const getTeam = async (id: number) => {
+export const getTeam = async (id: number): Promise<TeamType> => {
 	try {
 		const response = await fetch(`${import.meta.env.VITE_API_URL}/teams/${id}`);
 
-		const { data: team } = await response.json();
+		const { data } = await response.json();
+
+		const { success, data: team } = teamSchema.safeParse(data);
+
+		if (!success) {
+			throw new Error("Invalid data format");
+		}
 
 		return team;
 	} catch (error: unknown) {
