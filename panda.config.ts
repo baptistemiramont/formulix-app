@@ -10,6 +10,7 @@ export const textStyles = defineTextStyles({
 			fontSize: "md",
 			lineHeight: "1.5",
 			maxWidth: "75ch",
+			textWrap: "pretty",
 			lg: {
 				fontSize: "lg",
 			},
@@ -21,6 +22,7 @@ export const textStyles = defineTextStyles({
 			color: "neutral.100",
 			fontFamily: "League Spartan",
 			lineHeight: "1.25",
+			textWrap: "balance",
 		},
 	},
 });
