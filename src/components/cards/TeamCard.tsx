@@ -25,6 +25,7 @@ export const TeamCard = (props: Props) => {
 			display: "flex",
 			alignItems: "center",
 			height: "100%",
+			gap: 4,
 			lg: {
 				flexDirection: "column",
 			},

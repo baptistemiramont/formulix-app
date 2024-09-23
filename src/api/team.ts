@@ -6,11 +6,7 @@ export const getTeams = async () => {
 
 		const { data } = await response.json();
 
-		const teams = data.map((team: TeamType) => {
-			team.favicon = import.meta.env.VITE_SERVER_URL + team.favicon;
-
-			return team;
-		});
+		const teams = data.map((team: TeamType) => team);
 
 		return teams;
 	} catch (error: unknown) {
@@ -27,8 +23,6 @@ export const getTeam = async (id: number) => {
 		const response = await fetch(`${import.meta.env.VITE_API_URL}/teams/${id}`);
 
 		const { data: team } = await response.json();
-
-		team.favicon = import.meta.env.VITE_SERVER_URL + team.favicon;
 
 		return team;
 	} catch (error: unknown) {
