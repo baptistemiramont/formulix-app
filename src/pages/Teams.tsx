@@ -19,6 +19,8 @@ export const Teams = () => {
 
 	if (error) return "An error has occurred: " + error.message;
 
+	if (!teams) return "No teams found";
+
 	const teamsList = teams.map((team: TeamType) => (
 		<TeamCard key={team.id} team={team} />
 	));

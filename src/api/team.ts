@@ -1,4 +1,4 @@
-import { TeamType } from "@/types/team";
+import type { TeamType } from "@/types/team";
 import { z } from "zod";
 
 const teamSchema = z.object({
