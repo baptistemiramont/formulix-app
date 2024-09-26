@@ -22,19 +22,27 @@ export const DriverCard = (props: Props) => {
 		}),
 		link: css({
 			padding: 4,
-			display: "flex",
-			alignItems: "center",
+			display: "grid",
 			height: "100%",
+			textAlign: "center",
 			gap: 4,
 			lg: {
 				flexDirection: "column",
 			},
 		}),
+		imageContainer: css({
+			display: "grid",
+			justifyContent: "center",
+		}),
 		image: css({
 			minWidth: 50,
+			maxWidth: 200,
+			width: 100,
+			md: {
+				width: 150,
+			},
 			lg: {
 				width: "auto",
-				maxWidth: 150,
 			},
 		}),
 		title: css({
@@ -55,12 +63,12 @@ export const DriverCard = (props: Props) => {
 	return (
 		<li className={cardStyle.container}>
 			<Link to="/drivers/$id" params={{ id }} className={cardStyle.link}>
-				<div>
+				<div className={cardStyle.imageContainer}>
 					<img
 						className={cardStyle.image}
 						src={avatar}
 						alt={`${firstName} ${lastName}'s avatar`}
-						width="50"
+						width="100"
 						loading="lazy"
 					/>
 				</div>

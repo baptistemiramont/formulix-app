@@ -31,26 +31,23 @@ export const Drivers = () => {
 			display: "grid",
 			gap: 6,
 		}),
-	};
-
-	const teamListStyle = css({
-		display: "grid",
-		gap: 6,
-		md: {
+		teamListStyle: css({
+			display: "grid",
+			gap: 6,
 			gridTemplateColumns: "repeat(2, 1fr)",
-		},
-		lg: {
-			gridTemplateColumns: "repeat(3, 1fr)",
-		},
-		xl: {
-			gridTemplateColumns: "repeat(4, 1fr)",
-		},
-	});
+			lg: {
+				gridTemplateColumns: "repeat(3, 1fr)",
+			},
+			xl: {
+				gridTemplateColumns: "repeat(4, 1fr)",
+			},
+		}),
+	};
 
 	return (
 		<div className={pageStyle.container}>
 			<h1>Drivers</h1>
-			<ul className={teamListStyle}>{driversList}</ul>
+			<ul className={pageStyle.teamListStyle}>{driversList}</ul>
 		</div>
 	);
 };
