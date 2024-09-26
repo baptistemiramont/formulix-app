@@ -7,3 +7,10 @@ export type TeamType = {
 	firstTeamEntry: number;
 	favicon: string;
 };
+
+export type MinimalTeamType = {
+	id: number;
+	name: string;
+	favicon: string;
+	isCurrentTeam: boolean;
+};

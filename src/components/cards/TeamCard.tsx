@@ -1,15 +1,20 @@
-import type { TeamType } from "@/types/team";
+import type { MinimalTeamType, TeamType } from "@/types/team";
 import { css } from "../../../styled-system/css";
 import { Link } from "@tanstack/react-router";
 
 type Props = {
-	team: TeamType;
+	team: TeamType | MinimalTeamType;
 };
 
 export const TeamCard = (props: Props) => {
 	const {
-		team: { name, fullName, id, favicon },
+		team: { name, id, favicon },
 	} = props;
+
+	const isCurrentTeam =
+		"isCurrentTeam" in props.team ? props.team.isCurrentTeam : false;
+
+	// Styles
 
 	const cardStyle = {
 		container: css({
@@ -65,7 +70,7 @@ export const TeamCard = (props: Props) => {
 				</div>
 				<div>
 					<p className={cardStyle.title}>{name}</p>
-					<p className={cardStyle.subtitle}>{fullName}</p>
+					{isCurrentTeam && <p className={cardStyle.subtitle}>Current Team</p>}
 				</div>
 			</Link>
 		</li>
