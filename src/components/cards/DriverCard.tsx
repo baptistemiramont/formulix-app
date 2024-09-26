@@ -54,7 +54,7 @@ export const DriverCard = (props: Props) => {
 
 	return (
 		<li className={cardStyle.container}>
-			<Link to="/teams/$id" params={{ id }} className={cardStyle.link}>
+			<Link to="/drivers/$id" params={{ id }} className={cardStyle.link}>
 				<div>
 					<img
 						className={cardStyle.image}
