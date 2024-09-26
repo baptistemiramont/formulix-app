@@ -1,4 +1,5 @@
 import { css } from "../../styled-system/css";
+import { Button } from "../components/Button";
 
 export const Home = () => {
 	const heroSectionStyle = {
@@ -21,6 +22,20 @@ export const Home = () => {
 				fontSize: "6xl",
 			},
 		}),
+		subtitle: css({
+			fontSize: "xl",
+			lg: {
+				fontSize: "2xl",
+			},
+		}),
+		ctaContainer: css({
+			display: "flex",
+			gap: 4,
+			lg: {
+				gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+				gap: 6,
+			},
+		}),
 	};
 
 	return (
@@ -28,10 +43,14 @@ export const Home = () => {
 			<h1 className={heroSectionStyle.title}>
 				Follow your favourite teams and drivers !
 			</h1>
-			<p>
+			<p className={heroSectionStyle.subtitle}>
 				Discover over 70 years of competition in the world's greatest motor
 				sport.
 			</p>
+			<div className={heroSectionStyle.ctaContainer}>
+				<Button label="Drivers" path="/drivers" />
+				<Button label="Teams" path="/teams" />
+			</div>
 		</section>
 	);
 };
