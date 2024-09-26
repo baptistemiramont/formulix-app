@@ -41,9 +41,6 @@ export const DriverCard = (props: Props) => {
 			md: {
 				width: 150,
 			},
-			lg: {
-				width: "auto",
-			},
 		}),
 		title: css({
 			fontSize: "lg",
