@@ -1,15 +1,6 @@
+import { teamSchema } from "@/types/schemas/team";
 import type { TeamType } from "@/types/team";
 import { z } from "zod";
-
-const teamSchema = z.object({
-	id: z.number(),
-	name: z.string(),
-	fullName: z.string(),
-	slug: z.string(),
-	worldChampionships: z.number(),
-	firstTeamEntry: z.number(),
-	favicon: z.string(),
-});
 
 export const getTeams = async (): Promise<TeamType[]> => {
 	try {

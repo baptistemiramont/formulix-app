@@ -1,34 +1,6 @@
 import type { DriverType } from "@/types/driver";
+import { driverDetailedSchema, driverSchema } from "@/types/schemas/driver";
 import { z } from "zod";
-
-const driverSchema = z.object({
-	id: z.number(),
-	firstName: z.string(),
-	lastName: z.string(),
-	avatar: z.string(),
-	country: z.string(),
-	worldChampionshipsTitle: z.number(),
-	podiums: z.number(),
-	grandPrixParticipation: z.number(),
-	team: z.string(),
-});
-
-const driverDetailedSchema = z.object({
-	id: z.number(),
-	firstName: z.string(),
-	lastName: z.string(),
-	avatar: z.string(),
-	country: z.string(),
-	worldChampionshipsTitle: z.number(),
-	podiums: z.number(),
-	grandPrixParticipation: z.number(),
-	teams: z.array(
-		z.object({
-			name: z.string(),
-			favicon: z.string(),
-		})
-	),
-});
 
 export const getDrivers = async (): Promise<DriverType[]> => {
 	try {
@@ -52,7 +24,7 @@ export const getDrivers = async (): Promise<DriverType[]> => {
 	}
 };
 
-export const getDriver = async (id: number): Promise<DriverType> => {
+export const getDriver = async (id: number) => {
 	try {
 		const response = await fetch(
 			`${import.meta.env.VITE_API_URL}/drivers/${id}`
