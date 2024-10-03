@@ -1,11 +1,10 @@
 services:
-  app:
+  formulix_app:
     image: node:20
-    container_name: formulix-app
-    command: npm start
+    container_name: formulix_app
+    command: npm run dev
     working_dir: /app
     ports:
-      - 1111:5173
+      - ${APP_PORT}:5173
     volumes:
       - .:/app
-      - /app/node_modules
