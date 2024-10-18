@@ -14,10 +14,10 @@ export const DriverCard = (props: Props) => {
 	const cardStyle = {
 		container: css({
 			borderRadius: "md",
-			backgroundColor: "neutral.800",
+			backgroundColor: "neutral.700",
 			transition: "all 0.25s ease-in-out",
 			"&:hover": {
-				boxShadow: "0 0 25px token(colors.neutral.800)",
+				boxShadow: "0 0 25px token(colors.neutral.700)",
 			},
 		}),
 		link: css({
@@ -39,7 +39,7 @@ export const DriverCard = (props: Props) => {
 			maxWidth: 200,
 			width: 100,
 			md: {
-				width: 150,
+				width: 200,
 			},
 		}),
 		title: css({

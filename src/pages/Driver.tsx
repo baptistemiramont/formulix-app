@@ -79,9 +79,6 @@ export const Driver = () => {
 			height: "100%",
 			display: "grid",
 			gap: 6,
-			md: {
-				gridTemplateColumns: "repeat(2, 1fr)",
-			},
 		}),
 		driverTeamsContainer: css({
 			display: "grid",
@@ -95,9 +92,6 @@ export const Driver = () => {
 			},
 			lg: {
 				gridTemplateColumns: "repeat(3, 1fr)",
-			},
-			xl: {
-				gridTemplateColumns: "repeat(4, 1fr)",
 			},
 		}),
 	};
