@@ -2,9 +2,20 @@ import { teamSchema } from "@/types/schemas/team";
 import type { TeamType } from "@/types/team";
 import { z } from "zod";
 
+const token = import.meta.env.VITE_API_KEY;
+
 export const getTeams = async (): Promise<TeamType[]> => {
 	try {
-		const response = await fetch(`${import.meta.env.VITE_API_URL}/teams`);
+		const options = {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		};
+
+		const response = await fetch(
+			`${import.meta.env.VITE_API_URL}/teams`,
+			options
+		);
 
 		const { data } = await response.json();
 
@@ -26,7 +37,16 @@ export const getTeams = async (): Promise<TeamType[]> => {
 
 export const getTeam = async (id: number): Promise<TeamType> => {
 	try {
-		const response = await fetch(`${import.meta.env.VITE_API_URL}/teams/${id}`);
+		const options = {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		};
+
+		const response = await fetch(
+			`${import.meta.env.VITE_API_URL}/teams/${id}`,
+			options
+		);
 
 		const { data } = await response.json();
 
