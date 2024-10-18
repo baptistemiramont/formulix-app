@@ -12,6 +12,7 @@ export const Button = (props: Props) => {
 		display: "flex",
 		paddingY: 2,
 		paddingX: 8,
+		color: "neutral.50",
 		backgroundColor: "primary",
 		borderRadius: "md",
 		fontSize: "md",

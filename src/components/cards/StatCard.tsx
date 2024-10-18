@@ -16,7 +16,7 @@ export const StatCard = (props: Props) => {
 			padding: 2,
 			placeContent: "center",
 			borderRadius: "md",
-			backgroundColor: "neutral.700",
+			backgroundColor: "neutral.200",
 			textAlign: "center",
 			width: "100%",
 			height: "100%",

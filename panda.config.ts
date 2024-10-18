@@ -4,7 +4,7 @@ export const textStyles = defineTextStyles({
 	body: {
 		description: "The body text style - used in paragraphs",
 		value: {
-			color: "neutral.300",
+			color: "neutral.800",
 			fontFamily: "Quicksand",
 			fontWeight: "400",
 			fontSize: "md",
@@ -19,7 +19,7 @@ export const textStyles = defineTextStyles({
 	title: {
 		description: "The title text style - used in headings",
 		value: {
-			color: "neutral.100",
+			color: "neutral.900",
 			fontFamily: "League Spartan",
 			lineHeight: "1.25",
 			textWrap: "balance",
@@ -51,8 +51,8 @@ export default defineConfig({
 			scrollbarWidth: "thin",
 		},
 		body: {
-			color: "neutral.50",
-			backgroundColor: "neutral.900",
+			color: "neutral.800",
+			backgroundColor: "neutral.50",
 		},
 		p: {
 			textStyle: "body",
