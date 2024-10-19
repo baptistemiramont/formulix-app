@@ -1,15 +1,18 @@
-import type { DriverType } from "@/types/driver";
+import type { DriverType, MinimalDriverType } from "@/types/driver";
 import { css } from "../../../styled-system/css";
 import { Link } from "@tanstack/react-router";
 
 type Props = {
-	driver: DriverType;
+	driver: DriverType | MinimalDriverType;
 };
 
 export const DriverCard = (props: Props) => {
 	const {
-		driver: { firstName, lastName, id, avatar, team },
+		driver: { firstName, lastName, id, avatar },
 	} = props;
+
+	const team = "team" in props.driver ? props.driver.team : false;
+	// Styles
 
 	const cardStyle = {
 		container: css({
@@ -73,7 +76,7 @@ export const DriverCard = (props: Props) => {
 					<p className={cardStyle.title}>
 						{firstName} {lastName}
 					</p>
-					<p className={cardStyle.subtitle}>{team}</p>
+					{team && <p className={cardStyle.subtitle}>{team}</p>}
 				</div>
 			</Link>
 		</li>

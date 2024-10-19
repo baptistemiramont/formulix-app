@@ -25,6 +25,8 @@ export const Drivers = () => {
 		<DriverCard key={driver.id} driver={driver} />
 	));
 
+	// Styles
+
 	const pageStyle = {
 		container: css({
 			paddingY: 12,

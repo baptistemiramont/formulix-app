@@ -76,7 +76,7 @@ export const TeamCard = (props: Props) => {
 				</div>
 				<div>
 					<p className={cardStyle.title}>{name}</p>
-					{isCurrentTeam && <p className={cardStyle.subtitle}>Current Team</p>}
+					{isCurrentTeam && <p className={cardStyle.subtitle}>Current team</p>}
 				</div>
 			</Link>
 		</li>

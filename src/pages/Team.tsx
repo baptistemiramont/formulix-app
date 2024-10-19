@@ -4,6 +4,7 @@ import { getTeam } from "@/api/team";
 import { Loader } from "@/components/Loader";
 import { css } from "@/../styled-system/css";
 import { StatCard } from "@/components/cards/StatCard";
+import { DriverCard } from "@/components/cards/DriverCard";
 
 export const Team = () => {
 	const { id } = useParams({ from: "/teams/$id" });
@@ -23,18 +24,37 @@ export const Team = () => {
 
 	if (!team) return "Team not found";
 
-	const { name, fullName, favicon, worldChampionships, firstTeamEntry } = team;
+	const {
+		name,
+		fullName,
+		favicon,
+		worldChampionships,
+		firstTeamEntry,
+		drivers,
+	} = team;
 
-	// Style
+	const activeDrivers = drivers
+		.filter((driver) => driver.isActive)
+		.map((driver) => <DriverCard key={driver.id} driver={driver} />);
+	const formerDrivers = drivers
+		.filter((driver) => !driver.isActive)
+		.map((driver) => <DriverCard key={driver.id} driver={driver} />);
+
+	// Styles
 
 	const pageStyle = {
 		container: css({
-			paddingY: 12,
+			paddingTop: 4,
+			paddingBottom: 12,
 			display: "grid",
 			gap: 8,
+			lg: {
+				gap: 12,
+			},
 		}),
 		teamMainInfosContainer: css({
 			display: "grid",
+			placeContent: "center",
 			gap: 4,
 			lg: {
 				gridTemplateColumns: "1fr 1fr",
@@ -44,7 +64,7 @@ export const Team = () => {
 		teamPortraitContainer: css({
 			display: "grid",
 			justifyContent: "center",
-			gap: 3,
+			height: "auto",
 		}),
 		teamLogoContainer: css({
 			display: "grid",
@@ -54,7 +74,7 @@ export const Team = () => {
 			textAlign: "center",
 		}),
 		teamStatListContainer: css({
-			height: "100%",
+			height: "auto",
 		}),
 		teamStatList: css({
 			height: "100%",
@@ -78,6 +98,21 @@ export const Team = () => {
 				gridTemplateColumns: "repeat(4, 1fr)",
 			},
 		}),
+		teamDriversContainer: css({
+			display: "grid",
+			gap: 4,
+			lg: {
+				gap: 8,
+			},
+		}),
+		teamDriversList: css({
+			display: "grid",
+			gap: 6,
+			gridTemplateColumns: "repeat(2, 1fr)",
+			lg: {
+				gridTemplateColumns: "repeat(3, 1fr)",
+			},
+		}),
 	};
 
 	return (
@@ -92,11 +127,10 @@ export const Team = () => {
 							loading="lazy"
 						/>
 					</div>
-					<h1 className={pageStyle.teamName}>{name}</h1>
+					<h1 className={pageStyle.teamName}>{fullName}</h1>
 				</div>
 				<div className={pageStyle.teamStatListContainer}>
 					<ul className={pageStyle.teamStatList}>
-						<StatCard label="Fullname" value={fullName} />
 						<StatCard
 							label="World championships won"
 							value={worldChampionships}
@@ -105,10 +139,18 @@ export const Team = () => {
 					</ul>
 				</div>
 			</div>
-			{/* <div className={pageStyle.driverTeamsContainer}>
-				<h2>Driver's teams</h2>
-				<ul className={pageStyle.driverTeamsList}>{teamsList}</ul>
-			</div> */}
+			{activeDrivers.length > 0 && (
+				<div className={pageStyle.teamDriversContainer}>
+					<h2>Team's current drivers</h2>
+					<ul className={pageStyle.teamDriversList}>{activeDrivers}</ul>
+				</div>
+			)}
+			{formerDrivers.length > 0 && (
+				<div className={pageStyle.teamDriversContainer}>
+					<h2>Team's former drivers</h2>
+					<ul className={pageStyle.teamDriversList}>{formerDrivers}</ul>
+				</div>
+			)}
 		</div>
 	);
 };

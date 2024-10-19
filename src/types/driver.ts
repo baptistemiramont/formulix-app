@@ -10,6 +10,14 @@ export type DriverType = {
 	team: string;
 };
 
+export type MinimalDriverType = {
+	id: number;
+	firstName: string;
+	lastName: string;
+	avatar: string;
+	isActive: boolean;
+};
+
 export type DriverDetailedType = {
 	id: number;
 	firstName: string;

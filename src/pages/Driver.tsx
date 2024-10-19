@@ -51,7 +51,8 @@ export const Driver = () => {
 
 	const pageStyle = {
 		container: css({
-			paddingY: 12,
+			paddingTop: 4,
+			paddingBottom: 12,
 			display: "grid",
 			gap: 8,
 		}),
@@ -87,9 +88,7 @@ export const Driver = () => {
 		driverTeamsList: css({
 			display: "grid",
 			gap: 6,
-			md: {
-				gridTemplateColumns: "repeat(2, 1fr)",
-			},
+			gridTemplateColumns: "repeat(2, 1fr)",
 			lg: {
 				gridTemplateColumns: "repeat(3, 1fr)",
 			},
