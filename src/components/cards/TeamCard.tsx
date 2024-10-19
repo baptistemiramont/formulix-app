@@ -19,27 +19,32 @@ export const TeamCard = (props: Props) => {
 	const cardStyle = {
 		container: css({
 			borderRadius: "md",
-			backgroundColor: "neutral.800",
+			backgroundColor: "neutral.200",
 			transition: "all 0.25s ease-in-out",
 			"&:hover": {
-				boxShadow: "0 0 25px token(colors.neutral.800)",
+				boxShadow: "0 0 25px token(colors.neutral.200)",
 			},
 		}),
 		link: css({
 			padding: 4,
-			display: "flex",
-			alignItems: "center",
+			display: "grid",
 			height: "100%",
+			textAlign: "center",
 			gap: 4,
 			lg: {
 				flexDirection: "column",
 			},
 		}),
+		imageContainer: css({
+			display: "grid",
+			justifyContent: "center",
+		}),
 		image: css({
 			minWidth: 50,
-			lg: {
-				width: "auto",
-				maxWidth: 150,
+			maxWidth: 200,
+			width: 100,
+			md: {
+				width: 200,
 			},
 		}),
 		title: css({
@@ -60,17 +65,18 @@ export const TeamCard = (props: Props) => {
 	return (
 		<li className={cardStyle.container}>
 			<Link to="/teams/$id" params={{ id }} className={cardStyle.link}>
-				<div>
+				<div className={cardStyle.imageContainer}>
 					<img
 						className={cardStyle.image}
 						src={favicon}
 						alt={`${name} logo`}
 						width="50"
+						loading="lazy"
 					/>
 				</div>
 				<div>
 					<p className={cardStyle.title}>{name}</p>
-					{isCurrentTeam && <p className={cardStyle.subtitle}>Current Team</p>}
+					{isCurrentTeam && <p className={cardStyle.subtitle}>Current team</p>}
 				</div>
 			</Link>
 		</li>

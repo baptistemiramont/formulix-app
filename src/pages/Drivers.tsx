@@ -25,6 +25,8 @@ export const Drivers = () => {
 		<DriverCard key={driver.id} driver={driver} />
 	));
 
+	// Styles
+
 	const pageStyle = {
 		container: css({
 			paddingY: 12,
@@ -37,9 +39,6 @@ export const Drivers = () => {
 			gridTemplateColumns: "repeat(2, 1fr)",
 			lg: {
 				gridTemplateColumns: "repeat(3, 1fr)",
-			},
-			xl: {
-				gridTemplateColumns: "repeat(4, 1fr)",
 			},
 		}),
 	};
