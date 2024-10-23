@@ -29,7 +29,12 @@ export const getTeams = async (): Promise<TeamType[]> => {
 			throw new Error("Invalid data format");
 		}
 
-		return teams as TeamType[];
+		return teams.map((team) => {
+			return {
+				...team,
+				favicon: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${team.favicon}`,
+			};
+		}) as TeamType[];
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			throw new Error(error.message);
@@ -65,6 +70,15 @@ export const getTeam = async (id: number): Promise<TeamDetailedType> => {
 		if (!success) {
 			throw new Error("Invalid data format");
 		}
+
+		team.favicon = `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${team.favicon}`;
+
+		team.drivers = team.drivers.map((driver) => {
+			return {
+				...driver,
+				avatar: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${driver.avatar}`,
+			};
+		});
 
 		return team as TeamDetailedType;
 	} catch (error: unknown) {

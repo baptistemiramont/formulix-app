@@ -127,7 +127,9 @@ export const Driver = () => {
 				</div>
 			</div>
 			<div className={pageStyle.driverTeamsContainer}>
-				<h2>Driver's teams</h2>
+				<h2>
+					{firstName} {lastName}'s team(s)
+				</h2>
 				<ul className={pageStyle.driverTeamsList}>{teamsList}</ul>
 			</div>
 		</div>

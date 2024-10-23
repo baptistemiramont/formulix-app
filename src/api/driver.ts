@@ -25,7 +25,12 @@ export const getDrivers = async (): Promise<DriverType[]> => {
 			throw new Error("Invalid data format");
 		}
 
-		return drivers;
+		return drivers.map((driver) => {
+			return {
+				...driver,
+				avatar: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${driver.avatar}`,
+			};
+		});
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			throw new Error(error.message);
@@ -50,13 +55,22 @@ export const getDriver = async (id: number) => {
 
 		const { data } = await response.json();
 
-		const { success, data: team } = driverDetailedSchema.safeParse(data);
+		const { success, data: driver } = driverDetailedSchema.safeParse(data);
 
 		if (!success) {
 			throw new Error("Invalid data format");
 		}
 
-		return team;
+		driver.avatar = `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${driver.avatar}`;
+
+		driver.teams = driver.teams.map((team) => {
+			return {
+				...team,
+				favicon: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${team.favicon}`,
+			};
+		});
+
+		return driver;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			throw new Error(error.message);
