@@ -147,7 +147,7 @@ export const Team = () => {
 			)}
 			{formerDrivers.length > 0 && (
 				<div className={pageStyle.teamDriversContainer}>
-					<h2>Team's former drivers</h2>
+					<h2>Team's former driver(s)</h2>
 					<ul className={pageStyle.teamDriversList}>{formerDrivers}</ul>
 				</div>
 			)}
