@@ -37,7 +37,7 @@ export const Header = () => {
 	});
 
 	const linkStyle = css({
-		"&:.active p": {
+		"&.active p": {
 			color: "primary",
 		},
 	});
