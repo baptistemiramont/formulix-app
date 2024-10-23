@@ -4,13 +4,10 @@ export const textStyles = defineTextStyles({
 	body: {
 		description: "The body text style - used in paragraphs",
 		value: {
-			color: "neutral.800",
 			fontFamily: "Quicksand",
 			fontWeight: "400",
 			fontSize: "md",
 			lineHeight: "1.5",
-			maxWidth: "75ch",
-			textWrap: "pretty",
 			lg: {
 				fontSize: "lg",
 			},
@@ -19,10 +16,8 @@ export const textStyles = defineTextStyles({
 	title: {
 		description: "The title text style - used in headings",
 		value: {
-			color: "neutral.900",
 			fontFamily: "League Spartan",
 			lineHeight: "1.25",
-			textWrap: "balance",
 		},
 	},
 });
@@ -55,9 +50,14 @@ export default defineConfig({
 			backgroundColor: "neutral.50",
 		},
 		p: {
+			color: "neutral.800",
+			maxWidth: "75ch",
+			textWrap: "pretty",
 			textStyle: "body",
 		},
 		"h1, h2, h3, h4, h5, h6": {
+			color: "neutral.900",
+			textWrap: "balance",
 			textStyle: "title",
 		},
 		h1: {
