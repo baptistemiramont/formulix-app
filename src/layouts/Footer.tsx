@@ -48,7 +48,7 @@ export const Footer = () => {
 		<footer className={footerStyle.container}>
 			<section>
 				<p className={footerStyle.disclaimer}>
-					<span className={footerStyle.highlight}>Formulix</span> is an
+					<span className={footerStyle.highlight}>Formulix (FMX)</span> is an
 					independent fan project and is not affiliated with, endorsed by, or
 					associated with Formula One, the FIA, or any official Formula 1 teams,
 					sponsors, drivers, or organizations. All logos, names, images, and
