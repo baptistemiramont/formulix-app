@@ -13,11 +13,29 @@ export const textStyles = defineTextStyles({
 			},
 		},
 	},
+	label: {
+		description: "The label text style",
+		value: {
+			fontFamily: "Quicksand",
+			fontWeight: "400",
+			fontSize: "sm",
+			lineHeight: "1.5",
+			lg: {
+				fontSize: "md",
+			},
+		},
+	},
 	title: {
 		description: "The title text style - used in headings",
 		value: {
 			fontFamily: "League Spartan",
 			lineHeight: "1.25",
+		},
+	},
+	highlight: {
+		description: "The highlight text style",
+		value: {
+			fontWeight: "700",
 		},
 	},
 });
