@@ -85,19 +85,6 @@ export const Team = () => {
 			display: "grid",
 			gap: 8,
 		}),
-		teamTeamsList: css({
-			display: "grid",
-			gap: 6,
-			md: {
-				gridTemplateColumns: "repeat(2, 1fr)",
-			},
-			lg: {
-				gridTemplateColumns: "repeat(3, 1fr)",
-			},
-			xl: {
-				gridTemplateColumns: "repeat(4, 1fr)",
-			},
-		}),
 		teamDriversContainer: css({
 			display: "grid",
 			gap: 4,
@@ -111,6 +98,9 @@ export const Team = () => {
 			gridTemplateColumns: "repeat(2, 1fr)",
 			lg: {
 				gridTemplateColumns: "repeat(3, 1fr)",
+			},
+			"2xl": {
+				gridTemplateColumns: "repeat(4, 1fr)",
 			},
 		}),
 	};

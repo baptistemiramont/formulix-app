@@ -92,6 +92,9 @@ export const Driver = () => {
 			lg: {
 				gridTemplateColumns: "repeat(3, 1fr)",
 			},
+			"2xl": {
+				gridTemplateColumns: "repeat(4, 1fr)",
+			},
 		}),
 	};
 
