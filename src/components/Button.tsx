@@ -17,7 +17,7 @@ export const Button = (props: Props) => {
 		borderRadius: "md",
 		fontSize: "md",
 		transition: "all 0.25s ease-in-out",
-		"&:hover": {
+		_hover: {
 			backgroundColor: "primary10",
 		},
 		lg: {

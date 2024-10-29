@@ -21,7 +21,7 @@ export const TeamCard = (props: Props) => {
 			borderRadius: "md",
 			backgroundColor: "neutral.200",
 			transition: "all 0.25s ease-in-out",
-			"&:hover": {
+			_hover: {
 				boxShadow: "0 0 25px token(colors.neutral.200)",
 			},
 		}),
