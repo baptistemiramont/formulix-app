@@ -48,7 +48,8 @@ export default defineConfig({
 		extend: {
 			tokens: {
 				colors: {
-					primary: { value: "#e10600 " },
+					primary: { value: "hsl(0, 65%, 51%)" },
+					primary10: { value: "hsl(0, 65%, 61%)" },
 				},
 			},
 			textStyles,

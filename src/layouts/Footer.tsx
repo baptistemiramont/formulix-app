@@ -21,7 +21,7 @@ export const Footer = () => {
 				paddingX: 64,
 			},
 			"2xl": {
-				paddingX: 80,
+				paddingX: 72,
 			},
 			backgroundColor: "neutral.200",
 			display: "grid",
