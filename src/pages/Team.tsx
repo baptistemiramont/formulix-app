@@ -54,7 +54,6 @@ export const Team = () => {
 		}),
 		teamMainInfosContainer: css({
 			display: "grid",
-			placeContent: "center",
 			gap: 4,
 			lg: {
 				gridTemplateColumns: "1fr 1fr",
