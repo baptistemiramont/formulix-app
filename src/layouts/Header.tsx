@@ -39,7 +39,7 @@ export const Header = () => {
 			},
 		}),
 		linkStyle: css({
-			"&.active p": {
+			"&.active p, &.active svg": {
 				color: "primary",
 			},
 		}),
