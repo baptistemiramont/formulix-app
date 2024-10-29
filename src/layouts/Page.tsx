@@ -1,4 +1,4 @@
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, ScrollRestoration } from "@tanstack/react-router";
 import { css } from "../../styled-system/css";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
@@ -19,7 +19,7 @@ export const Page = () => {
 			paddingX: 64,
 		},
 		"2xl": {
-			paddingX: 80,
+			paddingX: 72,
 		},
 	});
 
@@ -27,6 +27,7 @@ export const Page = () => {
 		<>
 			<Header />
 			<main className={mainStyle}>
+				<ScrollRestoration />
 				<Outlet />
 			</main>
 			<Footer />
