@@ -5,6 +5,7 @@ import { Loader } from "@/components/Loader";
 import { css } from "@/../styled-system/css";
 import { StatCard } from "@/components/cards/StatCard";
 import { DriverCard } from "@/components/cards/DriverCard";
+import { layoutGutters } from "@/styles/layout";
 
 export const Team = () => {
 	const { id } = useParams({ from: "/teams/$id" });
@@ -42,8 +43,8 @@ export const Team = () => {
 
 	// Styles
 
-	const pageStyle = {
-		container: css({
+	const teamPageStyle = {
+		container: {
 			paddingTop: 4,
 			paddingBottom: 12,
 			display: "grid",
@@ -51,47 +52,47 @@ export const Team = () => {
 			lg: {
 				gap: 12,
 			},
-		}),
-		teamMainInfosContainer: css({
+		},
+		teamMainInfosContainer: {
 			display: "grid",
 			gap: 4,
 			lg: {
 				gridTemplateColumns: "1fr 1fr",
 				alignItems: "center",
 			},
-		}),
-		teamPortraitContainer: css({
+		},
+		teamPortraitContainer: {
 			display: "grid",
 			justifyContent: "center",
 			height: "auto",
-		}),
-		teamLogoContainer: css({
+		},
+		teamLogoContainer: {
 			display: "grid",
 			justifyContent: "center",
-		}),
-		teamName: css({
+		},
+		teamName: {
 			textAlign: "center",
-		}),
-		teamStatListContainer: css({
+		},
+		teamStatListContainer: {
 			height: "auto",
-		}),
-		teamStatList: css({
+		},
+		teamStatList: {
 			height: "100%",
 			display: "grid",
 			gap: 6,
-		}),
-		teamTeamsContainer: css({
+		},
+		teamTeamsContainer: {
 			display: "grid",
 			gap: 8,
-		}),
-		teamDriversContainer: css({
+		},
+		teamDriversContainer: {
 			display: "grid",
 			gap: 4,
 			lg: {
 				gap: 8,
 			},
-		}),
-		teamDriversList: css({
+		},
+		teamDriversList: {
 			display: "grid",
 			gap: 6,
 			gridTemplateColumns: "repeat(2, 1fr)",
@@ -101,14 +102,14 @@ export const Team = () => {
 			"2xl": {
 				gridTemplateColumns: "repeat(4, 1fr)",
 			},
-		}),
+		},
 	};
 
 	return (
-		<div className={pageStyle.container}>
-			<div className={pageStyle.teamMainInfosContainer}>
-				<div className={pageStyle.teamPortraitContainer}>
-					<div className={pageStyle.teamLogoContainer}>
+		<section className={css(layoutGutters, teamPageStyle.container)}>
+			<div className={css(teamPageStyle.teamMainInfosContainer)}>
+				<div className={css(teamPageStyle.teamPortraitContainer)}>
+					<div className={css(teamPageStyle.teamLogoContainer)}>
 						<img
 							src={favicon}
 							alt={`${name}'s logo`}
@@ -116,10 +117,10 @@ export const Team = () => {
 							loading="lazy"
 						/>
 					</div>
-					<h1 className={pageStyle.teamName}>{fullName}</h1>
+					<h1 className={css(teamPageStyle.teamName)}>{fullName}</h1>
 				</div>
-				<div className={pageStyle.teamStatListContainer}>
-					<ul className={pageStyle.teamStatList}>
+				<div className={css(teamPageStyle.teamStatListContainer)}>
+					<ul className={css(teamPageStyle.teamStatList)}>
 						<StatCard
 							label="World championships won"
 							value={worldChampionships}
@@ -129,17 +130,21 @@ export const Team = () => {
 				</div>
 			</div>
 			{activeDrivers.length > 0 && (
-				<div className={pageStyle.teamDriversContainer}>
+				<div className={css(teamPageStyle.teamDriversContainer)}>
 					<h2>Team's current drivers</h2>
-					<ul className={pageStyle.teamDriversList}>{activeDrivers}</ul>
+					<ul className={css(teamPageStyle.teamDriversList)}>
+						{activeDrivers}
+					</ul>
 				</div>
 			)}
 			{formerDrivers.length > 0 && (
-				<div className={pageStyle.teamDriversContainer}>
+				<div className={css(teamPageStyle.teamDriversContainer)}>
 					<h2>Team's former driver(s)</h2>
-					<ul className={pageStyle.teamDriversList}>{formerDrivers}</ul>
+					<ul className={css(teamPageStyle.teamDriversList)}>
+						{formerDrivers}
+					</ul>
 				</div>
 			)}
-		</div>
+		</section>
 	);
 };
