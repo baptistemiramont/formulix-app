@@ -6,6 +6,10 @@ export const Logo = (): JSX.Element => {
 		fontSize: "4xl",
 		fontWeight: 700,
 		fontFamily: "League Spartan",
+		transition: "var(--default-animation)",
+		_hover: {
+			color: "primary",
+		},
 		lg: {
 			fontSize: "2xl",
 		},

@@ -50,7 +50,7 @@ export const Header = () => {
 			fontWeight: 600,
 			letterSpacing: 1,
 			fontVariantCaps: "all-small-caps",
-			transition: "all 0.25s ease-in-out",
+			transition: "var(--default-animation)",
 			lg: {
 				fontSize: "lg",
 			},

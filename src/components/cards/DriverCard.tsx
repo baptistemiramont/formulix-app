@@ -18,7 +18,7 @@ export const DriverCard = (props: Props) => {
 		container: css({
 			borderRadius: "md",
 			backgroundColor: "neutral.200",
-			transition: "all 0.25s ease-in-out",
+			transition: "var(--default-animation)",
 			_hover: {
 				boxShadow: "0 0 25px token(colors.neutral.200)",
 			},

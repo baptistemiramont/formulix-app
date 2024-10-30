@@ -16,7 +16,7 @@ export const Button = (props: Props) => {
 		backgroundColor: "primary",
 		borderRadius: "md",
 		fontSize: "md",
-		transition: "all 0.25s ease-in-out",
+		transition: "var(--default-animation)",
 		_hover: {
 			backgroundColor: "primary10",
 		},

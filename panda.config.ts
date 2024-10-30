@@ -108,5 +108,8 @@ export default defineConfig({
 			},
 		},
 	},
+	globalVars: {
+		"--default-animation": "all 0.25s ease-in-out",
+	},
 	outdir: "styled-system",
 });
