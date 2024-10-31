@@ -74,6 +74,9 @@ export const Driver = () => {
 			display: "grid",
 			justifyContent: "center",
 		},
+		driverName: {
+			textAlign: "center",
+		},
 		driverStatListContainer: {
 			height: "100%",
 		},
@@ -111,7 +114,7 @@ export const Driver = () => {
 							loading="lazy"
 						/>
 					</div>
-					<h1>
+					<h1 className={css(driverPageStyle.driverName)}>
 						{firstName} {lastName}
 					</h1>
 				</div>
