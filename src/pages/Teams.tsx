@@ -4,6 +4,7 @@ import { TeamCard } from "../components/cards/TeamCard";
 import type { TeamType } from "../types/team";
 import { css } from "../../styled-system/css";
 import { Loader } from "@/components/Loader";
+import { layoutGutters } from "@/styles/layout";
 
 export const Teams = () => {
 	const {
@@ -25,13 +26,15 @@ export const Teams = () => {
 		<TeamCard key={team.id} team={team} />
 	));
 
-	const pageStyle = {
-		container: css({
+	// Styles
+
+	const teamsPageStyle = {
+		container: {
 			paddingY: 12,
 			display: "grid",
 			gap: 6,
-		}),
-		teamListStyle: css({
+		},
+		teamListStyle: {
 			display: "grid",
 			gap: 6,
 			gridTemplateColumns: "repeat(2, 1fr)",
@@ -41,13 +44,13 @@ export const Teams = () => {
 			"2xl": {
 				gridTemplateColumns: "repeat(4, 1fr)",
 			},
-		}),
+		},
 	};
 
 	return (
-		<div className={pageStyle.container}>
+		<section className={css(layoutGutters, teamsPageStyle.container)}>
 			<h1>Teams</h1>
-			<ul className={pageStyle.teamListStyle}>{teamsList}</ul>
-		</div>
+			<ul className={css(teamsPageStyle.teamListStyle)}>{teamsList}</ul>
+		</section>
 	);
 };

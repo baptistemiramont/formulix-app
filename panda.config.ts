@@ -81,32 +81,35 @@ export default defineConfig({
 		},
 		h1: {
 			fontWeight: "700",
+			fontSize: "5xl",
+			lg: {
+				fontSize: "6xl",
+			},
+		},
+		h2: {
+			fontWeight: "700",
 			fontSize: "4xl",
 			lg: {
 				fontSize: "5xl",
 			},
 		},
-		h2: {
+		h3: {
 			fontWeight: "600",
 			fontSize: "3xl",
 			lg: {
 				fontSize: "4xl",
 			},
 		},
-		h3: {
+		h4: {
 			fontWeight: "500",
 			fontSize: "2xl",
 			lg: {
 				fontSize: "3xl",
 			},
 		},
-		h4: {
-			fontWeight: "400",
-			fontSize: "xl",
-			lg: {
-				fontSize: "2xl",
-			},
-		},
+	},
+	globalVars: {
+		"--default-animation": "all 0.25s ease-in-out",
 	},
 	outdir: "styled-system",
 });

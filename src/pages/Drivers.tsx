@@ -4,6 +4,7 @@ import { DriverCard } from "@/components/cards/DriverCard";
 import type { DriverType } from "@/types/driver";
 import { css } from "../../styled-system/css";
 import { Loader } from "@/components/Loader";
+import { layoutGutters } from "@/styles/layout";
 
 export const Drivers = () => {
 	const {
@@ -27,13 +28,13 @@ export const Drivers = () => {
 
 	// Styles
 
-	const pageStyle = {
-		container: css({
+	const driversPageStyle = {
+		container: {
 			paddingY: 12,
 			display: "grid",
 			gap: 6,
-		}),
-		teamListStyle: css({
+		},
+		teamListStyle: {
 			display: "grid",
 			gap: 6,
 			gridTemplateColumns: "repeat(2, 1fr)",
@@ -43,13 +44,13 @@ export const Drivers = () => {
 			"2xl": {
 				gridTemplateColumns: "repeat(4, 1fr)",
 			},
-		}),
+		},
 	};
 
 	return (
-		<div className={pageStyle.container}>
+		<section className={css(layoutGutters, driversPageStyle.container)}>
 			<h1>Drivers</h1>
-			<ul className={pageStyle.teamListStyle}>{driversList}</ul>
-		</div>
+			<ul className={css(driversPageStyle.teamListStyle)}>{driversList}</ul>
+		</section>
 	);
 };

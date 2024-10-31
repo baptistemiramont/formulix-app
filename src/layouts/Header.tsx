@@ -50,8 +50,12 @@ export const Header = () => {
 			fontWeight: 600,
 			letterSpacing: 1,
 			fontVariantCaps: "all-small-caps",
+			transition: "var(--default-animation)",
 			lg: {
 				fontSize: "lg",
+			},
+			_hover: {
+				color: "primary10",
 			},
 		}),
 		iconStyle: css({

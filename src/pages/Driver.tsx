@@ -5,6 +5,7 @@ import { Loader } from "@/components/Loader";
 import { css } from "@/../styled-system/css";
 import { StatCard } from "@/components/cards/StatCard";
 import { TeamCard } from "@/components/cards/TeamCard";
+import { layoutGutters } from "@/styles/layout";
 
 export const Driver = () => {
 	const { id } = useParams({ from: "/drivers/$id" });
@@ -47,45 +48,48 @@ export const Driver = () => {
 		<TeamCard key={team.id} team={team} />
 	));
 
-	// Style
+	// Styles
 
-	const pageStyle = {
-		container: css({
+	const driverPageStyle = {
+		container: {
 			paddingTop: 4,
 			paddingBottom: 12,
 			display: "grid",
 			gap: 8,
-		}),
-		driverMainInfosContainer: css({
+		},
+		driverMainInfosContainer: {
 			display: "grid",
 			gap: 4,
 			lg: {
 				gridTemplateColumns: "1fr 1fr",
 				alignItems: "center",
 			},
-		}),
-		driverPortraitContainer: css({
+		},
+		driverPortraitContainer: {
 			display: "grid",
 			justifyContent: "center",
 			gap: 3,
-		}),
-		driverAvatarContainer: css({
+		},
+		driverAvatarContainer: {
 			display: "grid",
 			justifyContent: "center",
-		}),
-		driverStatListContainer: css({
+		},
+		driverName: {
+			textAlign: "center",
+		},
+		driverStatListContainer: {
 			height: "100%",
-		}),
-		driverStatList: css({
+		},
+		driverStatList: {
 			height: "100%",
 			display: "grid",
 			gap: 6,
-		}),
-		driverTeamsContainer: css({
+		},
+		driverTeamsContainer: {
 			display: "grid",
 			gap: 8,
-		}),
-		driverTeamsList: css({
+		},
+		driverTeamsList: {
 			display: "grid",
 			gap: 6,
 			gridTemplateColumns: "repeat(2, 1fr)",
@@ -95,14 +99,14 @@ export const Driver = () => {
 			"2xl": {
 				gridTemplateColumns: "repeat(4, 1fr)",
 			},
-		}),
+		},
 	};
 
 	return (
-		<div className={pageStyle.container}>
-			<div className={pageStyle.driverMainInfosContainer}>
-				<div className={pageStyle.driverPortraitContainer}>
-					<div className={pageStyle.driverAvatarContainer}>
+		<section className={css(layoutGutters, driverPageStyle.container)}>
+			<div className={css(driverPageStyle.driverMainInfosContainer)}>
+				<div className={css(driverPageStyle.driverPortraitContainer)}>
+					<div className={css(driverPageStyle.driverAvatarContainer)}>
 						<img
 							src={avatar}
 							alt={`${firstName} ${lastName} avatar`}
@@ -110,12 +114,12 @@ export const Driver = () => {
 							loading="lazy"
 						/>
 					</div>
-					<h1>
+					<h1 className={css(driverPageStyle.driverName)}>
 						{firstName} {lastName}
 					</h1>
 				</div>
-				<div className={pageStyle.driverStatListContainer}>
-					<ul className={pageStyle.driverStatList}>
+				<div className={css(driverPageStyle.driverStatListContainer)}>
+					<ul className={css(driverPageStyle.driverStatList)}>
 						<StatCard label="Country" value={country} />
 						<StatCard
 							label="World championships won"
@@ -129,12 +133,12 @@ export const Driver = () => {
 					</ul>
 				</div>
 			</div>
-			<div className={pageStyle.driverTeamsContainer}>
+			<div className={css(driverPageStyle.driverTeamsContainer)}>
 				<h2>
 					{firstName} {lastName}'s team(s)
 				</h2>
-				<ul className={pageStyle.driverTeamsList}>{teamsList}</ul>
+				<ul className={css(driverPageStyle.driverTeamsList)}>{teamsList}</ul>
 			</div>
-		</div>
+		</section>
 	);
 };
