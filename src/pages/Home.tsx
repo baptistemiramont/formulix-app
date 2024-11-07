@@ -1,14 +1,108 @@
+import { useRef } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+// Styling
+import { layoutGutters, sectionSpacing } from "@/styles/layout";
 import { css } from "../../styled-system/css";
+// Components
 import { Button } from "@/components/Button";
 import { Logo } from "@/components/Logo";
-import { layoutGutters, sectionSpacing } from "@/styles/layout";
+// Animations
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { fromSettings, scrollOptions, toSettings } from "@/animations";
+// Medias
 import mclarenF1 from "@/../public/assets/images/mclaren-mcl37.webp";
 import landoNorrisCelebrationDesktop from "@/../public/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_desktop.webp";
 import landoNorrisCelebrationMobile from "@/../public/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_mobile.webp";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export const Home = () => {
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+	const refs = {
+		heroImage: useRef<HTMLImageElement>(null),
+		heroAppName: useRef<HTMLSpanElement>(null),
+		heroTitle: useRef<HTMLSpanElement>(null),
+		heroSubtitle: useRef<HTMLHeadingElement>(null),
+		heroCtasContainer: useRef<HTMLDivElement>(null),
+		aboutImage: useRef<HTMLImageElement>(null),
+		aboutTitle: useRef<HTMLHeadingElement>(null),
+		aboutSubtitle: useRef<HTMLHeadingElement>(null),
+		aboutText1: useRef<HTMLParagraphElement>(null),
+		aboutText2: useRef<HTMLParagraphElement>(null),
+	};
+
+	useGSAP(() => {
+		const animations = [
+			gsap.from(refs.heroImage.current, {
+				...fromSettings.bottom,
+			}),
+			gsap.from(refs.heroAppName.current, {
+				...fromSettings.top,
+			}),
+			gsap.from(refs.heroTitle.current, {
+				...fromSettings.left,
+				delay: 0.25,
+			}),
+			gsap.from(refs.heroSubtitle.current, {
+				...fromSettings.left,
+				delay: 0.5,
+			}),
+			gsap.from(refs.heroCtasContainer.current, {
+				...fromSettings.left,
+				delay: 0.75,
+			}),
+			gsap.fromTo(refs.aboutImage.current, fromSettings.bottom, {
+				...toSettings,
+				scrollTrigger: {
+					trigger: refs.aboutImage.current,
+					...scrollOptions,
+					start: "top 80%",
+					end: "bottom 70%",
+				},
+			}),
+			gsap.fromTo(refs.aboutTitle.current, fromSettings.right, {
+				...toSettings,
+				scrollTrigger: {
+					trigger: refs.aboutTitle.current,
+					...scrollOptions,
+					start: "top 80%",
+					end: "bottom 70%",
+				},
+			}),
+			gsap.fromTo(refs.aboutSubtitle.current, fromSettings.right, {
+				...toSettings,
+				scrollTrigger: {
+					trigger: refs.aboutSubtitle.current,
+					...scrollOptions,
+					start: "top 80%",
+					end: "bottom 70%",
+				},
+			}),
+			gsap.fromTo(refs.aboutText1.current, fromSettings.right, {
+				...toSettings,
+				scrollTrigger: {
+					trigger: refs.aboutText1.current,
+					...scrollOptions,
+					start: "top 80%",
+					end: "bottom 70%",
+				},
+			}),
+			gsap.fromTo(refs.aboutText2.current, fromSettings.right, {
+				...toSettings,
+				scrollTrigger: {
+					trigger: refs.aboutText2.current,
+					...scrollOptions,
+					start: "top 80%",
+					end: "bottom 70%",
+				},
+			}),
+		];
+
+		return animations;
+	}, []);
 
 	// Styles
 
@@ -21,6 +115,7 @@ export const Home = () => {
 			display: "grid",
 			gap: 6,
 			alignItems: "center",
+			overflowX: "hidden",
 			lg: {
 				gridTemplateColumns: "3fr 2fr",
 				gap: 12,
@@ -82,6 +177,7 @@ export const Home = () => {
 			display: "grid",
 			placeItems: "center",
 			gap: 8,
+			overflow: "hidden",
 			lg: {
 				gap: 12,
 				gridTemplateColumns: "repeat(2, 1fr)",
@@ -112,15 +208,23 @@ export const Home = () => {
 					{!isDesktop && <Logo />}
 					<div className={css(heroSectionStyle.ctaSectionContentContainer)}>
 						<h1 className={css(heroSectionStyle.title)}>
-							<span className={css(appNameStyle)}>Formulix</span>
-							<span>Your ultimate F1 companion</span>
+							<span ref={refs.heroAppName} className={css(appNameStyle)}>
+								Formulix
+							</span>
+							<span ref={refs.heroTitle}>Your ultimate F1 companion</span>
 						</h1>
-						<p className={css(heroSectionStyle.subtitle)}>
+						<p
+							ref={refs.heroSubtitle}
+							className={css(heroSectionStyle.subtitle)}
+						>
 							Explore the rich history and current excitement of Formula 1.
 							Follow your favorite drivers and teams through over 70 years of
 							thrilling competition.
 						</p>
-						<div className={css(heroSectionStyle.ctaContainer)}>
+						<div
+							ref={refs.heroCtasContainer}
+							className={css(heroSectionStyle.ctaContainer)}
+						>
 							<Button label="Drivers" path="/drivers" />
 							<Button label="Teams" path="/teams" />
 						</div>
@@ -129,6 +233,7 @@ export const Home = () => {
 				{isDesktop && (
 					<div>
 						<img
+							ref={refs.heroImage}
 							className={css(heroSectionStyle.heroImage)}
 							src={mclarenF1}
 							alt="McLaren 2023 F1 car (MCL37)"
@@ -148,19 +253,19 @@ export const Home = () => {
 			>
 				<div className={css(aboutSectionStyle.aboutContentContainer)}>
 					<div className={css(aboutSectionStyle.titlesContainer)}>
-						<h2>
+						<h2 ref={refs.aboutTitle}>
 							More about <span className={css(appNameStyle)}>Formulix</span>
 						</h2>
-						<h3>Purpose of the Application</h3>
+						<h3 ref={refs.aboutSubtitle}>Purpose of the Application</h3>
 					</div>
-					<p>
+					<p ref={refs.aboutText1}>
 						Formulix is a web application dedicated to bringing fans closer to
 						the excitement and legacy of the Formula 1 World Championship. It
 						offers users the chance to dive into the sport’s rich history and
 						stay updated on the latest thrills, following their favorite drivers
 						and teams across more than 70 years of legendary competition.
 					</p>
-					<p>
+					<p ref={refs.aboutText2}>
 						At present, the app features information on drivers and teams from
 						the latest season. However, our vision is to expand and eventually
 						cover the entire history of Formula 1, starting from its inception
@@ -176,6 +281,7 @@ export const Home = () => {
 							media="(min-width: 1024px)"
 						/>
 						<img
+							ref={refs.aboutImage}
 							className={css(aboutSectionStyle.image)}
 							src={landoNorrisCelebrationMobile}
 							alt="Lando Norris celebrating his first GP win (Miami 2024)."

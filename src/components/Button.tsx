@@ -1,12 +1,13 @@
+import React from "react";
 import { Link } from "@tanstack/react-router";
-import { css } from "../../styled-system/css";
+import { css } from "@/../styled-system/css";
 
 type Props = {
 	label: string;
 	path: string;
 };
 
-export const Button = (props: Props) => {
+export const Button: React.FC<Props> = ({ label, path }) => {
 	const buttonStyle = css({
 		width: "fit-content",
 		display: "flex",
@@ -24,8 +25,6 @@ export const Button = (props: Props) => {
 			fontSize: "lg",
 		},
 	});
-
-	const { label, path } = props;
 
 	return (
 		<Link to={path} className={buttonStyle}>
