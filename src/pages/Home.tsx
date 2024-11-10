@@ -12,9 +12,9 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { fromSettings, scrollOptions, toSettings } from "@/animations";
 // Medias
-import mclarenF1 from "@/../public/assets/images/mclaren-mcl37.webp";
-import landoNorrisCelebrationDesktop from "@/../public/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_desktop.webp";
-import landoNorrisCelebrationMobile from "@/../public/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_mobile.webp";
+import mclarenF1 from "@/assets/images/mclaren-mcl37.webp";
+import landoNorrisCelebrationDesktop from "@/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_desktop.webp";
+import landoNorrisCelebrationMobile from "@/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_mobile.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
