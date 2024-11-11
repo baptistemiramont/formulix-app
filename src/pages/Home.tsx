@@ -1,11 +1,12 @@
+// Hooks
 import { useRef } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-// Styling
-import { layoutGutters, sectionSpacing } from "@/styles/layout";
-import { css } from "../../styled-system/css";
 // Components
 import { Button } from "@/components/Button";
 import { Logo } from "@/components/Logo";
+// Styling
+import { layoutGutters, sectionSpacing } from "@/styles/layout";
+import { css } from "../../styled-system/css";
 // Animations
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";

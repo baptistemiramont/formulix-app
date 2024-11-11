@@ -1,9 +1,13 @@
+// Queries
 import { useQuery } from "@tanstack/react-query";
 import { getTeams } from "../api/team";
-import { TeamCard } from "../components/cards/TeamCard";
+// Type
 import type { TeamType } from "../types/team";
-import { css } from "../../styled-system/css";
+// Components
+import { TeamCard } from "../components/cards/TeamCard";
 import { Loader } from "@/components/Loader";
+// Styling
+import { css } from "../../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
 
 export const Teams = () => {

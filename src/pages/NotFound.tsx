@@ -1,6 +1,8 @@
-import { layoutGutters, sectionSpacing } from "@/styles/layout";
-import { css } from "@/../styled-system/css";
+// Components
 import { Button } from "@/components/Button";
+// Styling
+import { css } from "@/../styled-system/css";
+import { layoutGutters, sectionSpacing } from "@/styles/layout";
 
 export const NotFound = () => {
 	const pageStyle = {

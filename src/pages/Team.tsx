@@ -1,10 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+// Router
 import { useParams } from "@tanstack/react-router";
+// Queries
+import { useQuery } from "@tanstack/react-query";
 import { getTeam } from "@/api/team";
+// Components
 import { Loader } from "@/components/Loader";
-import { css } from "@/../styled-system/css";
 import { StatCard } from "@/components/cards/StatCard";
 import { DriverCard } from "@/components/cards/DriverCard";
+// Styling
+import { css } from "@/../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
 
 export const Team = () => {
