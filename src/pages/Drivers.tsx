@@ -1,9 +1,13 @@
+// Queries
 import { useQuery } from "@tanstack/react-query";
 import { getDrivers } from "@/api/driver";
-import { DriverCard } from "@/components/cards/DriverCard";
+// Types
 import type { DriverType } from "@/types/driver";
-import { css } from "../../styled-system/css";
+// Components
+import { DriverCard } from "@/components/cards/DriverCard";
 import { Loader } from "@/components/Loader";
+// Styling
+import { css } from "@/../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
 
 export const Drivers = () => {

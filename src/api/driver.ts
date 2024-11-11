@@ -2,13 +2,13 @@ import type { DriverType } from "@/types/driver";
 import { driverDetailedSchema, driverSchema } from "@/types/schemas/driver";
 import { z } from "zod";
 
-const token = import.meta.env.VITE_API_KEY;
+const apiKey: string = import.meta.env.VITE_API_KEY;
 
 export const getDrivers = async (): Promise<DriverType[]> => {
 	try {
 		const options = {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				APIKey: apiKey,
 			},
 		};
 
@@ -44,7 +44,7 @@ export const getDriver = async (id: number) => {
 	try {
 		const options = {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				APIKey: apiKey,
 			},
 		};
 

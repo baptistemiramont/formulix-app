@@ -2,13 +2,13 @@ import type { TeamDetailedType, TeamType } from "@/types/team";
 import { teamDetailedSchema, teamSchema } from "@/types/schemas/team";
 import { z } from "zod";
 
+const apiKey: string = import.meta.env.VITE_API_KEY;
+
 export const getTeams = async (): Promise<TeamType[]> => {
 	try {
-		const token: string = import.meta.env.VITE_API_KEY;
-
 		const options: RequestInit = {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				APIKey: apiKey,
 			},
 		};
 
@@ -46,11 +46,9 @@ export const getTeams = async (): Promise<TeamType[]> => {
 
 export const getTeam = async (id: number): Promise<TeamDetailedType> => {
 	try {
-		const token: string = import.meta.env.VITE_API_KEY;
-
 		const options: RequestInit = {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				APIKey: apiKey,
 			},
 		};
 

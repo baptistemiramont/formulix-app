@@ -9,6 +9,7 @@ import { Teams } from "@/pages/Teams";
 import { Team } from "@/pages/Team";
 import { Drivers } from "@/pages/Drivers";
 import { Driver } from "@/pages/Driver";
+import { NotFound } from "@/pages/NotFound";
 
 const rootRoute = createRootRoute({
 	component: () => <App />,
@@ -39,6 +40,11 @@ const routeTree = rootRoute.addChildren([
 		getParentRoute: () => rootRoute,
 		path: "/drivers/$id",
 		component: () => <Driver />,
+	}),
+	createRoute({
+		getParentRoute: () => rootRoute,
+		path: "*",
+		component: () => <NotFound />,
 	}),
 ]);
 

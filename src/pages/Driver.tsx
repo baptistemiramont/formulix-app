@@ -1,10 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+// Router
 import { useParams } from "@tanstack/react-router";
+// Queries
+import { useQuery } from "@tanstack/react-query";
 import { getDriver } from "@/api/driver";
-import { Loader } from "@/components/Loader";
-import { css } from "@/../styled-system/css";
+// Components
 import { StatCard } from "@/components/cards/StatCard";
 import { TeamCard } from "@/components/cards/TeamCard";
+import { Loader } from "@/components/Loader";
+// Styling
+import { css } from "@/../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
 
 export const Driver = () => {
