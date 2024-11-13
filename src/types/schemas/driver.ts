@@ -9,7 +9,10 @@ export const driverSchema = z.object({
 	worldChampionshipsTitle: z.number(),
 	podiums: z.number(),
 	grandPrixParticipation: z.number(),
-	team: z.string(),
+	team: z.object({
+		name: z.string(),
+		slug: z.string(),
+	}),
 });
 
 export const driverDetailedSchema = z.object({

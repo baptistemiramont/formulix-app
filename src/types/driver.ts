@@ -7,7 +7,10 @@ export type DriverType = {
 	worldChampionshipsTitle: number;
 	podiums: number;
 	grandPrixParticipation: number;
-	team: string;
+	team: {
+		name: string;
+		slug: string;
+	};
 };
 
 export type MinimalDriverType = {
