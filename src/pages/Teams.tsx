@@ -1,6 +1,3 @@
-// Queries
-import { useQuery } from "@tanstack/react-query";
-import { getTeams } from "../api/team";
 // Type
 import type { TeamType } from "../types/team";
 // Components
@@ -9,16 +6,10 @@ import { Loader } from "@/components/Loader";
 // Styling
 import { css } from "../../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
+import { useTeams } from "@/hooks/useTeams";
 
 export const Teams = () => {
-	const {
-		data: teams,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ["teams"],
-		queryFn: getTeams,
-	});
+	const { data: teams, isLoading, error } = useTeams();
 
 	if (isLoading) return <Loader />;
 
