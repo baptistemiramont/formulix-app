@@ -17,7 +17,7 @@ export const textStyles = defineTextStyles({
 		description: "The label text style",
 		value: {
 			fontFamily: "Quicksand",
-			fontWeight: "400",
+			fontWeight: "700",
 			fontSize: "sm",
 			lineHeight: "1.5",
 			lg: {
@@ -74,6 +74,10 @@ export default defineConfig({
 			textWrap: "pretty",
 			textStyle: "body",
 		},
+		label: {
+			color: "neutral.800",
+			textStyle: "label",
+		},
 		"h1, h2, h3, h4, h5, h6": {
 			color: "neutral.900",
 			textWrap: "balance",
@@ -106,6 +110,17 @@ export default defineConfig({
 			lg: {
 				fontSize: "3xl",
 			},
+		},
+		select: {
+			fontFamily: "Quicksand",
+			padding: "2",
+			borderRadius: "md",
+			outlineStyle: "solid",
+			outlineWidth: "2px",
+			outlineColor: "neutral.200",
+			outlineOffset: "-2px",
+			backgroundColor: "neutral.50",
+			cursor: "pointer",
 		},
 	},
 	globalVars: {
