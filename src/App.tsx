@@ -1,5 +1,10 @@
-import { Page } from "./layouts/Page";
+import { DataProvider } from "@/providers/DataProvider";
+import { Page } from "@/layouts/Page";
 
 export const App = () => {
-	return <Page />;
+	return (
+		<DataProvider>
+			<Page />
+		</DataProvider>
+	);
 };

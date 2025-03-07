@@ -1,34 +1,54 @@
-// Queries
-import { useQuery } from "@tanstack/react-query";
-import { getDrivers } from "@/api/driver";
+// Hooks
+import { useEffect } from "react";
+import { useTeams } from "@/hooks/useTeams";
+import { useDrivers } from "@/hooks/useDrivers";
+import { useData } from "@/hooks/useData";
 // Types
 import type { DriverType } from "@/types/driver";
 // Components
 import { DriverCard } from "@/components/cards/DriverCard";
 import { Loader } from "@/components/Loader";
+import { Select } from "@/components/form/Select";
+import { Error } from "@/components/Error";
 // Styling
 import { css } from "@/../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
 
 export const Drivers = () => {
 	const {
-		data: drivers,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ["drivers"],
-		queryFn: getDrivers,
-	});
+		data: driversData,
+		isLoading: isDriversLoading,
+		error: driversError,
+	} = useDrivers();
+	const {
+		data: teamsData,
+		isLoading: isTeamsLoading,
+		error: teamsError,
+	} = useTeams();
+	const { filteredDrivers, setFilteredDrivers, filterByTeam } = useData();
 
-	if (isLoading) return <Loader />;
+	useEffect(() => {
+		if (driversData) {
+			setFilteredDrivers(driversData);
+		}
+	}, [driversData, setFilteredDrivers]);
 
-	if (error) return "An error has occurred: " + error.message;
-
-	if (!drivers) return "No drivers found";
-
-	const driversList = drivers.map((driver: DriverType) => (
+	const driversList = filteredDrivers.map((driver: DriverType) => (
 		<DriverCard key={driver.id} driver={driver} />
 	));
+
+	const teams = [
+		...(teamsData ?? []).map((team) => ({
+			label: team.name,
+			value: team.slug,
+		})),
+	];
+
+	function handleTeamChange(event: React.ChangeEvent<HTMLSelectElement>): void {
+		if (driversData) {
+			filterByTeam(event.target.value, driversData);
+		}
+	}
 
 	// Styles
 
@@ -49,12 +69,58 @@ export const Drivers = () => {
 				gridTemplateColumns: "repeat(4, 1fr)",
 			},
 		},
+		formFieldsContainer: {
+			display: "grid",
+			gridTemplateColumns: "repeat(2, 1fr)",
+			gap: 6,
+			lg: {
+				gridTemplateColumns: "repeat(3, 1fr)",
+			},
+			"2xl": {
+				gridTemplateColumns: "repeat(4, 1fr)",
+			},
+		},
 	};
+
+	// Render
+
+	if (isDriversLoading || isTeamsLoading) return <Loader />;
+
+	if (driversError) {
+		return <Error message={`An error has occurred: ${driversError.message}`} />;
+	}
+
+	if (teamsError) {
+		return <Error message={`An error has occurred: ${teamsError.message}`} />;
+	}
+
+	if (!driversData) {
+		return <Error message="No driver found" />;
+	}
+
+	if (!teamsData) {
+		return <Error message="No team found" />;
+	}
 
 	return (
 		<section className={css(layoutGutters, driversPageStyle.container)}>
 			<h1>Drivers</h1>
-			<ul className={css(driversPageStyle.teamListStyle)}>{driversList}</ul>
+			<form>
+				<div className={css(driversPageStyle.formFieldsContainer)}>
+					<Select
+						id="teams"
+						label="Filter by team"
+						defaultOptionLabel="All"
+						options={teams}
+						changeHandler={handleTeamChange}
+					/>
+				</div>
+			</form>
+			{driversList.length === 0 ? (
+				<Error message="No driver found" />
+			) : (
+				<ul className={css(driversPageStyle.teamListStyle)}>{driversList}</ul>
+			)}
 		</section>
 	);
 };
