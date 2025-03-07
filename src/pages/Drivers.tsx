@@ -1,7 +1,5 @@
 // Hooks
-import { useEffect } from "react";
 import { useTeams } from "@/hooks/useTeams";
-import { useDrivers } from "@/hooks/useDrivers";
 import { useData } from "@/hooks/useData";
 // Types
 import type { DriverType } from "@/types/driver";
@@ -16,22 +14,11 @@ import { layoutGutters } from "@/styles/layout";
 
 export const Drivers = () => {
 	const {
-		data: driversData,
-		isLoading: isDriversLoading,
-		error: driversError,
-	} = useDrivers();
-	const {
 		data: teamsData,
 		isLoading: isTeamsLoading,
 		error: teamsError,
 	} = useTeams();
-	const { filteredDrivers, setFilteredDrivers, filterByTeam } = useData();
-
-	useEffect(() => {
-		if (driversData) {
-			setFilteredDrivers(driversData);
-		}
-	}, [driversData, setFilteredDrivers]);
+	const { isDataLoading, error, filteredDrivers, filterByTeam } = useData();
 
 	const driversList = filteredDrivers.map((driver: DriverType) => (
 		<DriverCard key={driver.id} driver={driver} />
@@ -45,8 +32,8 @@ export const Drivers = () => {
 	];
 
 	function handleTeamChange(event: React.ChangeEvent<HTMLSelectElement>): void {
-		if (driversData) {
-			filterByTeam(event.target.value, driversData);
+		if (filteredDrivers) {
+			filterByTeam(event.target.value, filteredDrivers);
 		}
 	}
 
@@ -84,17 +71,17 @@ export const Drivers = () => {
 
 	// Render
 
-	if (isDriversLoading || isTeamsLoading) return <Loader />;
+	if (isDataLoading || isTeamsLoading) return <Loader />;
 
-	if (driversError) {
-		return <Error message={`An error has occurred: ${driversError.message}`} />;
+	if (error) {
+		return <Error message={`An error has occurred: ${error.message}`} />;
 	}
 
 	if (teamsError) {
 		return <Error message={`An error has occurred: ${teamsError.message}`} />;
 	}
 
-	if (!driversData) {
+	if (!filteredDrivers) {
 		return <Error message="No driver found" />;
 	}
 

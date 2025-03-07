@@ -2,6 +2,8 @@ import { createContext } from "react";
 import type { DriverType } from "@/types/driver";
 
 type DataContextType = {
+	isDataLoading: boolean;
+	error: Error | null;
 	filteredDrivers: DriverType[];
 	setFilteredDrivers: (drivers: DriverType[]) => void;
 	filterByTeam: (teamSlug: string, drivers: DriverType[]) => void;
