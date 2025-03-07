@@ -1,5 +1,4 @@
 // Hooks
-import { useTeams } from "@/hooks/useTeams";
 import { useData } from "@/hooks/useData";
 // Types
 import type { DriverType } from "@/types/driver";
@@ -11,21 +10,24 @@ import { Error } from "@/components/Error";
 // Styling
 import { css } from "@/../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
+import { useEffect } from "react";
 
 export const Drivers = () => {
 	const {
-		data: teamsData,
-		isLoading: isTeamsLoading,
-		error: teamsError,
-	} = useTeams();
-	const { isDataLoading, error, filteredDrivers, filterByTeam } = useData();
+		isDataLoading,
+		error,
+		filteredDrivers,
+		resetFilteredDrivers,
+		teams,
+		filterByTeam,
+	} = useData();
 
 	const driversList = filteredDrivers.map((driver: DriverType) => (
 		<DriverCard key={driver.id} driver={driver} />
 	));
 
-	const teams = [
-		...(teamsData ?? []).map((team) => ({
+	const filteredTeams = [
+		...(teams ?? []).map((team) => ({
 			label: team.name,
 			value: team.slug,
 		})),
@@ -33,7 +35,7 @@ export const Drivers = () => {
 
 	function handleTeamChange(event: React.ChangeEvent<HTMLSelectElement>): void {
 		if (filteredDrivers) {
-			filterByTeam(event.target.value, filteredDrivers);
+			filterByTeam(event.target.value);
 		}
 	}
 
@@ -71,21 +73,19 @@ export const Drivers = () => {
 
 	// Render
 
-	if (isDataLoading || isTeamsLoading) return <Loader />;
+	useEffect(() => resetFilteredDrivers(), []);
+
+	if (isDataLoading) return <Loader />;
 
 	if (error) {
 		return <Error message={`An error has occurred: ${error.message}`} />;
-	}
-
-	if (teamsError) {
-		return <Error message={`An error has occurred: ${teamsError.message}`} />;
 	}
 
 	if (!filteredDrivers) {
 		return <Error message="No driver found" />;
 	}
 
-	if (!teamsData) {
+	if (!filterByTeam) {
 		return <Error message="No team found" />;
 	}
 
@@ -98,7 +98,7 @@ export const Drivers = () => {
 						id="teams"
 						label="Filter by team"
 						defaultOptionLabel="All"
-						options={teams}
+						options={filteredTeams}
 						changeHandler={handleTeamChange}
 					/>
 				</div>
