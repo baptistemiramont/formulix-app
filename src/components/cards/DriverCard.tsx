@@ -11,7 +11,7 @@ export const DriverCard = (props: Props) => {
 		driver: { firstName, lastName, id, avatar },
 	} = props;
 
-	const team = "team" in props.driver ? props.driver.team : false;
+	const team = "currentTeam" in props.driver ? props.driver.currentTeam : false;
 
 	// Styles
 
