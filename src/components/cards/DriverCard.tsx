@@ -12,6 +12,7 @@ export const DriverCard = (props: Props) => {
 	} = props;
 
 	const team = "team" in props.driver ? props.driver.team : false;
+
 	// Styles
 
 	const cardStyle = {
@@ -76,7 +77,7 @@ export const DriverCard = (props: Props) => {
 					<p className={cardStyle.title}>
 						{firstName} {lastName}
 					</p>
-					{team && <p className={cardStyle.subtitle}>{team}</p>}
+					{team && <p className={cardStyle.subtitle}>{team.name}</p>}
 				</div>
 			</Link>
 		</li>
