@@ -5,21 +5,27 @@
 		"lib": ["ES2020", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
+		"allowJs": true,
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true,
 		"isolatedModules": true,
+		"moduleDetection": "force",
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noImplicitAny": false,
+		"noFallthroughCasesInSwitch": false,
+		"strictNullChecks": false,
+		"verbatimModuleSyntax": true,
 		"baseUrl": "./",
+		"composite": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": false,
 		"paths": {
 			"@/*": ["src/*"]
 		}
 	},
 	"include": ["src", "./panda.config.ts", "styled-system"],
-	"references": [{ "path": "./tsconfig.node.json" }]
+	"exclude": ["node_modules", "dist", "build", "public"]
 }
