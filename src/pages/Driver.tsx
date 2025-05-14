@@ -1,17 +1,16 @@
-// Router
-import { useParams } from "@tanstack/react-router";
-// Queries
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
+import type { FunctionComponent } from "react";
+
+import { css } from "@/../styled-system/css";
 import { getDriver } from "@/api/driver";
-// Components
 import { StatCard } from "@/components/cards/StatCard";
 import { TeamCard } from "@/components/cards/TeamCard";
+import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
-// Styling
-import { css } from "@/../styled-system/css";
 import { layoutGutters } from "@/styles/layout";
 
-export const Driver = () => {
+export const Driver: FunctionComponent = () => {
 	const { id } = useParams({ from: "/drivers/$id" });
 
 	const {
@@ -25,9 +24,9 @@ export const Driver = () => {
 
 	if (isLoading) return <Loader />;
 
-	if (error) return "An error has occurred: " + error.message;
+	if (error) return <Error message={error.message} />;
 
-	if (!driver) return "Driver not found";
+	if (!driver) return <Error message="Driver not found" />;
 
 	const {
 		firstName,
@@ -141,7 +140,9 @@ export const Driver = () => {
 				<h2>
 					{firstName} {lastName}'s team(s)
 				</h2>
-				<ul className={css(driverPageStyle.driverTeamsList)}>{teamsList}</ul>
+				<ul className={css(driverPageStyle.driverTeamsList)}>
+					{teamsList}
+				</ul>
 			</div>
 		</section>
 	);
