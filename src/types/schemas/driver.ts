@@ -4,6 +4,7 @@ export const driverSchema = z.object({
 	id: z.number(),
 	firstName: z.string(),
 	lastName: z.string(),
+	slug: z.string(),
 	avatar: z.string(),
 	country: z.string(),
 	worldChampionshipsTitle: z.number(),
@@ -34,6 +35,7 @@ export const driverDetailedSchema = z.object({
 		z.object({
 			id: z.number(),
 			name: z.string(),
+			slug: z.string(),
 			favicon: z.string(),
 			isCurrentTeam: z.boolean(),
 		})

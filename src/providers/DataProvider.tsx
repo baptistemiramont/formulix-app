@@ -1,14 +1,29 @@
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
+
+import { DataContext } from "@/contexts/DataContext";
 import { useDrivers } from "@/hooks/useDrivers";
 import { useTeams } from "@/hooks/useTeams";
-import { DataContext } from "@/contexts/DataContext";
-import type { DriverType } from "@/types/driver";
-import type { TeamType } from "@/types/team";
+import type { TDriver } from "@/types/driver";
+import type { TTeam } from "@/types/team";
 
-export const DataProvider = ({ children }: { children: ReactNode }) => {
-	const [drivers, setDrivers] = useState<DriverType[]>([]);
-	const [filteredDrivers, setFilteredDrivers] = useState<DriverType[]>([]);
-	const [teams, setTeams] = useState<TeamType[]>([]);
+export type TDataContext = {
+	isDataLoading: boolean;
+	error: Error | null;
+	filteredDrivers: TDriver[];
+	resetFilteredDrivers: () => void;
+	teams: TTeam[];
+	setFilteredDrivers: (drivers: TDriver[]) => void;
+	filterByTeam: (teamSlug: string) => void;
+};
+
+type TDataProviderProps = {
+	children: ReactNode;
+};
+
+export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
+	const [drivers, setDrivers] = useState<TDriver[]>([]);
+	const [filteredDrivers, setFilteredDrivers] = useState<TDriver[]>([]);
+	const [teams, setTeams] = useState<TTeam[]>([]);
 
 	function filterByTeam(teamSlug: string): void {
 		if (!teamSlug || teamSlug === "") {

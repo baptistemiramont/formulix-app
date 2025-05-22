@@ -1,15 +1,16 @@
 import {
-	createRouter,
-	createRoute,
 	createRootRoute,
+	createRoute,
+	createRouter,
 } from "@tanstack/react-router";
+
 import { App } from "@/App";
-import { Home } from "@/pages/Home";
-import { Teams } from "@/pages/Teams";
-import { Team } from "@/pages/Team";
-import { Drivers } from "@/pages/Drivers";
 import { Driver } from "@/pages/Driver";
+import { Drivers } from "@/pages/Drivers";
+import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
+import { Team } from "@/pages/Team";
+import { Teams } from "@/pages/Teams";
 
 const rootRoute = createRootRoute({
 	component: () => <App />,
@@ -28,7 +29,7 @@ const routeTree = rootRoute.addChildren([
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,
-		path: "/teams/$id",
+		path: "/teams/$teamSlug",
 		component: () => <Team />,
 	}),
 	createRoute({
@@ -38,7 +39,7 @@ const routeTree = rootRoute.addChildren([
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,
-		path: "/drivers/$id",
+		path: "/drivers/$driverSlug",
 		component: () => <Driver />,
 	}),
 	createRoute({

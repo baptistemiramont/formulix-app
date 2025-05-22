@@ -1,17 +1,19 @@
-import type { DriverType, MinimalDriverType } from "@/types/driver";
-import { css } from "../../../styled-system/css";
 import { Link } from "@tanstack/react-router";
+import type { FunctionComponent } from "react";
 
-type Props = {
-	driver: DriverType | MinimalDriverType;
+import { css } from "@/../styled-system/css";
+import type { MinimalDriverType, TDriver } from "@/types/driver";
+
+type TDriverCardProps = {
+	driver: TDriver | MinimalDriverType;
 };
 
-export const DriverCard = (props: Props) => {
-	const {
-		driver: { firstName, lastName, id, avatar },
-	} = props;
+export const DriverCard: FunctionComponent<TDriverCardProps> = ({
+	driver,
+}: TDriverCardProps) => {
+	const { firstName, lastName, slug, avatar } = driver;
 
-	const team = "currentTeam" in props.driver ? props.driver.currentTeam : false;
+	const team = "currentTeam" in driver ? driver.currentTeam : false;
 
 	// Styles
 
@@ -63,7 +65,11 @@ export const DriverCard = (props: Props) => {
 
 	return (
 		<li className={cardStyle.container}>
-			<Link to="/drivers/$id" params={{ id }} className={cardStyle.link}>
+			<Link
+				to="/drivers/$driverSlug"
+				params={{ driverSlug: slug }}
+				className={cardStyle.link}
+			>
 				<div className={cardStyle.imageContainer}>
 					<img
 						className={cardStyle.image}

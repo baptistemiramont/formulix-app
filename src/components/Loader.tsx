@@ -1,6 +1,8 @@
+import type { FunctionComponent } from "react";
+
 import { css } from "@/../styled-system/css";
 
-export const Loader = () => {
+export const Loader: FunctionComponent = () => {
 	const loaderStyles = {
 		container: {
 			display: "flex",

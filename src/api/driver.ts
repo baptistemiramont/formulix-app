@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-import type { TDriverDetailedType, TDriverType } from "@/types/driver";
+import type { TDriver, TDriverDetailed } from "@/types/driver";
 import { driverDetailedSchema, driverSchema } from "@/types/schemas/driver";
 import { API_URL, QUERY_HEADERS } from "@/utils/constants";
 
-export async function getDrivers(): Promise<TDriverType[]> {
+export async function getDrivers(): Promise<TDriver[]> {
 	const options = { headers: QUERY_HEADERS };
 
 	const response = await fetch(`${API_URL}/drivers`, options);
@@ -28,10 +28,10 @@ export async function getDrivers(): Promise<TDriverType[]> {
 	return drivers;
 }
 
-export async function getDriver(id: number): Promise<TDriverDetailedType> {
+export async function getDriver(driverSlug: string): Promise<TDriverDetailed> {
 	const options = { headers: QUERY_HEADERS };
 
-	const response = await fetch(`${API_URL}/drivers/${id}`, options);
+	const response = await fetch(`${API_URL}/drivers/${driverSlug}`, options);
 
 	if (!response.ok) {
 		throw new Error("Failed to fetch driver");

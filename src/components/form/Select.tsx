@@ -1,19 +1,18 @@
-import React from "react";
-// Components
-import { Label } from "@/components/form/Label";
-// Styling
+import { type ChangeEvent, type FunctionComponent } from "react";
+
 import { css } from "@/../styled-system/css";
+import { Label } from "@/components/form/Label";
 import { fieldContainer } from "@/styles/form";
 
-type Props = {
+type TSelectProps = {
 	id: string;
 	label: string;
 	defaultOptionLabel: string;
 	options: { label: string; value: string }[];
-	changeHandler: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+	changeHandler: (event: ChangeEvent<HTMLSelectElement>) => void;
 };
 
-export const Select: React.FC<Props> = ({
+export const Select: FunctionComponent<TSelectProps> = ({
 	id,
 	label,
 	defaultOptionLabel,

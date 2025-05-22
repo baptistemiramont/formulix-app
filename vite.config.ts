@@ -1,8 +1,8 @@
+import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
+import react from "@vitejs/plugin-react-swc";
+import * as path from "path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-import react from "@vitejs/plugin-react-swc";
-import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
-import * as path from "path";
 
 export default defineConfig({
 	plugins: [

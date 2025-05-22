@@ -1,89 +1,59 @@
-import type { TeamDetailedType, TeamType } from "@/types/team";
-import { teamDetailedSchema, teamSchema } from "@/types/schemas/team";
 import { z } from "zod";
 
-const apiKey: string = import.meta.env.VITE_API_KEY;
+import { teamDetailedSchema, teamSchema } from "@/types/schemas/team";
+import type { TTeam, TTeamDetailed } from "@/types/team";
+import { API_URL, QUERY_HEADERS } from "@/utils/constants";
 
-export const getTeams = async (): Promise<TeamType[]> => {
-	try {
-		const options: RequestInit = {
-			headers: {
-				APIKey: apiKey,
-			},
-		};
+export async function getTeams(): Promise<TTeam[]> {
+	const options = {
+		headers: QUERY_HEADERS,
+	};
 
-		const response: Response = await fetch(
-			`${import.meta.env.VITE_API_URL}/teams`,
-			options
-		);
+	const response = await fetch(`${API_URL}/teams`, options);
 
-		if (!response.ok) {
-			throw new Error(`HTTP error ! status: ${response.status}`);
-		}
-
-		const { data } = await response.json();
-
-		const { success, data: teams } = z.array(teamSchema).safeParse(data);
-
-		if (!success) {
-			throw new Error("Invalid data format");
-		}
-
-		return teams.map((team) => {
-			return {
-				...team,
-				favicon: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${team.favicon}`,
-			};
-		}) as TeamType[];
-	} catch (error: unknown) {
-		if (error instanceof Error) {
-			throw new Error(error.message);
-		} else {
-			throw new Error("An unknown error occurred");
-		}
+	if (!response.ok) {
+		throw new Error(`HTTP error ! status: ${response.status}`);
 	}
-};
 
-export const getTeam = async (id: number): Promise<TeamDetailedType> => {
-	try {
-		const options: RequestInit = {
-			headers: {
-				APIKey: apiKey,
-			},
-		};
+	const { data } = await response.json();
 
-		const response: Response = await fetch(
-			`${import.meta.env.VITE_API_URL}/teams/${id}`,
-			options
-		);
+	const { success, data: teams } = z.array(teamSchema).safeParse(data);
 
-		if (!response.ok) {
-			throw new Error(`HTTP error ! status: ${response.status}`);
-		}
-
-		const { data } = await response.json();
-
-		const { success, data: team } = teamDetailedSchema.safeParse(data);
-
-		if (!success) {
-			throw new Error("Invalid data format");
-		}
-
-		team.favicon = `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${team.favicon}`;
-
-		team.drivers = team.drivers.map((driver) => {
-			return {
-				...driver,
-				avatar: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${driver.avatar}`,
-			};
-		});
-
-		return team as TeamDetailedType;
-	} catch (error: unknown) {
-		if (error instanceof Error) {
-			throw new Error(error.message);
-		} else {
-			throw new Error("An unknown error occurred");
-		}
+	if (!success) {
+		throw new Error("Invalid data format");
 	}
-};
+
+	teams.forEach((team) => {
+		team.favicon = `${API_URL.replace("/api/v1", "")}${team.favicon}`;
+	});
+
+	return teams;
+}
+
+export async function getTeam(teamSlug: string): Promise<TTeamDetailed> {
+	const options = {
+		headers: QUERY_HEADERS,
+	};
+
+	const response = await fetch(`${API_URL}/teams/${teamSlug}`, options);
+
+	if (!response.ok) {
+		throw new Error(`HTTP error ! status: ${response.status}`);
+	}
+
+	const { data } = await response.json();
+
+	const { success, data: team } = teamDetailedSchema.safeParse(data);
+
+	if (!success) {
+		throw new Error("Invalid data format");
+	}
+
+	team.favicon = `${API_URL.replace("/api/v1", "")}${team.favicon}`;
+
+	team.drivers.forEach((driver) => {
+		driver.avatar = `${API_URL.replace("/api/v1", "")}${driver.avatar}`;
+	});
+
+	return team;
+}

@@ -1,13 +1,13 @@
-import React from "react";
-// Styling
+import { type FunctionComponent } from "react";
+
 import { css } from "@/../styled-system/css";
 
-type Props = {
+type TLabelProps = {
 	id: string;
 	label: string;
 };
 
-export const Label: React.FC<Props> = ({ id, label }) => {
+export const Label: FunctionComponent<TLabelProps> = ({ id, label }) => {
 	const labelStyle = css({});
 
 	return (

@@ -11,15 +11,15 @@ import { Loader } from "@/components/Loader";
 import { layoutGutters } from "@/styles/layout";
 
 export const Driver: FunctionComponent = () => {
-	const { id } = useParams({ from: "/drivers/$id" });
+	const { driverSlug } = useParams({ from: "/drivers/$driverSlug" });
 
 	const {
 		data: driver,
 		isLoading,
 		error,
 	} = useQuery({
-		queryKey: ["driver", id],
-		queryFn: () => getDriver(id),
+		queryKey: ["driver", driverSlug],
+		queryFn: () => getDriver(driverSlug),
 	});
 
 	if (isLoading) return <Loader />;
