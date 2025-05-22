@@ -1,12 +1,12 @@
-import React from "react";
+import { type FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 
-type Props = {
+type TErrorProps = {
 	message: string;
 };
 
-export const Error: React.FC<Props> = ({ message }) => {
+export const Error: FunctionComponent<TErrorProps> = ({ message }) => {
 	const textStyle = css({
 		color: "red",
 		fontWeight: "bold",
