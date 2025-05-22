@@ -1,81 +1,55 @@
-import type { DriverType } from "@/types/driver";
-import { driverDetailedSchema, driverSchema } from "@/types/schemas/driver";
 import { z } from "zod";
 
-const apiKey: string = import.meta.env.VITE_API_KEY;
+import type { TDriverDetailedType, TDriverType } from "@/types/driver";
+import { driverDetailedSchema, driverSchema } from "@/types/schemas/driver";
+import { API_URL, QUERY_HEADERS } from "@/utils/constants";
 
-export const getDrivers = async (): Promise<DriverType[]> => {
-	try {
-		const options = {
-			headers: {
-				APIKey: apiKey,
-			},
-		};
+export async function getDrivers(): Promise<TDriverType[]> {
+	const options = { headers: QUERY_HEADERS };
 
-		const response = await fetch(
-			`${import.meta.env.VITE_API_URL}/drivers`,
-			options
-		);
+	const response = await fetch(`${API_URL}/drivers`, options);
 
-		const { data } = await response.json();
-
-		const { success, data: drivers } = z.array(driverSchema).safeParse(data);
-
-		if (!success) {
-			throw new Error("Invalid data format");
-		}
-
-		return drivers.map((driver) => {
-			return {
-				...driver,
-				avatar: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${driver.avatar}`,
-			};
-		});
-	} catch (error: unknown) {
-		if (error instanceof Error) {
-			throw new Error(error.message);
-		} else {
-			throw new Error("An unknown error occurred");
-		}
+	if (!response.ok) {
+		throw new Error("Failed to fetch drivers");
 	}
-};
 
-export const getDriver = async (id: number) => {
-	try {
-		const options = {
-			headers: {
-				APIKey: apiKey,
-			},
-		};
+	const { data } = await response.json();
 
-		const response = await fetch(
-			`${import.meta.env.VITE_API_URL}/drivers/${id}`,
-			options
-		);
+	const { success, data: drivers } = z.array(driverSchema).safeParse(data);
 
-		const { data } = await response.json();
-
-		const { success, data: driver } = driverDetailedSchema.safeParse(data);
-
-		if (!success) {
-			throw new Error("Invalid data format");
-		}
-
-		driver.avatar = `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${driver.avatar}`;
-
-		driver.teams = driver.teams.map((team) => {
-			return {
-				...team,
-				favicon: `${import.meta.env.VITE_API_URL.replace("/api/v1", "")}${team.favicon}`,
-			};
-		});
-
-		return driver;
-	} catch (error: unknown) {
-		if (error instanceof Error) {
-			throw new Error(error.message);
-		} else {
-			throw new Error("An unknown error occurred");
-		}
+	if (!success) {
+		throw new Error("Invalid data format");
 	}
-};
+
+	drivers.forEach((driver) => {
+		driver.avatar = `${API_URL.replace("/api/v1", "")}${driver.avatar}`;
+	});
+
+	return drivers;
+}
+
+export async function getDriver(id: number): Promise<TDriverDetailedType> {
+	const options = { headers: QUERY_HEADERS };
+
+	const response = await fetch(`${API_URL}/drivers/${id}`, options);
+
+	if (!response.ok) {
+		throw new Error("Failed to fetch driver");
+	}
+
+	const { data } = await response.json();
+
+	const { success, data: driver } = driverDetailedSchema.safeParse(data);
+
+	if (!success) {
+		throw new Error("Invalid data format");
+	}
+
+	driver.avatar = `${API_URL.replace("/api/v1", "")}${driver.avatar}`;
+
+	driver.teams.forEach((team) => {
+		team.favicon = `${API_URL.replace("/api/v1", "")}${team.favicon}`;
+	});
+
+	return driver;
+}

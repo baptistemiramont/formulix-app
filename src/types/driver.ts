@@ -1,21 +1,8 @@
-export type DriverType = {
-	id: number;
-	firstName: string;
-	lastName: string;
-	avatar: string;
-	country: string;
-	worldChampionshipsTitle: number;
-	podiums: number;
-	grandPrixParticipation: number;
-	currentTeam: {
-		name: string;
-		slug: string;
-	};
-	formerTeams: {
-		name: string;
-		slug: string;
-	}[];
-};
+import type { z } from "zod";
+
+import type { driverDetailedSchema, driverSchema } from "./schemas/driver";
+
+export type TDriverType = z.infer<typeof driverSchema>;
 
 export type MinimalDriverType = {
 	id: number;
@@ -25,21 +12,4 @@ export type MinimalDriverType = {
 	isActive: boolean;
 };
 
-export type DriverDetailedType = {
-	id: number;
-	firstName: string;
-	lastName: string;
-	avatar: string;
-	country: string;
-	worldChampionshipsTitle: number;
-	podiums: number;
-	grandPrixParticipation: number;
-	teams: [
-		{
-			id: number;
-			name: string;
-			favicon: string;
-			isCurrentTeam: boolean;
-		},
-	];
-};
+export type TDriverDetailedType = z.infer<typeof driverDetailedSchema>;
