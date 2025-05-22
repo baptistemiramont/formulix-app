@@ -1,18 +1,19 @@
-import type { MinimalTeamType, TeamType } from "@/types/team";
-import { css } from "../../../styled-system/css";
 import { Link } from "@tanstack/react-router";
+import type { FunctionComponent } from "react";
 
-type Props = {
-	team: TeamType | MinimalTeamType;
+import { css } from "@/../styled-system/css";
+import type { MinimalTeamType, TTeam } from "@/types/team";
+
+type TTeamCardProps = {
+	team: TTeam | MinimalTeamType;
 };
 
-export const TeamCard = (props: Props) => {
-	const {
-		team: { name, id, favicon },
-	} = props;
+export const TeamCard: FunctionComponent<TTeamCardProps> = ({
+	team,
+}: TTeamCardProps) => {
+	const { name, slug, favicon } = team;
 
-	const isCurrentTeam =
-		"isCurrentTeam" in props.team ? props.team.isCurrentTeam : false;
+	const isCurrentTeam = "isCurrentTeam" in team ? team.isCurrentTeam : false;
 
 	// Styles
 
@@ -64,7 +65,11 @@ export const TeamCard = (props: Props) => {
 
 	return (
 		<li className={cardStyle.container}>
-			<Link to="/teams/$id" params={{ id }} className={cardStyle.link}>
+			<Link
+				to="/teams/$teamSlug"
+				params={{ teamSlug: slug }}
+				className={cardStyle.link}
+			>
 				<div className={cardStyle.imageContainer}>
 					<img
 						className={cardStyle.image}
@@ -76,7 +81,9 @@ export const TeamCard = (props: Props) => {
 				</div>
 				<div>
 					<p className={cardStyle.title}>{name}</p>
-					{isCurrentTeam && <p className={cardStyle.subtitle}>Current team</p>}
+					{isCurrentTeam && (
+						<p className={cardStyle.subtitle}>Current team</p>
+					)}
 				</div>
 			</Link>
 		</li>

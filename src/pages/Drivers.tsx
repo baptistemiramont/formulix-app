@@ -1,18 +1,14 @@
-// Hooks
-import { useData } from "@/hooks/useData";
-// Types
-import type { DriverType } from "@/types/driver";
-// Components
-import { DriverCard } from "@/components/cards/DriverCard";
-import { Loader } from "@/components/Loader";
-import { Select } from "@/components/form/Select";
-import { Error } from "@/components/Error";
-// Styling
-import { css } from "@/../styled-system/css";
-import { layoutGutters } from "@/styles/layout";
-import { useEffect } from "react";
+import { type FunctionComponent, useEffect } from "react";
 
-export const Drivers = () => {
+import { css } from "@/../styled-system/css";
+import { DriverCard } from "@/components/cards/DriverCard";
+import { Error } from "@/components/Error";
+import { Select } from "@/components/form/Select";
+import { Loader } from "@/components/Loader";
+import { useData } from "@/hooks/useData";
+import { layoutGutters } from "@/styles/layout";
+
+export const Drivers: FunctionComponent = () => {
 	const {
 		isDataLoading,
 		error,
@@ -22,7 +18,7 @@ export const Drivers = () => {
 		filterByTeam,
 	} = useData();
 
-	const driversList = filteredDrivers.map((driver: DriverType) => (
+	const driversList = filteredDrivers.map((driver) => (
 		<DriverCard key={driver.id} driver={driver} />
 	));
 
@@ -33,7 +29,9 @@ export const Drivers = () => {
 		})),
 	];
 
-	function handleTeamChange(event: React.ChangeEvent<HTMLSelectElement>): void {
+	function handleTeamChange(
+		event: React.ChangeEvent<HTMLSelectElement>
+	): void {
 		if (filteredDrivers) {
 			filterByTeam(event.target.value);
 		}
@@ -73,7 +71,7 @@ export const Drivers = () => {
 
 	// Render
 
-	useEffect(() => resetFilteredDrivers(), []);
+	useEffect(() => resetFilteredDrivers(), [resetFilteredDrivers]);
 
 	if (isDataLoading) return <Loader />;
 
@@ -106,7 +104,9 @@ export const Drivers = () => {
 			{driversList.length === 0 ? (
 				<Error message="No driver found" />
 			) : (
-				<ul className={css(driversPageStyle.teamListStyle)}>{driversList}</ul>
+				<ul className={css(driversPageStyle.teamListStyle)}>
+					{driversList}
+				</ul>
 			)}
 		</section>
 	);
