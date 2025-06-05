@@ -25,6 +25,7 @@ export const teamDetailedSchema = z.object({
 			id: z.number(),
 			firstName: z.string(),
 			lastName: z.string(),
+			slug: z.string(),
 			avatar: z.string(),
 			isActive: z.boolean(),
 		})

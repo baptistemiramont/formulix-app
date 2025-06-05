@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
+import type { FunctionComponent } from "react";
+
 import { css } from "@/../styled-system/css";
 
-export const Logo = (): JSX.Element => {
+export const Logo: FunctionComponent = () => {
 	const logoTextStyle = css({
 		fontSize: "4xl",
 		fontWeight: 700,

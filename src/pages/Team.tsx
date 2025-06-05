@@ -1,26 +1,24 @@
-// Router
-import { useParams } from "@tanstack/react-router";
-// Queries
 import { useQuery } from "@tanstack/react-query";
-import { getTeam } from "@/api/team";
-// Components
-import { Loader } from "@/components/Loader";
-import { StatCard } from "@/components/cards/StatCard";
-import { DriverCard } from "@/components/cards/DriverCard";
-// Styling
+import { useParams } from "@tanstack/react-router";
+import type { FunctionComponent } from "react";
+
 import { css } from "@/../styled-system/css";
+import { getTeam } from "@/api/team";
+import { DriverCard } from "@/components/cards/DriverCard";
+import { StatCard } from "@/components/cards/StatCard";
+import { Loader } from "@/components/Loader";
 import { layoutGutters } from "@/styles/layout";
 
-export const Team = () => {
-	const { id } = useParams({ from: "/teams/$id" });
+export const Team: FunctionComponent = () => {
+	const { teamSlug } = useParams({ from: "/teams/$teamSlug" });
 
 	const {
 		data: team,
 		isLoading,
 		error,
 	} = useQuery({
-		queryKey: ["team", id],
-		queryFn: () => getTeam(id),
+		queryKey: ["team", teamSlug],
+		queryFn: () => getTeam(teamSlug),
 	});
 
 	if (isLoading) return <Loader />;
@@ -129,7 +127,10 @@ export const Team = () => {
 							label="World championships won"
 							value={worldChampionships}
 						/>
-						<StatCard label="First team entry" value={firstTeamEntry} />
+						<StatCard
+							label="First team entry"
+							value={firstTeamEntry}
+						/>
 					</ul>
 				</div>
 			</div>

@@ -1,15 +1,18 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
+import ReactDOM from "react-dom/client";
+
 import { router } from "./router/router";
+
 import "./index.css";
 
-const rootElement = document.getElementById("app")!;
+const rootElement = document.getElementById("app");
 
 const queryClient = new QueryClient();
 
-if (!rootElement.innerHTML) {
+if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 
 	root.render(

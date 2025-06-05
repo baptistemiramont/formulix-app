@@ -1,7 +1,9 @@
-import { DataProvider } from "@/providers/DataProvider";
-import { Page } from "@/layouts/Page";
+import type { FunctionComponent } from "react";
 
-export const App = () => {
+import { Page } from "@/layouts/Page";
+import { DataProvider } from "@/providers/DataProvider";
+
+export const App: FunctionComponent = () => {
 	return (
 		<DataProvider>
 			<Page />

@@ -1,15 +1,16 @@
+import type { FunctionComponent } from "react";
+
 import { css } from "@/../styled-system/css";
 
-type Props = {
+type TStatCardProps = {
 	label: string;
 	value: string | number;
 };
 
-export const StatCard = (props: Props) => {
-	const { label, value } = props;
-
-	// Style
-
+export const StatCard: FunctionComponent<TStatCardProps> = ({
+	label,
+	value,
+}: TStatCardProps) => {
 	const cardStyle = {
 		container: css({
 			display: "grid",
