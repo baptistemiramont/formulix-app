@@ -1,0 +1,41 @@
+name: Production deployment
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 20
+
+            - name: Create .env file
+              run: echo "${{ vars.ENV_VARS }}" > .env
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build project
+              run: npm run build
+
+            - name: Setup SSH
+              uses: webfactory/ssh-agent@v0.5.3
+              with:
+                  ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+
+            - name: Add server to known hosts and create remote directory
+              run: |
+                  ssh -o StrictHostKeyChecking=no -t ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+                    mkdir -p ~/formulix-app
+                  EOF
+
+            - name: Rsync build to VPS
+              run: rsync -rtgovh --delete --progress --chmod=a-w -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@${{ secrets.SERVER_IP }}:~/formulix-app/

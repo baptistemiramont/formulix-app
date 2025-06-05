@@ -1,27 +1,27 @@
-// Type
-import type { TeamType } from "../types/team";
-// Components
-import { TeamCard } from "../components/cards/TeamCard";
+import type { FunctionComponent } from "react";
+
+import { css } from "@/../styled-system/css";
+import { TeamCard } from "@/components/cards/TeamCard";
+import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
-// Styling
-import { css } from "../../styled-system/css";
+import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
-import { useTeams } from "@/hooks/useTeams";
+import type { TTeam } from "@/types/team";
 
-export const Teams = () => {
-	const { data: teams, isLoading, error } = useTeams();
+export const Teams: FunctionComponent = () => {
+	const { isTeamsLoading, teams, teamsError } = useData();
 
-	if (isLoading) return <Loader />;
+	if (isTeamsLoading) return <Loader />;
 
-	if (error) return "An error has occurred: " + error.message;
+	if (teamsError) {
+		return <Error message="An error has occurred" />;
+	}
 
 	if (!teams) return "No teams found";
 
-	const teamsList = teams.map((team: TeamType) => (
+	const teamsList = teams.map((team: TTeam) => (
 		<TeamCard key={team.id} team={team} />
 	));
-
-	// Styles
 
 	const teamsPageStyle = {
 		container: {

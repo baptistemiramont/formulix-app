@@ -1,25 +1,22 @@
-// Hooks
-import { useRef } from "react";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-// Components
-import { Button } from "@/components/Button";
-import { Logo } from "@/components/Logo";
-// Styling
-import { layoutGutters, sectionSpacing } from "@/styles/layout";
-import { css } from "../../styled-system/css";
-// Animations
-import gsap from "gsap";
+import { type FunctionComponent, useRef } from "react";
+
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+import { css } from "@/../styled-system/css";
 import { fromSettings, scrollOptions, toSettings } from "@/animations";
-// Medias
-import mclarenF1 from "@/assets/images/mclaren-mcl37.webp";
 import landoNorrisCelebrationDesktop from "@/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_desktop.webp";
 import landoNorrisCelebrationMobile from "@/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_mobile.webp";
+import mclarenF1 from "@/assets/images/mclaren-mcl37.webp";
+import { Button } from "@/components/Button";
+import { Logo } from "@/components/Logo";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { layoutGutters, sectionSpacing } from "@/styles/layout";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const Home = () => {
+export const Home: FunctionComponent = () => {
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
 
 	const refs = {
@@ -207,20 +204,29 @@ export const Home = () => {
 			<section className={css(layoutGutters, heroSectionStyle.section)}>
 				<div className={css(heroSectionStyle.ctaSectionContainer)}>
 					{!isDesktop && <Logo />}
-					<div className={css(heroSectionStyle.ctaSectionContentContainer)}>
+					<div
+						className={css(
+							heroSectionStyle.ctaSectionContentContainer
+						)}
+					>
 						<h1 className={css(heroSectionStyle.title)}>
-							<span ref={refs.heroAppName} className={css(appNameStyle)}>
+							<span
+								ref={refs.heroAppName}
+								className={css(appNameStyle)}
+							>
 								Formulix
 							</span>
-							<span ref={refs.heroTitle}>Your ultimate F1 companion</span>
+							<span ref={refs.heroTitle}>
+								Your ultimate F1 companion
+							</span>
 						</h1>
 						<p
 							ref={refs.heroSubtitle}
 							className={css(heroSectionStyle.subtitle)}
 						>
-							Explore the rich history and current excitement of Formula 1.
-							Follow your favorite drivers and teams through over 70 years of
-							thrilling competition.
+							Explore the rich history and current excitement of
+							Formula 1. Follow your favorite drivers and teams
+							through over 70 years of thrilling competition.
 						</p>
 						<div
 							ref={refs.heroCtasContainer}
@@ -255,24 +261,30 @@ export const Home = () => {
 				<div className={css(aboutSectionStyle.aboutContentContainer)}>
 					<div className={css(aboutSectionStyle.titlesContainer)}>
 						<h2 ref={refs.aboutTitle}>
-							More about <span className={css(appNameStyle)}>Formulix</span>
+							More about{" "}
+							<span className={css(appNameStyle)}>Formulix</span>
 						</h2>
-						<h3 ref={refs.aboutSubtitle}>Purpose of the Application</h3>
+						<h3 ref={refs.aboutSubtitle}>
+							Purpose of the Application
+						</h3>
 					</div>
 					<p ref={refs.aboutText1}>
-						Formulix is a web application dedicated to bringing fans closer to
-						the excitement and legacy of the Formula 1 World Championship. It
-						offers users the chance to dive into the sport’s rich history and
-						stay updated on the latest thrills, following their favorite drivers
-						and teams across more than 70 years of legendary competition.
+						Formulix is a web application dedicated to bringing fans
+						closer to the excitement and legacy of the Formula 1
+						World Championship. It offers users the chance to dive
+						into the sport’s rich history and stay updated on the
+						latest thrills, following their favorite drivers and
+						teams across more than 70 years of legendary
+						competition.
 					</p>
 					<p ref={refs.aboutText2}>
-						At present, the app features information on drivers and teams from
-						the latest season. However, our vision is to expand and eventually
-						cover the entire history of Formula 1, starting from its inception
-						in the 1950s. In future updates, we also plan to introduce detailed
-						information about the legendary tracks that have shaped this iconic
-						sport.
+						At present, the app features information on drivers and
+						teams from the latest season. However, our vision is to
+						expand and eventually cover the entire history of
+						Formula 1, starting from its inception in the 1950s. In
+						future updates, we also plan to introduce detailed
+						information about the legendary tracks that have shaped
+						this iconic sport.
 					</p>
 				</div>
 				<div className={css(aboutSectionStyle.imageContainer)}>

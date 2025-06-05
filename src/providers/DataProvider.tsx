@@ -8,10 +8,12 @@ import type { TTeam } from "@/types/team";
 
 export type TDataContext = {
 	isDataLoading: boolean;
-	error: Error | null;
+	error: Error | unknown | null;
 	filteredDrivers: TDriver[];
 	resetFilteredDrivers: () => void;
+	isTeamsLoading: boolean;
 	teams: TTeam[];
+	teamsError: Error | unknown | null;
 	setFilteredDrivers: (drivers: TDriver[]) => void;
 	filterByTeam: (teamSlug: string) => void;
 };
@@ -59,14 +61,14 @@ export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
 
 	useEffect(() => {
 		if (driversData) {
-			setDrivers(driversData);
-			setFilteredDrivers(driversData);
+			setDrivers(driversData as TDriver[]);
+			setFilteredDrivers(driversData as TDriver[]);
 		}
 	}, [driversData]);
 
 	useEffect(() => {
 		if (teamsData) {
-			setTeams(teamsData);
+			setTeams(teamsData as TTeam[]);
 		}
 	}, [teamsData]);
 
@@ -76,7 +78,9 @@ export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
 			value={{
 				filteredDrivers,
 				resetFilteredDrivers,
+				isTeamsLoading,
 				teams,
+				teamsError,
 				isDataLoading,
 				error,
 				setFilteredDrivers,

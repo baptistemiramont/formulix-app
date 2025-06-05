@@ -15,8 +15,6 @@ export const TeamCard: FunctionComponent<TTeamCardProps> = ({
 
 	const isCurrentTeam = "isCurrentTeam" in team ? team.isCurrentTeam : false;
 
-	// Styles
-
 	const cardStyle = {
 		container: css({
 			borderRadius: "md",

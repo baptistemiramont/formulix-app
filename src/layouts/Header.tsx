@@ -1,10 +1,12 @@
-import { Link } from "@tanstack/react-router";
-import { css } from "@/../styled-system/css";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Icon } from "@iconify/react";
-import { Logo } from "@/components/Logo";
+import { Link } from "@tanstack/react-router";
+import type { FunctionComponent } from "react";
 
-export const Header = () => {
+import { css } from "@/../styled-system/css";
+import { Logo } from "@/components/Logo";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+
+export const Header: FunctionComponent = () => {
 	// Styles
 
 	const headerStyle = {
@@ -81,13 +83,21 @@ export const Header = () => {
 		},
 		{
 			href: "/drivers",
-			icon: <Icon icon="mdi-racing-helmet" className={headerStyle.iconStyle} />,
+			icon: (
+				<Icon
+					icon="mdi-racing-helmet"
+					className={headerStyle.iconStyle}
+				/>
+			),
 			label: "Drivers",
 		},
 		{
 			href: "/teams",
 			icon: (
-				<Icon icon="mdi-flag-checkered" className={headerStyle.iconStyle} />
+				<Icon
+					icon="mdi-flag-checkered"
+					className={headerStyle.iconStyle}
+				/>
 			),
 			label: "Teams",
 		},

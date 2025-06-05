@@ -76,7 +76,7 @@ export const Drivers: FunctionComponent = () => {
 	if (isDataLoading) return <Loader />;
 
 	if (error) {
-		return <Error message={`An error has occurred: ${error.message}`} />;
+		return <Error message="An error has occurred" />;
 	}
 
 	if (!filteredDrivers) {

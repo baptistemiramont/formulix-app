@@ -1,7 +1,9 @@
 import { useContext } from "react";
-import { DataContext } from "@/contexts/DataContext";
 
-export const useData = () => {
+import { DataContext } from "@/contexts/DataContext";
+import type { TDataContext } from "@/providers/DataProvider";
+
+export const useData = (): TDataContext => {
 	const context = useContext(DataContext);
 
 	if (!context) {
