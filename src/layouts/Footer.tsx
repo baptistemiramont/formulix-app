@@ -1,6 +1,8 @@
-import { css } from "../../styled-system/css";
+import type { FunctionComponent } from "react";
 
-export const Footer = () => {
+import { css } from "@/../styled-system/css";
+
+export const Footer: FunctionComponent = () => {
 	const footerStyle = {
 		container: css({
 			paddingBottom: "81px",
@@ -48,19 +50,26 @@ export const Footer = () => {
 		<footer className={footerStyle.container}>
 			<section>
 				<p className={footerStyle.disclaimer}>
-					<span className={footerStyle.highlight}>Formulix (FMX)</span> is an
-					independent fan project and is not affiliated with, endorsed by, or
-					associated with Formula One, the FIA, or any official Formula 1 teams,
-					sponsors, drivers, or organizations. All logos, names, images, and
-					brand references belong to their respective owners. This app is
-					created solely for informational and entertainment purposes and does
-					not intend to infringe on any trademarks or copyrights.
+					<span className={footerStyle.highlight}>
+						Formulix (FMX)
+					</span>{" "}
+					is an independent fan project and is not affiliated with,
+					endorsed by, or associated with Formula One, the FIA, or any
+					official Formula 1 teams, sponsors, drivers, or
+					organizations. All logos, names, images, and brand
+					references belong to their respective owners. This app is
+					created solely for informational and entertainment purposes
+					and does not intend to infringe on any trademarks or
+					copyrights.
 				</p>
 			</section>
 			<section className={footerStyle.copyrightContainer}>
 				<p className={footerStyle.copyright}>
 					Made with ♥️ by{" "}
-					<a href="https://baptistemiramont.fr/" title="Visit my portfolio">
+					<a
+						href="https://baptistemiramont.fr/"
+						title="Visit my portfolio"
+					>
 						Baptiste
 					</a>
 				</p>

@@ -15,8 +15,6 @@ export const DriverCard: FunctionComponent<TDriverCardProps> = ({
 
 	const team = "currentTeam" in driver ? driver.currentTeam : false;
 
-	// Styles
-
 	const cardStyle = {
 		container: css({
 			borderRadius: "md",
