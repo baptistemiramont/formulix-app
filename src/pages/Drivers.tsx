@@ -71,7 +71,11 @@ export const Drivers: FunctionComponent = () => {
 
 	// Render
 
-	useEffect(() => resetFilteredDrivers(), [resetFilteredDrivers]);
+	useEffect(
+		() => resetFilteredDrivers(),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
 
 	if (isDataLoading) return <Loader />;
 
@@ -94,15 +98,16 @@ export const Drivers: FunctionComponent = () => {
 				<div className={css(driversPageStyle.formFieldsContainer)}>
 					<Select
 						id="teams"
-						label="Filter by team"
+						label="Filter by active team"
 						defaultOptionLabel="All"
 						options={filteredTeams}
 						changeHandler={handleTeamChange}
+						onReset={resetFilteredDrivers}
 					/>
 				</div>
 			</form>
 			{driversList.length === 0 ? (
-				<Error message="No driver found" />
+				<p>No drivers match the selected team.</p>
 			) : (
 				<ul className={css(driversPageStyle.teamListStyle)}>
 					{driversList}
