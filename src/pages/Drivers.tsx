@@ -9,26 +9,6 @@ import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 
 export const Drivers: FunctionComponent = () => {
-	const {
-		isDataLoading,
-		error,
-		filteredDrivers,
-		resetFilteredDrivers,
-		teams,
-		filterByTeam,
-	} = useData();
-
-	const driversList = filteredDrivers.map((driver) => (
-		<DriverCard key={driver.id} driver={driver} />
-	));
-
-	const filteredTeams = [
-		...(teams ?? []).map((team) => ({
-			label: team.name,
-			value: team.slug,
-		})),
-	];
-
 	function handleTeamChange(
 		event: React.ChangeEvent<HTMLSelectElement>
 	): void {
@@ -37,7 +17,49 @@ export const Drivers: FunctionComponent = () => {
 		}
 	}
 
-	// Styles
+	const {
+		isTeamsLoading,
+		isDriversLoading,
+		filteredDrivers,
+		driversError,
+		resetFilteredDrivers,
+		teams,
+		filterByTeam,
+	} = useData();
+
+	useEffect(
+		() => resetFilteredDrivers(),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
+
+	if (isTeamsLoading || isDriversLoading) return <Loader />;
+
+	if (driversError) return <Error message="Failed to load drivers data" />;
+
+	if (!filteredDrivers) return <Error message="No driver found" />;
+
+	if (!filterByTeam) return <Error message="No team found" />;
+
+	const driversList = filteredDrivers.map(
+		({ id, firstName, lastName, slug, avatar, currentTeam }) => (
+			<DriverCard
+				key={id}
+				firstName={firstName}
+				lastName={lastName}
+				slug={slug}
+				avatar={avatar}
+				currentTeamName={currentTeam.name}
+			/>
+		)
+	);
+
+	const filteredTeams = [
+		...(teams ?? []).map((team) => ({
+			label: team.name,
+			value: team.slug,
+		})),
+	];
 
 	const driversPageStyle = {
 		container: {
@@ -68,28 +90,6 @@ export const Drivers: FunctionComponent = () => {
 			},
 		},
 	};
-
-	// Render
-
-	useEffect(
-		() => resetFilteredDrivers(),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[]
-	);
-
-	if (isDataLoading) return <Loader />;
-
-	if (error) {
-		return <Error message="An error has occurred" />;
-	}
-
-	if (!filteredDrivers) {
-		return <Error message="No driver found" />;
-	}
-
-	if (!filterByTeam) {
-		return <Error message="No team found" />;
-	}
 
 	return (
 		<section className={css(layoutGutters, driversPageStyle.container)}>

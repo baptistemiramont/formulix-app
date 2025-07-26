@@ -1,31 +1,33 @@
-import { useQuery } from "@tanstack/react-query";
+import { type FunctionComponent, useEffect } from "react";
+
 import { useParams } from "@tanstack/react-router";
-import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
-import { getTeam } from "@/api/team";
 import { DriverCard } from "@/components/cards/DriverCard";
 import { StatCard } from "@/components/cards/StatCard";
+import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 
 export const Team: FunctionComponent = () => {
 	const { teamSlug } = useParams({ from: "/teams/$teamSlug" });
+	const { setTeamSlug, isTeamLoading, team, teamError } = useData();
 
-	const {
-		data: team,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ["team", teamSlug],
-		queryFn: () => getTeam(teamSlug),
-	});
+	useEffect(() => {
+		if (teamSlug) {
+			setTeamSlug(teamSlug);
+		}
+	}, [teamSlug, setTeamSlug]);
 
-	if (isLoading) return <Loader />;
+	if (isTeamLoading) return <Loader />;
 
-	if (error) return "An error has occurred: " + error.message;
+	if (teamError)
+		return (
+			<Error message="An error has occurred while fetching the team data" />
+		);
 
-	if (!team) return "Team not found";
+	if (!team) return <Error message="No team data found" />;
 
 	const {
 		name,
@@ -38,12 +40,27 @@ export const Team: FunctionComponent = () => {
 
 	const activeDrivers = drivers
 		.filter((driver) => driver.isActive)
-		.map((driver) => <DriverCard key={driver.id} driver={driver} />);
+		.map(({ id, firstName, lastName, slug, avatar }) => (
+			<DriverCard
+				key={id}
+				firstName={firstName}
+				lastName={lastName}
+				slug={slug}
+				avatar={avatar}
+			/>
+		));
+
 	const formerDrivers = drivers
 		.filter((driver) => !driver.isActive)
-		.map((driver) => <DriverCard key={driver.id} driver={driver} />);
-
-	// Styles
+		.map(({ id, firstName, lastName, slug, avatar }) => (
+			<DriverCard
+				key={id}
+				firstName={firstName}
+				lastName={lastName}
+				slug={slug}
+				avatar={avatar}
+			/>
+		));
 
 	const teamPageStyle = {
 		container: {

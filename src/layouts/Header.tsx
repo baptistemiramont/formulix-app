@@ -7,8 +7,6 @@ import { Logo } from "@/components/Logo";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export const Header: FunctionComponent = () => {
-	// Styles
-
 	const headerStyle = {
 		headerStyle: css({
 			paddingY: 4,
@@ -70,8 +68,6 @@ export const Header: FunctionComponent = () => {
 			fontFamily: "League Spartan",
 		}),
 	};
-
-	// Logic
 
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
 

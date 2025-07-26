@@ -1,21 +1,33 @@
 import { type ReactNode, useEffect, useState } from "react";
 
 import { DataContext } from "@/contexts/DataContext";
+import { useDriver } from "@/hooks/useDriver";
 import { useDrivers } from "@/hooks/useDrivers";
+import { useTeam } from "@/hooks/useTeam";
 import { useTeams } from "@/hooks/useTeams";
-import type { TDriver } from "@/types/driver";
-import type { TTeam } from "@/types/team";
+import type { TDriver, TDriverDetailed } from "@/types/driver";
+import type { TTeam, TTeamDetailed } from "@/types/team";
 
-export type TDataContext = {
-	isDataLoading: boolean;
-	error: Error | unknown | null;
+type TError = Error | unknown | null;
+
+export type TDataState = {
 	filteredDrivers: TDriver[];
 	resetFilteredDrivers: () => void;
 	isTeamsLoading: boolean;
 	teams: TTeam[];
-	teamsError: Error | unknown | null;
+	teamsError: TError;
+	setTeamSlug: (slug: string | null) => void;
+	isTeamLoading: boolean;
+	team: TTeamDetailed | null;
+	teamError: TError;
 	setFilteredDrivers: (drivers: TDriver[]) => void;
 	filterByTeam: (teamSlug: string) => void;
+	setDriverSlug: (slug: string | null) => void;
+	isDriversLoading: boolean;
+	driversError: TError;
+	isDriverLoading: boolean;
+	driver: TDriverDetailed | null;
+	driverError: TError;
 };
 
 type TDataProviderProps = {
@@ -24,8 +36,12 @@ type TDataProviderProps = {
 
 export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
 	const [drivers, setDrivers] = useState<TDriver[]>([]);
+	const [driverSlug, setDriverSlug] = useState<string | null>(null);
+	const [driver, setDriver] = useState<TDriverDetailed | null>(null);
 	const [filteredDrivers, setFilteredDrivers] = useState<TDriver[]>([]);
 	const [teams, setTeams] = useState<TTeam[]>([]);
+	const [teamSlug, setTeamSlug] = useState<string | null>(null);
+	const [team, setTeam] = useState<TTeamDetailed | null>(null);
 
 	function filterByTeam(teamSlug: string): void {
 		if (!teamSlug || teamSlug === "") {
@@ -51,13 +67,22 @@ export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
 	} = useDrivers();
 
 	const {
+		data: driverData,
+		isLoading: isDriverLoading,
+		error: driverError,
+	} = useDriver(driverSlug ? driverSlug : "");
+
+	const {
 		data: teamsData,
 		isLoading: isTeamsLoading,
 		error: teamsError,
 	} = useTeams();
 
-	const isDataLoading = isDriversLoading || isTeamsLoading;
-	const error = driversError || teamsError;
+	const {
+		data: teamData,
+		isLoading: isTeamLoading,
+		error: teamError,
+	} = useTeam(teamSlug ? teamSlug : "");
 
 	useEffect(() => {
 		if (driversData) {
@@ -67,10 +92,22 @@ export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
 	}, [driversData]);
 
 	useEffect(() => {
+		if (driverData) {
+			setDriver(driverData as TDriverDetailed);
+		}
+	}, [driverData]);
+
+	useEffect(() => {
 		if (teamsData) {
 			setTeams(teamsData as TTeam[]);
 		}
 	}, [teamsData]);
+
+	useEffect(() => {
+		if (teamData) {
+			setTeam(teamData);
+		}
+	}, [teamData]);
 
 	return (
 		<DataContext.Provider
@@ -81,10 +118,18 @@ export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
 				isTeamsLoading,
 				teams,
 				teamsError,
-				isDataLoading,
-				error,
+				setTeamSlug,
+				isTeamLoading,
+				team,
+				teamError,
 				setFilteredDrivers,
 				filterByTeam,
+				isDriversLoading,
+				driversError,
+				setDriverSlug,
+				isDriverLoading,
+				driver,
+				driverError,
 			}}
 		/>
 	);

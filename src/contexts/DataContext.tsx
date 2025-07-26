@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-import type { TDataContext } from "@/providers/DataProvider";
+import type { TDataState } from "@/providers/DataProvider";
 
-export const DataContext = createContext<TDataContext | undefined>(undefined);
+export const DataContext = createContext<TDataState | undefined>(undefined);

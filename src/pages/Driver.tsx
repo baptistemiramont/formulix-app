@@ -1,30 +1,28 @@
-import { useQuery } from "@tanstack/react-query";
+import { type FunctionComponent, useEffect } from "react";
+
 import { useParams } from "@tanstack/react-router";
-import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
-import { getDriver } from "@/api/driver";
 import { StatCard } from "@/components/cards/StatCard";
 import { TeamCard } from "@/components/cards/TeamCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 
 export const Driver: FunctionComponent = () => {
 	const { driverSlug } = useParams({ from: "/drivers/$driverSlug" });
+	const { setDriverSlug, isDriverLoading, driver, driverError } = useData();
 
-	const {
-		data: driver,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ["driver", driverSlug],
-		queryFn: () => getDriver(driverSlug),
-	});
+	useEffect(() => {
+		if (driverSlug) {
+			setDriverSlug(driverSlug);
+		}
+	}, [driverSlug, setDriverSlug]);
 
-	if (isLoading) return <Loader />;
+	if (isDriverLoading) return <Loader />;
 
-	if (error) return <Error message={error.message} />;
+	if (driverError) return <Error message="Failed to load driver data" />;
 
 	if (!driver) return <Error message="Driver not found" />;
 
@@ -41,17 +39,21 @@ export const Driver: FunctionComponent = () => {
 
 	const sortedTeams = teams.sort((a, b) => {
 		if (a.isCurrentTeam && !b.isCurrentTeam) return -1;
-
 		if (!a.isCurrentTeam && b.isCurrentTeam) return 1;
-
 		return 0;
 	});
 
-	const teamsList = sortedTeams.map((team) => (
-		<TeamCard key={team.id} team={team} />
-	));
-
-	// Styles
+	const teamsList = sortedTeams.map(
+		({ id, name, slug, favicon, isCurrentTeam }) => (
+			<TeamCard
+				key={id}
+				name={name}
+				slug={slug}
+				favicon={favicon}
+				isCurrentTeam={isCurrentTeam}
+			/>
+		)
+	);
 
 	const driverPageStyle = {
 		container: {

@@ -2,19 +2,20 @@ import { Link } from "@tanstack/react-router";
 import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
-import type { MinimalTeamType, TTeam } from "@/types/team";
 
 type TTeamCardProps = {
-	team: TTeam | MinimalTeamType;
+	name: string;
+	slug: string;
+	favicon: string;
+	isCurrentTeam?: boolean;
 };
 
 export const TeamCard: FunctionComponent<TTeamCardProps> = ({
-	team,
+	name,
+	slug,
+	favicon,
+	isCurrentTeam = false,
 }: TTeamCardProps) => {
-	const { name, slug, favicon } = team;
-
-	const isCurrentTeam = "isCurrentTeam" in team ? team.isCurrentTeam : false;
-
 	const cardStyle = {
 		container: css({
 			borderRadius: "md",
