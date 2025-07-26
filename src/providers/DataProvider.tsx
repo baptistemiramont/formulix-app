@@ -1,4 +1,9 @@
-import { type ReactNode, useEffect, useState } from "react";
+import {
+	type PropsWithChildren,
+	type ReactNode,
+	useEffect,
+	useState,
+} from "react";
 
 import { DataContext } from "@/contexts/DataContext";
 import { useDriver } from "@/hooks/useDriver";
@@ -30,11 +35,7 @@ export type TDataState = {
 	driverError: TError;
 };
 
-type TDataProviderProps = {
-	children: ReactNode;
-};
-
-export const DataProvider = ({ children }: TDataProviderProps): ReactNode => {
+export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 	const [drivers, setDrivers] = useState<TDriver[]>([]);
 	const [driverSlug, setDriverSlug] = useState<string | null>(null);
 	const [driver, setDriver] = useState<TDriverDetailed | null>(null);
