@@ -5,6 +5,7 @@ import type { FunctionComponent } from "react";
 import { css } from "@/../styled-system/css";
 import { Logo } from "@/components/Logo";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { ROUTES } from "@/utils/constants";
 
 export const Header: FunctionComponent = () => {
 	const headerStyle = {
@@ -73,12 +74,12 @@ export const Header: FunctionComponent = () => {
 
 	const links = [
 		{
-			href: "/",
+			href: ROUTES.HOME,
 			icon: <Icon icon="mdi-home" className={headerStyle.iconStyle} />,
 			label: "Home",
 		},
 		{
-			href: "/drivers",
+			href: ROUTES.DRIVERS,
 			icon: (
 				<Icon
 					icon="mdi-racing-helmet"
@@ -88,7 +89,7 @@ export const Header: FunctionComponent = () => {
 			label: "Drivers",
 		},
 		{
-			href: "/teams",
+			href: ROUTES.TEAMS,
 			icon: (
 				<Icon
 					icon="mdi-flag-checkered"

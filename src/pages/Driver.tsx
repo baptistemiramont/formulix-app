@@ -9,9 +9,10 @@ import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
+import { ROUTES } from "@/utils/constants";
 
 export const Driver: FunctionComponent = () => {
-	const { driverSlug } = useParams({ from: "/drivers/$driverSlug" });
+	const { driverSlug } = useParams({ from: ROUTES.DRIVER });
 	const { setDriverSlug, isDriverLoading, driver, driverError } = useData();
 
 	useEffect(() => {

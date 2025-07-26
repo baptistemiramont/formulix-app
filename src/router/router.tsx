@@ -11,6 +11,7 @@ import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
 import { Team } from "@/pages/Team";
 import { Teams } from "@/pages/Teams";
+import { ROUTES } from "@/utils/constants";
 
 const rootRoute = createRootRoute({
 	component: () => <App />,
@@ -19,27 +20,27 @@ const rootRoute = createRootRoute({
 const routeTree = rootRoute.addChildren([
 	createRoute({
 		getParentRoute: () => rootRoute,
-		path: "/",
+		path: ROUTES.HOME,
 		component: () => <Home />,
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,
-		path: "/teams",
+		path: ROUTES.TEAMS,
 		component: () => <Teams />,
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,
-		path: "/teams/$teamSlug",
+		path: ROUTES.TEAM,
 		component: () => <Team />,
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,
-		path: "/drivers",
+		path: ROUTES.DRIVERS,
 		component: () => <Drivers />,
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,
-		path: "/drivers/$driverSlug",
+		path: ROUTES.DRIVER,
 		component: () => <Driver />,
 	}),
 	createRoute({
