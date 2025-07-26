@@ -38,7 +38,7 @@ export async function getTeam(teamSlug: string): Promise<TTeamDetailed> {
 	const response = await fetch(`${API_URL}/teams/${teamSlug}`, options);
 
 	if (!response.ok) {
-		throw new Error(`HTTP error ! status: ${response.status}`);
+		throw new Error("Failed to fetch team data");
 	}
 
 	const { data } = await response.json();

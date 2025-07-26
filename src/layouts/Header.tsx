@@ -5,10 +5,9 @@ import type { FunctionComponent } from "react";
 import { css } from "@/../styled-system/css";
 import { Logo } from "@/components/Logo";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { ROUTES } from "@/utils/constants";
 
 export const Header: FunctionComponent = () => {
-	// Styles
-
 	const headerStyle = {
 		headerStyle: css({
 			paddingY: 4,
@@ -71,18 +70,16 @@ export const Header: FunctionComponent = () => {
 		}),
 	};
 
-	// Logic
-
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
 
 	const links = [
 		{
-			href: "/",
+			href: ROUTES.HOME,
 			icon: <Icon icon="mdi-home" className={headerStyle.iconStyle} />,
 			label: "Home",
 		},
 		{
-			href: "/drivers",
+			href: ROUTES.DRIVERS,
 			icon: (
 				<Icon
 					icon="mdi-racing-helmet"
@@ -92,7 +89,7 @@ export const Header: FunctionComponent = () => {
 			label: "Drivers",
 		},
 		{
-			href: "/teams",
+			href: ROUTES.TEAMS,
 			icon: (
 				<Icon
 					icon="mdi-flag-checkered"

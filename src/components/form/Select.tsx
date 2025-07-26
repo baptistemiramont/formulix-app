@@ -29,8 +29,6 @@ export const Select: FunctionComponent<TSelectProps> = ({
 		</option>
 	));
 
-	// Styles
-
 	const inputsContainerStyle = {
 		display: "flex",
 		gap: 2,

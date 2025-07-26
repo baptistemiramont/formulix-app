@@ -102,8 +102,6 @@ export const Home: FunctionComponent = () => {
 		return animations;
 	}, []);
 
-	// Styles
-
 	const appNameStyle = {
 		color: "primary",
 	};

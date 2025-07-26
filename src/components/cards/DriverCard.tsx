@@ -2,19 +2,22 @@ import { Link } from "@tanstack/react-router";
 import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
-import type { MinimalDriverType, TDriver } from "@/types/driver";
 
 type TDriverCardProps = {
-	driver: TDriver | MinimalDriverType;
+	firstName: string;
+	lastName: string;
+	slug: string;
+	avatar: string;
+	currentTeamName?: string | null;
 };
 
 export const DriverCard: FunctionComponent<TDriverCardProps> = ({
-	driver,
+	firstName,
+	lastName,
+	slug,
+	avatar,
+	currentTeamName = null,
 }: TDriverCardProps) => {
-	const { firstName, lastName, slug, avatar } = driver;
-
-	const team = "currentTeam" in driver ? driver.currentTeam : false;
-
 	const cardStyle = {
 		container: css({
 			borderRadius: "md",
@@ -74,14 +77,15 @@ export const DriverCard: FunctionComponent<TDriverCardProps> = ({
 						src={avatar}
 						alt={`${firstName} ${lastName}'s avatar`}
 						width="100"
-						loading="lazy"
 					/>
 				</div>
 				<div>
 					<p className={cardStyle.title}>
 						{firstName} {lastName}
 					</p>
-					{team && <p className={cardStyle.subtitle}>{team.name}</p>}
+					{currentTeamName && (
+						<p className={cardStyle.subtitle}>{currentTeamName}</p>
+					)}
 				</div>
 			</Link>
 		</li>
