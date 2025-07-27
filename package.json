@@ -4,10 +4,7 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"start": "npm install && npm run up",
-		"up": "docker compose up --build -d",
-		"down": "docker compose down -v",
-		"dev": "npm install && vite",
+		"dev": "vite",
 		"build": "tsc && vite build",
 		"lint": "eslint .",
 		"preview": "vite preview",

@@ -31,6 +31,7 @@ export default defineConfig({
 	],
 	server: {
 		host: true,
+		port: 1111,
 	},
 	resolve: {
 		alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
