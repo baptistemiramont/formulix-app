@@ -10,16 +10,12 @@ export const driverSchema = z.object({
 	worldChampionshipsTitle: z.number(),
 	podiums: z.number(),
 	grandPrixParticipation: z.number(),
-	currentTeam: z.object({
-		name: z.string(),
-		slug: z.string(),
-	}),
-	formerTeams: z.array(
-		z.object({
+	currentTeam: z
+		.object({
 			name: z.string(),
 			slug: z.string(),
 		})
-	),
+		.nullable(),
 });
 
 export const driverDetailedSchema = z.object({
