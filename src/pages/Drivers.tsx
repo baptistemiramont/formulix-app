@@ -1,7 +1,7 @@
 import { type FunctionComponent, useEffect, useState } from "react";
 
 import { css } from "@/../styled-system/css";
-import { DriverCard } from "@/components/cards/DriverCard";
+import { Card } from "@/components/cards/Card";
 import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { Loader } from "@/components/Loader";
@@ -74,13 +74,14 @@ export const Drivers: FunctionComponent = () => {
 
 	const driversList = filteredDrivers.map(
 		({ id, firstName, lastName, slug, avatar, currentTeam }) => (
-			<DriverCard
+			<Card
 				key={id}
-				firstName={firstName}
-				lastName={lastName}
-				slug={slug}
-				avatar={avatar}
-				currentTeamName={currentTeam?.name}
+				title={`${firstName} ${lastName}`}
+				image={avatar}
+				imageAlt={`${firstName} ${lastName}'s avatar`}
+				linkPath="/drivers/$driverSlug"
+				linkParams={{ driverSlug: slug }}
+				subtitle={currentTeam ? currentTeam.name : "No team/Inactive"}
 			/>
 		)
 	);

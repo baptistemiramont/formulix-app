@@ -3,7 +3,7 @@ import { type FunctionComponent, useEffect } from "react";
 import { useParams } from "@tanstack/react-router";
 
 import { css } from "@/../styled-system/css";
-import { DriverCard } from "@/components/cards/DriverCard";
+import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
@@ -29,36 +29,32 @@ export const Team: FunctionComponent = () => {
 
 	if (!team) return <Error message="No team data found" />;
 
-	const {
-		name,
-		fullName,
-		favicon,
-		worldChampionships,
-		firstTeamEntry,
-		drivers,
-	} = team;
+	const { name, fullName, logo, worldChampionships, yearOfStart, drivers } =
+		team;
 
 	const activeDrivers = drivers
-		.filter((driver) => driver.isActive)
+		.filter((driver) => driver.isCurrentDriver)
 		.map(({ id, firstName, lastName, slug, avatar }) => (
-			<DriverCard
+			<Card
 				key={id}
-				firstName={firstName}
-				lastName={lastName}
-				slug={slug}
-				avatar={avatar}
+				title={`${firstName} ${lastName}`}
+				image={avatar}
+				imageAlt={`${firstName} ${lastName}'s avatar`}
+				linkPath="/drivers/$driverSlug"
+				linkParams={{ driverSlug: slug }}
 			/>
 		));
 
 	const formerDrivers = drivers
-		.filter((driver) => !driver.isActive)
+		.filter((driver) => !driver.isCurrentDriver)
 		.map(({ id, firstName, lastName, slug, avatar }) => (
-			<DriverCard
+			<Card
 				key={id}
-				firstName={firstName}
-				lastName={lastName}
-				slug={slug}
-				avatar={avatar}
+				title={`${firstName} ${lastName}`}
+				image={avatar}
+				imageAlt={`${firstName} ${lastName}'s avatar`}
+				linkPath="/drivers/$driverSlug"
+				linkParams={{ driverSlug: slug }}
 			/>
 		));
 
@@ -130,7 +126,7 @@ export const Team: FunctionComponent = () => {
 				<div className={css(teamPageStyle.teamPortraitContainer)}>
 					<div className={css(teamPageStyle.teamLogoContainer)}>
 						<img
-							src={favicon}
+							src={logo}
 							alt={`${name}'s logo`}
 							width="250"
 							loading="lazy"
@@ -146,7 +142,7 @@ export const Team: FunctionComponent = () => {
 						/>
 						<StatCard
 							label="First team entry"
-							value={firstTeamEntry}
+							value={yearOfStart}
 						/>
 					</ul>
 				</div>

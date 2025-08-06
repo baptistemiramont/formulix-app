@@ -1,7 +1,7 @@
 import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
-import { TeamCard } from "@/components/cards/TeamCard";
+import { Card } from "@/components/cards/Card";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
@@ -9,6 +9,24 @@ import { layoutGutters } from "@/styles/layout";
 
 export const Teams: FunctionComponent = () => {
 	const { isTeamsLoading, teams, teamsError } = useData();
+
+	if (isTeamsLoading) return <Loader />;
+
+	if (teamsError) {
+		return <Error message="An error has occurred" />;
+	}
+
+	const teamsList = teams.map(({ id, isActive, name, slug, logo }) => (
+		<Card
+			key={id}
+			title={name}
+			image={logo}
+			imageAlt={`${name}'s logo`}
+			linkPath={`/teams/${slug}`}
+			linkParams={{ teamSlug: slug }}
+			subtitle={isActive ? "Active" : "Inactive"}
+		/>
+	));
 
 	const teamsPageStyle = {
 		container: {
@@ -28,16 +46,6 @@ export const Teams: FunctionComponent = () => {
 			},
 		},
 	};
-
-	if (isTeamsLoading) return <Loader />;
-
-	if (teamsError) {
-		return <Error message="An error has occurred" />;
-	}
-
-	const teamsList = (teams ?? []).map(({ id, name, slug, favicon }) => (
-		<TeamCard key={id} name={name} slug={slug} favicon={favicon} />
-	));
 
 	return (
 		<section className={css(layoutGutters, teamsPageStyle.container)}>

@@ -3,19 +3,23 @@ import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 
-type TTeamCardProps = {
-	name: string;
-	slug: string;
-	logo: string;
-	isCurrentTeam?: boolean;
+type TCardProps = {
+	title: string;
+	image: string;
+	imageAlt: string;
+	linkPath: string;
+	linkParams: object;
+	subtitle?: string | null;
 };
 
-export const TeamCard: FunctionComponent<TTeamCardProps> = ({
-	name,
-	slug,
-	logo,
-	isCurrentTeam = false,
-}: TTeamCardProps) => {
+export const Card: FunctionComponent<TCardProps> = ({
+	title,
+	image,
+	imageAlt,
+	linkPath,
+	linkParams,
+	subtitle = null,
+}: TCardProps) => {
 	const cardStyle = {
 		container: css({
 			borderRadius: "md",
@@ -64,24 +68,20 @@ export const TeamCard: FunctionComponent<TTeamCardProps> = ({
 
 	return (
 		<li className={cardStyle.container}>
-			<Link
-				to="/teams/$teamSlug"
-				params={{ teamSlug: slug }}
-				className={cardStyle.link}
-			>
+			<Link to={linkPath} params={linkParams} className={cardStyle.link}>
 				<div className={cardStyle.imageContainer}>
 					<img
 						className={cardStyle.image}
-						src={logo}
-						alt={`${name} logo`}
+						src={image}
+						alt={imageAlt}
 						width="50"
 						loading="lazy"
 					/>
 				</div>
 				<div>
-					<p className={cardStyle.title}>{name}</p>
-					{isCurrentTeam && (
-						<p className={cardStyle.subtitle}>Current team</p>
+					<p className={cardStyle.title}>{title}</p>
+					{subtitle && (
+						<p className={cardStyle.subtitle}>{subtitle}</p>
 					)}
 				</div>
 			</Link>
