@@ -3,7 +3,7 @@ import { type FunctionComponent, useEffect } from "react";
 import { useParams } from "@tanstack/react-router";
 
 import { css } from "@/../styled-system/css";
-import { DriverCard } from "@/components/cards/DriverCard";
+import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
@@ -32,33 +32,61 @@ export const Team: FunctionComponent = () => {
 	const {
 		name,
 		fullName,
-		favicon,
+		logo,
 		worldChampionships,
-		firstTeamEntry,
+		yearOfStart,
+		yearOfEnd,
+		teamDetails,
 		drivers,
 	} = team;
 
+	const formerTeamIdentities =
+		teamDetails.length > 1 &&
+		teamDetails
+			.sort((a, b) => {
+				if (a.yearOfStart > b.yearOfStart) return -1;
+				if (a.yearOfStart < b.yearOfStart) return 1;
+				return 0;
+			})
+			.map(({ id, name, logo, yearOfStart, yearOfEnd }) => {
+				const subtitle = yearOfEnd
+					? `${yearOfStart} - ${yearOfEnd}`
+					: `${yearOfStart} - Present`;
+
+				return (
+					<Card
+						key={id}
+						title={name}
+						image={logo}
+						imageAlt={`${name}'s logo`}
+						subtitle={subtitle}
+					/>
+				);
+			});
+
 	const activeDrivers = drivers
-		.filter((driver) => driver.isActive)
+		.filter((driver) => driver.isCurrentDriver)
 		.map(({ id, firstName, lastName, slug, avatar }) => (
-			<DriverCard
+			<Card
 				key={id}
-				firstName={firstName}
-				lastName={lastName}
-				slug={slug}
-				avatar={avatar}
+				title={`${firstName} ${lastName}`}
+				image={avatar}
+				imageAlt={`${firstName} ${lastName}'s avatar`}
+				linkPath="/drivers/$driverSlug"
+				linkParams={{ driverSlug: slug }}
 			/>
 		));
 
 	const formerDrivers = drivers
-		.filter((driver) => !driver.isActive)
+		.filter((driver) => !driver.isCurrentDriver)
 		.map(({ id, firstName, lastName, slug, avatar }) => (
-			<DriverCard
+			<Card
 				key={id}
-				firstName={firstName}
-				lastName={lastName}
-				slug={slug}
-				avatar={avatar}
+				title={`${firstName} ${lastName}`}
+				image={avatar}
+				imageAlt={`${firstName} ${lastName}'s avatar`}
+				linkPath="/drivers/$driverSlug"
+				linkParams={{ driverSlug: slug }}
 			/>
 		));
 
@@ -104,14 +132,14 @@ export const Team: FunctionComponent = () => {
 			display: "grid",
 			gap: 8,
 		},
-		teamDriversContainer: {
+		teamContainer: {
 			display: "grid",
 			gap: 4,
 			lg: {
 				gap: 8,
 			},
 		},
-		teamDriversList: {
+		teamList: {
 			display: "grid",
 			gap: 6,
 			gridTemplateColumns: "repeat(2, 1fr)",
@@ -130,7 +158,7 @@ export const Team: FunctionComponent = () => {
 				<div className={css(teamPageStyle.teamPortraitContainer)}>
 					<div className={css(teamPageStyle.teamLogoContainer)}>
 						<img
-							src={favicon}
+							src={logo}
 							alt={`${name}'s logo`}
 							width="250"
 							loading="lazy"
@@ -146,23 +174,37 @@ export const Team: FunctionComponent = () => {
 						/>
 						<StatCard
 							label="First team entry"
-							value={firstTeamEntry}
+							value={yearOfStart}
+						/>
+						<StatCard
+							label="Last team entry"
+							value={
+								yearOfEnd ? yearOfEnd : new Date().getFullYear()
+							}
 						/>
 					</ul>
 				</div>
 			</div>
+			{teamDetails.length > 1 && (
+				<div className={css(teamPageStyle.teamContainer)}>
+					<h2>Team's history</h2>
+					<ul className={css(teamPageStyle.teamList)}>
+						{formerTeamIdentities}
+					</ul>
+				</div>
+			)}
 			{activeDrivers.length > 0 && (
-				<div className={css(teamPageStyle.teamDriversContainer)}>
+				<div className={css(teamPageStyle.teamContainer)}>
 					<h2>Team's current drivers</h2>
-					<ul className={css(teamPageStyle.teamDriversList)}>
+					<ul className={css(teamPageStyle.teamList)}>
 						{activeDrivers}
 					</ul>
 				</div>
 			)}
 			{formerDrivers.length > 0 && (
-				<div className={css(teamPageStyle.teamDriversContainer)}>
+				<div className={css(teamPageStyle.teamContainer)}>
 					<h2>Team's former driver(s)</h2>
-					<ul className={css(teamPageStyle.teamDriversList)}>
+					<ul className={css(teamPageStyle.teamList)}>
 						{formerDrivers}
 					</ul>
 				</div>

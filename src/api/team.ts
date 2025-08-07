@@ -23,10 +23,6 @@ export async function getTeams(): Promise<TTeam[]> {
 		throw new Error("Invalid data format");
 	}
 
-	teams.forEach((team) => {
-		team.favicon = `${API_URL.replace("/api/v1", "")}${team.favicon}`;
-	});
-
 	return teams;
 }
 
@@ -48,12 +44,6 @@ export async function getTeam(teamSlug: string): Promise<TTeamDetailed> {
 	if (!success) {
 		throw new Error("Invalid data format");
 	}
-
-	team.favicon = `${API_URL.replace("/api/v1", "")}${team.favicon}`;
-
-	team.drivers.forEach((driver) => {
-		driver.avatar = `${API_URL.replace("/api/v1", "")}${driver.avatar}`;
-	});
 
 	return team;
 }

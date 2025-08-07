@@ -6,14 +6,14 @@ import { css } from "@/../styled-system/css";
 type TTeamCardProps = {
 	name: string;
 	slug: string;
-	favicon: string;
+	logo: string;
 	isCurrentTeam?: boolean;
 };
 
 export const TeamCard: FunctionComponent<TTeamCardProps> = ({
 	name,
 	slug,
-	favicon,
+	logo,
 	isCurrentTeam = false,
 }: TTeamCardProps) => {
 	const cardStyle = {
@@ -72,7 +72,7 @@ export const TeamCard: FunctionComponent<TTeamCardProps> = ({
 				<div className={cardStyle.imageContainer}>
 					<img
 						className={cardStyle.image}
-						src={favicon}
+						src={logo}
 						alt={`${name} logo`}
 						width="50"
 						loading="lazy"

@@ -10,22 +10,19 @@ export const driverSchema = z.object({
 	worldChampionshipsTitle: z.number(),
 	podiums: z.number(),
 	grandPrixParticipation: z.number(),
-	currentTeam: z.object({
-		name: z.string(),
-		slug: z.string(),
-	}),
-	formerTeams: z.array(
-		z.object({
+	currentTeam: z
+		.object({
 			name: z.string(),
 			slug: z.string(),
 		})
-	),
+		.nullable(),
 });
 
 export const driverDetailedSchema = z.object({
 	id: z.number(),
 	firstName: z.string(),
 	lastName: z.string(),
+	slug: z.string(),
 	avatar: z.string(),
 	country: z.string(),
 	worldChampionshipsTitle: z.number(),
@@ -34,10 +31,11 @@ export const driverDetailedSchema = z.object({
 	teams: z.array(
 		z.object({
 			id: z.number(),
+			isCurrentTeam: z.boolean(),
 			name: z.string(),
 			slug: z.string(),
-			favicon: z.string(),
-			isCurrentTeam: z.boolean(),
+			originalTeamSlug: z.string(),
+			logo: z.string(),
 		})
 	),
 });

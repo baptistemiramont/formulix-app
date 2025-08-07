@@ -16,6 +16,7 @@ import type { TTeam, TTeamDetailed } from "@/types/team";
 type TError = Error | unknown | null;
 
 export type TDataState = {
+	drivers: TDriver[];
 	filteredDrivers: TDriver[];
 	resetFilteredDrivers: () => void;
 	isTeamsLoading: boolean;
@@ -50,8 +51,13 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 			return;
 		}
 
+		if (teamSlug === "off") {
+			setFilteredDrivers(drivers.filter((driver) => !driver.currentTeam));
+			return;
+		}
+
 		const filtered = drivers.filter(
-			(driver) => driver.currentTeam.slug === teamSlug
+			(driver) => driver.currentTeam?.slug === teamSlug
 		);
 
 		setFilteredDrivers(filtered);
@@ -114,6 +120,7 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 		<DataContext.Provider
 			children={children}
 			value={{
+				drivers,
 				filteredDrivers,
 				resetFilteredDrivers,
 				isTeamsLoading,

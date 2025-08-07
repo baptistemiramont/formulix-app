@@ -8,7 +8,7 @@ type TDriverCardProps = {
 	lastName: string;
 	slug: string;
 	avatar: string;
-	currentTeamName?: string | null;
+	currentTeamName?: string;
 };
 
 export const DriverCard: FunctionComponent<TDriverCardProps> = ({
@@ -16,7 +16,7 @@ export const DriverCard: FunctionComponent<TDriverCardProps> = ({
 	lastName,
 	slug,
 	avatar,
-	currentTeamName = null,
+	currentTeamName = "No team/Inactive",
 }: TDriverCardProps) => {
 	const cardStyle = {
 		container: css({
@@ -83,9 +83,7 @@ export const DriverCard: FunctionComponent<TDriverCardProps> = ({
 					<p className={cardStyle.title}>
 						{firstName} {lastName}
 					</p>
-					{currentTeamName && (
-						<p className={cardStyle.subtitle}>{currentTeamName}</p>
-					)}
+					<p className={cardStyle.subtitle}>{currentTeamName}</p>
 				</div>
 			</Link>
 		</li>

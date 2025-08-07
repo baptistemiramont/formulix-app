@@ -1,7 +1,7 @@
-import { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, useEffect, useState } from "react";
 
 import { css } from "@/../styled-system/css";
-import { DriverCard } from "@/components/cards/DriverCard";
+import { Card } from "@/components/cards/Card";
 import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { Loader } from "@/components/Loader";
@@ -18,22 +18,53 @@ export const Drivers: FunctionComponent = () => {
 	}
 
 	const {
-		isTeamsLoading,
+		drivers,
 		isDriversLoading,
 		filteredDrivers,
 		driversError,
 		resetFilteredDrivers,
-		teams,
 		filterByTeam,
 	} = useData();
 
+	const [filteredTeams, setFilteredTeams] = useState<
+		{ label: string; value: string }[]
+	>([]);
+
 	useEffect(
-		() => resetFilteredDrivers(),
+		() => {
+			return () => {
+				resetFilteredDrivers();
+			};
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
 
-	if (isTeamsLoading || isDriversLoading) return <Loader />;
+	useEffect(() => {
+		if (drivers && drivers.length > 0) {
+			const mappedTeams = new Map<string, string>();
+
+			drivers.forEach((driver) => {
+				if (driver.currentTeam) {
+					mappedTeams.set(
+						driver.currentTeam.name,
+						driver.currentTeam.slug
+					);
+				}
+			});
+
+			mappedTeams.set("No team/Inactive", "off");
+
+			setFilteredTeams(
+				Array.from(mappedTeams, ([k, v]) => ({
+					label: k,
+					value: v,
+				}))
+			);
+		}
+	}, [drivers]);
+
+	if (isDriversLoading) return <Loader />;
 
 	if (driversError) return <Error message="Failed to load drivers data" />;
 
@@ -43,23 +74,17 @@ export const Drivers: FunctionComponent = () => {
 
 	const driversList = filteredDrivers.map(
 		({ id, firstName, lastName, slug, avatar, currentTeam }) => (
-			<DriverCard
+			<Card
 				key={id}
-				firstName={firstName}
-				lastName={lastName}
-				slug={slug}
-				avatar={avatar}
-				currentTeamName={currentTeam.name}
+				title={`${firstName} ${lastName}`}
+				image={avatar}
+				imageAlt={`${firstName} ${lastName}'s avatar`}
+				linkPath="/drivers/$driverSlug"
+				linkParams={{ driverSlug: slug }}
+				subtitle={currentTeam ? currentTeam.name : "No team/Inactive"}
 			/>
 		)
 	);
-
-	const filteredTeams = [
-		...(teams ?? []).map((team) => ({
-			label: team.name,
-			value: team.slug,
-		})),
-	];
 
 	const driversPageStyle = {
 		container: {
@@ -98,7 +123,7 @@ export const Drivers: FunctionComponent = () => {
 				<div className={css(driversPageStyle.formFieldsContainer)}>
 					<Select
 						id="teams"
-						label="Filter by active team"
+						label="Filter by team"
 						defaultOptionLabel="All"
 						options={filteredTeams}
 						changeHandler={handleTeamChange}

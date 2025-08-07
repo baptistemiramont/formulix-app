@@ -3,8 +3,8 @@ import { type FunctionComponent, useEffect } from "react";
 import { useParams } from "@tanstack/react-router";
 
 import { css } from "@/../styled-system/css";
+import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
-import { TeamCard } from "@/components/cards/TeamCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
@@ -45,13 +45,15 @@ export const Driver: FunctionComponent = () => {
 	});
 
 	const teamsList = sortedTeams.map(
-		({ id, name, slug, favicon, isCurrentTeam }) => (
-			<TeamCard
+		({ id, name, originalTeamSlug, logo, isCurrentTeam }) => (
+			<Card
 				key={id}
-				name={name}
-				slug={slug}
-				favicon={favicon}
-				isCurrentTeam={isCurrentTeam}
+				title={name}
+				image={logo}
+				imageAlt={`${name}'s logo`}
+				linkPath={`/teams/${originalTeamSlug}`}
+				linkParams={{ teamSlug: originalTeamSlug }}
+				subtitle={isCurrentTeam ? "Current" : null}
 			/>
 		)
 	);
