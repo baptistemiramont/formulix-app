@@ -53,7 +53,7 @@ export const Driver: FunctionComponent = () => {
 				imageAlt={`${name}'s logo`}
 				linkPath={`/teams/${originalTeamSlug}`}
 				linkParams={{ teamSlug: originalTeamSlug }}
-				subtitle={isCurrentTeam ? "Current" : null}
+				subtitle={isCurrentTeam ? "Current" : undefined}
 			/>
 		)
 	);
