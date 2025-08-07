@@ -45,14 +45,14 @@ export const Driver: FunctionComponent = () => {
 	});
 
 	const teamsList = sortedTeams.map(
-		({ id, name, slug, logo, isCurrentTeam }) => (
+		({ id, name, originalTeamSlug, logo, isCurrentTeam }) => (
 			<Card
 				key={id}
 				title={name}
 				image={logo}
 				imageAlt={`${name}'s logo`}
-				linkPath={`/teams/${slug}`}
-				linkParams={{ teamSlug: slug }}
+				linkPath={`/teams/${originalTeamSlug}`}
+				linkParams={{ teamSlug: originalTeamSlug }}
 				subtitle={isCurrentTeam ? "Current" : null}
 			/>
 		)

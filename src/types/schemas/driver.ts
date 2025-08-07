@@ -34,6 +34,7 @@ export const driverDetailedSchema = z.object({
 			isCurrentTeam: z.boolean(),
 			name: z.string(),
 			slug: z.string(),
+			originalTeamSlug: z.string(),
 			logo: z.string(),
 		})
 	),
