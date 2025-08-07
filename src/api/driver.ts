@@ -29,11 +29,12 @@ export async function getDriver(driverSlug: string): Promise<TDriverDetailed> {
 
 	const response = await fetch(`${API_URL}/drivers/${driverSlug}`, options);
 
+	const { message, data } = await response.json();
+
 	if (!response.ok) {
+		console.error(message);
 		throw new Error("Failed to fetch driver");
 	}
-
-	const { data } = await response.json();
 
 	const { success, data: driver } = driverDetailedSchema.safeParse(data);
 

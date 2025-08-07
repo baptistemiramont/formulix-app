@@ -76,6 +76,10 @@ export const Card: FunctionComponent<TCardProps> = ({
 						alt={imageAlt}
 						width="50"
 						loading="lazy"
+						onError={(e) => {
+							(e.target as HTMLImageElement).src =
+								"/assets/images/default-team.png";
+						}}
 					/>
 				</div>
 				<div>

@@ -22,6 +22,7 @@ export const driverDetailedSchema = z.object({
 	id: z.number(),
 	firstName: z.string(),
 	lastName: z.string(),
+	slug: z.string(),
 	avatar: z.string(),
 	country: z.string(),
 	worldChampionshipsTitle: z.number(),
@@ -30,10 +31,10 @@ export const driverDetailedSchema = z.object({
 	teams: z.array(
 		z.object({
 			id: z.number(),
+			isCurrentTeam: z.boolean(),
 			name: z.string(),
 			slug: z.string(),
-			favicon: z.string(),
-			isCurrentTeam: z.boolean(),
+			logo: z.string(),
 		})
 	),
 });
