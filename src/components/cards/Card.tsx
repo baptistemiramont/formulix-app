@@ -7,9 +7,9 @@ type TCardProps = {
 	title: string;
 	image: string;
 	imageAlt: string;
-	linkPath: string;
-	linkParams: object;
-	subtitle?: string | null;
+	linkPath?: string;
+	linkParams?: object;
+	subtitle?: string;
 };
 
 export const Card: FunctionComponent<TCardProps> = ({
@@ -18,7 +18,7 @@ export const Card: FunctionComponent<TCardProps> = ({
 	imageAlt,
 	linkPath,
 	linkParams,
-	subtitle = null,
+	subtitle,
 }: TCardProps) => {
 	const cardStyle = {
 		container: css({
@@ -29,7 +29,7 @@ export const Card: FunctionComponent<TCardProps> = ({
 				boxShadow: "0 0 25px token(colors.neutral.200)",
 			},
 		}),
-		link: css({
+		content: css({
 			padding: 4,
 			display: "grid",
 			height: "100%",
@@ -40,16 +40,20 @@ export const Card: FunctionComponent<TCardProps> = ({
 			},
 		}),
 		imageContainer: css({
-			display: "grid",
+			display: "flex",
 			justifyContent: "center",
+			alignItems: "center",
+			minHeight: 100,
+			maxHeight: 200,
+			width: "100%",
 		}),
 		image: css({
-			minWidth: 50,
+			width: "100%",
+			height: "auto",
 			maxWidth: 200,
-			width: 100,
-			md: {
-				width: 200,
-			},
+			minWidth: 50,
+			objectFit: "contain",
+			objectPosition: "center",
 		}),
 		title: css({
 			fontSize: "lg",
@@ -66,29 +70,41 @@ export const Card: FunctionComponent<TCardProps> = ({
 		}),
 	};
 
+	const cardContent = (
+		<>
+			<div className={cardStyle.imageContainer}>
+				<img
+					className={cardStyle.image}
+					src={image}
+					alt={imageAlt}
+					width="50"
+					loading="lazy"
+					onError={(e) => {
+						(e.target as HTMLImageElement).src =
+							"/assets/images/default-team.png";
+					}}
+				/>
+			</div>
+			<div>
+				<p className={cardStyle.title}>{title}</p>
+				{subtitle && <p className={cardStyle.subtitle}>{subtitle}</p>}
+			</div>
+		</>
+	);
+
 	return (
 		<li className={cardStyle.container}>
-			<Link to={linkPath} params={linkParams} className={cardStyle.link}>
-				<div className={cardStyle.imageContainer}>
-					<img
-						className={cardStyle.image}
-						src={image}
-						alt={imageAlt}
-						width="50"
-						loading="lazy"
-						onError={(e) => {
-							(e.target as HTMLImageElement).src =
-								"/assets/images/default-team.png";
-						}}
-					/>
-				</div>
-				<div>
-					<p className={cardStyle.title}>{title}</p>
-					{subtitle && (
-						<p className={cardStyle.subtitle}>{subtitle}</p>
-					)}
-				</div>
-			</Link>
+			{linkPath && linkParams ? (
+				<Link
+					to={linkPath}
+					params={linkParams}
+					className={cardStyle.content}
+				>
+					{cardContent}
+				</Link>
+			) : (
+				<div className={cardStyle.content}>{cardContent}</div>
+			)}
 		</li>
 	);
 };

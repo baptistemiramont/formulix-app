@@ -29,8 +29,40 @@ export const Team: FunctionComponent = () => {
 
 	if (!team) return <Error message="No team data found" />;
 
-	const { name, fullName, logo, worldChampionships, yearOfStart, drivers } =
-		team;
+	const {
+		name,
+		fullName,
+		logo,
+		worldChampionships,
+		yearOfStart,
+		yearOfEnd,
+		teamDetails,
+		drivers,
+	} = team;
+
+	const formerTeamIdentities =
+		teamDetails.length > 1 &&
+		teamDetails
+			.sort((a, b) => {
+				if (a.yearOfStart > b.yearOfStart) return -1;
+				if (a.yearOfStart < b.yearOfStart) return 1;
+				return 0;
+			})
+			.map(({ id, name, logo, yearOfStart, yearOfEnd }) => {
+				const subtitle = yearOfEnd
+					? `${yearOfStart} - ${yearOfEnd}`
+					: `${yearOfStart} - Present`;
+
+				return (
+					<Card
+						key={id}
+						title={name}
+						image={logo}
+						imageAlt={`${name}'s logo`}
+						subtitle={subtitle}
+					/>
+				);
+			});
 
 	const activeDrivers = drivers
 		.filter((driver) => driver.isCurrentDriver)
@@ -100,14 +132,14 @@ export const Team: FunctionComponent = () => {
 			display: "grid",
 			gap: 8,
 		},
-		teamDriversContainer: {
+		teamContainer: {
 			display: "grid",
 			gap: 4,
 			lg: {
 				gap: 8,
 			},
 		},
-		teamDriversList: {
+		teamList: {
 			display: "grid",
 			gap: 6,
 			gridTemplateColumns: "repeat(2, 1fr)",
@@ -144,21 +176,35 @@ export const Team: FunctionComponent = () => {
 							label="First team entry"
 							value={yearOfStart}
 						/>
+						<StatCard
+							label="Last team entry"
+							value={
+								yearOfEnd ? yearOfEnd : new Date().getFullYear()
+							}
+						/>
 					</ul>
 				</div>
 			</div>
+			{teamDetails.length > 1 && (
+				<div className={css(teamPageStyle.teamContainer)}>
+					<h2>Team's history</h2>
+					<ul className={css(teamPageStyle.teamList)}>
+						{formerTeamIdentities}
+					</ul>
+				</div>
+			)}
 			{activeDrivers.length > 0 && (
-				<div className={css(teamPageStyle.teamDriversContainer)}>
+				<div className={css(teamPageStyle.teamContainer)}>
 					<h2>Team's current drivers</h2>
-					<ul className={css(teamPageStyle.teamDriversList)}>
+					<ul className={css(teamPageStyle.teamList)}>
 						{activeDrivers}
 					</ul>
 				</div>
 			)}
 			{formerDrivers.length > 0 && (
-				<div className={css(teamPageStyle.teamDriversContainer)}>
+				<div className={css(teamPageStyle.teamContainer)}>
 					<h2>Team's former driver(s)</h2>
-					<ul className={css(teamPageStyle.teamDriversList)}>
+					<ul className={css(teamPageStyle.teamList)}>
 						{formerDrivers}
 					</ul>
 				</div>
