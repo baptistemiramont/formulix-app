@@ -40,7 +40,7 @@ export const Header: FunctionComponent = () => {
 		ulStyle: css({
 			display: "grid",
 			gap: 4,
-			gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+			gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
 			lg: {
 				display: "flex",
 				gap: 8,
@@ -119,6 +119,16 @@ export const Header: FunctionComponent = () => {
 				/>
 			),
 			label: "Teams",
+		},
+		{
+			href: ROUTES.CIRCUITS,
+			icon: (
+				<Icon
+					icon="mdi-go-kart-track"
+					className={headerStyle.iconStyle}
+				/>
+			),
+			label: "Circuits",
 		},
 	];
 

@@ -5,6 +5,8 @@ import {
 } from "@tanstack/react-router";
 
 import { App } from "@/App";
+import { Circuit } from "@/pages/Circuit";
+import { Circuits } from "@/pages/Circuits";
 import { Driver } from "@/pages/Driver";
 import { Drivers } from "@/pages/Drivers";
 import { Home } from "@/pages/Home";
@@ -42,6 +44,16 @@ const routeTree = rootRoute.addChildren([
 		getParentRoute: () => rootRoute,
 		path: ROUTES.DRIVER,
 		component: () => <Driver />,
+	}),
+	createRoute({
+		getParentRoute: () => rootRoute,
+		path: ROUTES.CIRCUITS,
+		component: () => <Circuits />,
+	}),
+	createRoute({
+		getParentRoute: () => rootRoute,
+		path: ROUTES.CIRCUIT,
+		component: () => <Circuit />,
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,

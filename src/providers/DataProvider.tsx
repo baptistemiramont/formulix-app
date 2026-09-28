@@ -6,10 +6,13 @@ import {
 } from "react";
 
 import { DataContext } from "@/contexts/DataContext";
+import { useCircuit } from "@/hooks/useCircuit";
+import { useCircuits } from "@/hooks/useCircuits";
 import { useDriver } from "@/hooks/useDriver";
 import { useDrivers } from "@/hooks/useDrivers";
 import { useTeam } from "@/hooks/useTeam";
 import { useTeams } from "@/hooks/useTeams";
+import type { TCircuit, TCircuitDetailed } from "@/types/circuit";
 import type { TDriver, TDriverDetailed } from "@/types/driver";
 import type { TTeam, TTeamDetailed } from "@/types/team";
 
@@ -34,6 +37,13 @@ export type TDataState = {
 	isDriverLoading: boolean;
 	driver: TDriverDetailed | null;
 	driverError: TError;
+	isCircuitsLoading: boolean;
+	circuits: TCircuit[];
+	circuitsError: TError;
+	setCircuitSlug: (slug: string | null) => void;
+	isCircuitLoading: boolean;
+	circuit: TCircuitDetailed | null;
+	circuitError: TError;
 };
 
 export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
@@ -44,6 +54,9 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 	const [teams, setTeams] = useState<TTeam[]>([]);
 	const [teamSlug, setTeamSlug] = useState<string | null>(null);
 	const [team, setTeam] = useState<TTeamDetailed | null>(null);
+	const [circuits, setCircuits] = useState<TCircuit[]>([]);
+	const [circuitSlug, setCircuitSlug] = useState<string | null>(null);
+	const [circuit, setCircuit] = useState<TCircuitDetailed | null>(null);
 
 	function filterByTeam(teamSlug: string): void {
 		if (!teamSlug || teamSlug === "") {
@@ -91,6 +104,18 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 		error: teamError,
 	} = useTeam(teamSlug ? teamSlug : "");
 
+	const {
+		data: circuitsData,
+		isLoading: isCircuitsLoading,
+		error: circuitsError,
+	} = useCircuits();
+
+	const {
+		data: circuitData,
+		isLoading: isCircuitLoading,
+		error: circuitError,
+	} = useCircuit(circuitSlug ? circuitSlug : "");
+
 	useEffect(() => {
 		if (driversData) {
 			setDrivers(driversData as TDriver[]);
@@ -116,6 +141,18 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 		}
 	}, [teamData]);
 
+	useEffect(() => {
+		if (circuitsData) {
+			setCircuits(circuitsData);
+		}
+	}, [circuitsData]);
+
+	useEffect(() => {
+		if (circuitData) {
+			setCircuit(circuitData);
+		}
+	}, [circuitData]);
+
 	return (
 		<DataContext.Provider
 			children={children}
@@ -138,6 +175,13 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 				isDriverLoading,
 				driver,
 				driverError,
+				isCircuitsLoading,
+				circuits,
+				circuitsError,
+				setCircuitSlug,
+				isCircuitLoading,
+				circuit,
+				circuitError,
 			}}
 		/>
 	);

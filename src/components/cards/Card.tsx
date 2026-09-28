@@ -7,7 +7,7 @@ type TCardProps = {
 	title: string;
 	image: string;
 	imageAlt: string;
-	imageType: "avatar" | "logo";
+	imageType: "avatar" | "logo" | "flag";
 	linkPath?: string;
 	linkParams?: object;
 	subtitle?: string;
@@ -83,7 +83,11 @@ export const Card: FunctionComponent<TCardProps> = ({
 				: {
 						width: "60%",
 						maxHeight: "100%",
-					}
+					},
+			// A thin line keeps the white of a flag apart from the plate
+			imageType === "flag" && {
+				boxShadow: "0 0 0 1px token(colors.line)",
+			}
 		),
 		title: css({
 			fontSize: "md",
