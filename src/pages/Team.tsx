@@ -201,7 +201,7 @@ export const Team: FunctionComponent = () => {
 				<div className={css(teamPageStyle.teamStatListContainer)}>
 					<ul className={css(teamPageStyle.teamStatList)}>
 						<StatCard
-							label="World championships won"
+							label="Constructors' titles"
 							value={worldChampionships}
 							accentColor={teamColor}
 						/>
