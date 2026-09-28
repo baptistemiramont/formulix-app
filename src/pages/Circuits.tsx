@@ -8,7 +8,7 @@ import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
-import { formatSeasons, toFlagUrl } from "@/utils/circuit";
+import { formatSeasons, getLayoutUrl, toFlagUrl } from "@/utils/circuit";
 
 const STATUS_OPTIONS = [
 	{ label: "Active", value: "active" },
@@ -33,14 +33,21 @@ export const Circuits: FunctionComponent = () => {
 		.filter(({ isActive }) => !status || isActive === (status === "active"))
 		.map((circuit) => {
 			const { id, name, slug, locality, country, countryCode } = circuit;
+			const layoutUrl = getLayoutUrl(slug);
+			const flag = {
+				image: toFlagUrl(countryCode),
+				alt: `${country}'s flag`,
+			};
 
 			return (
 				<Card
 					key={id}
 					title={name}
-					image={toFlagUrl(countryCode)}
-					imageAlt={`${country}'s flag`}
-					imageType="flag"
+					// Without a known layout, the flag takes the whole picture
+					image={layoutUrl ?? flag.image}
+					imageAlt={layoutUrl ? `${name}'s layout` : flag.alt}
+					imageType={layoutUrl ? "layout" : "flag"}
+					badge={layoutUrl ? flag : undefined}
 					linkPath="/circuits/$circuitSlug"
 					linkParams={{ circuitSlug: slug }}
 					subtitle={`${locality} · ${formatSeasons(circuit)}`}

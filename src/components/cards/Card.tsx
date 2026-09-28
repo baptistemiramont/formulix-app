@@ -1,13 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import type { CSSProperties, FunctionComponent } from "react";
 
-import { css } from "@/../styled-system/css";
+import { css, cx } from "@/../styled-system/css";
+import { CircuitLayout } from "@/components/CircuitLayout";
 
 type TCardProps = {
 	title: string;
 	image: string;
 	imageAlt: string;
-	imageType: "avatar" | "logo" | "flag";
+	imageType: "avatar" | "logo" | "flag" | "layout";
+	badge?: { image: string; alt: string };
 	linkPath?: string;
 	linkParams?: object;
 	subtitle?: string;
@@ -19,6 +21,7 @@ export const Card: FunctionComponent<TCardProps> = ({
 	image,
 	imageAlt,
 	imageType,
+	badge,
 	linkPath,
 	linkParams,
 	subtitle,
@@ -51,6 +54,7 @@ export const Card: FunctionComponent<TCardProps> = ({
 		}),
 		imageContainer: css(
 			{
+				position: "relative",
 				display: "grid",
 				width: "100%",
 				overflow: "hidden",
@@ -68,8 +72,25 @@ export const Card: FunctionComponent<TCardProps> = ({
 						padding: 3,
 						backgroundColor: "plate",
 						borderRadius: "sm",
-					}
+					},
+			// A layout is a line in the text colour: on the plate, it would vanish in the dark theme
+			imageType === "layout" && {
+				color: "text",
+				backgroundColor: "transparent",
+				_groupHover: {
+					color: "accent",
+				},
+			}
 		),
+		badge: css({
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: 7,
+			height: "auto",
+			borderRadius: "2px",
+			boxShadow: "0 0 0 1px token(colors.line)",
+		}),
 		image: css(
 			{
 				height: "auto",
@@ -118,17 +139,30 @@ export const Card: FunctionComponent<TCardProps> = ({
 	const cardContent = (
 		<>
 			<div className={cardStyle.imageContainer}>
-				<img
-					className={cardStyle.image}
-					src={image}
-					alt={imageAlt}
-					width="50"
-					loading="lazy"
-					onError={(e) => {
-						(e.target as HTMLImageElement).src =
-							"/assets/images/default-team.png";
-					}}
-				/>
+				{imageType === "layout" ? (
+					<CircuitLayout url={image} label={imageAlt} />
+				) : (
+					<img
+						className={cardStyle.image}
+						src={image}
+						alt={imageAlt}
+						width="50"
+						loading="lazy"
+						onError={(e) => {
+							(e.target as HTMLImageElement).src =
+								"/assets/images/default-team.png";
+						}}
+					/>
+				)}
+				{badge && (
+					<img
+						className={cardStyle.badge}
+						src={badge.image}
+						alt={badge.alt}
+						width="28"
+						loading="lazy"
+					/>
+				)}
 			</div>
 			<div>
 				<p className={cardStyle.title}>{title}</p>
@@ -139,7 +173,7 @@ export const Card: FunctionComponent<TCardProps> = ({
 
 	return (
 		<li
-			className={cardStyle.container}
+			className={cx("group", cardStyle.container)}
 			style={{ "--card-team-color": accentColor } as CSSProperties}
 		>
 			{linkPath && linkParams ? (

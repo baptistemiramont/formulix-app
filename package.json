@@ -8,7 +8,8 @@
 		"build": "tsc && vite build",
 		"lint": "eslint .",
 		"preview": "vite preview",
-		"prepare": "panda codegen"
+		"prepare": "panda codegen",
+		"build-circuit-layouts": "node scripts/build-circuit-layouts.js"
 	},
 	"dependencies": {
 		"@gsap/react": "^2.1.1",
