@@ -11,6 +11,8 @@ export const ROUTES = {
 	DRIVER: "/drivers/$driverSlug",
 	TEAMS: "/teams",
 	TEAM: "/teams/$teamSlug",
+	CIRCUITS: "/circuits",
+	CIRCUIT: "/circuits/$circuitSlug",
 } as const;
 
 export const THEME_STORAGE_KEY = "formulix-theme";
