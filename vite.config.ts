@@ -20,10 +20,11 @@ export default defineConfig({
 				short_name: "Formulix",
 				description:
 					"Formulix: Dive into F1 history and present ! Explore detailed profiles of teams and drivers from both the current season and past years, all in one app.",
-				theme_color: "#f5f5f5",
+				theme_color: "#15151E",
+				background_color: "#15151E",
 			},
 			workbox: {
-				globPatterns: ["**/*.{js,css,html,svg,ico,png,ttf}"],
+				globPatterns: ["**/*.{js,css,html,svg,ico,png,woff2}"],
 				cleanupOutdatedCaches: true,
 				clientsClaim: true,
 			},

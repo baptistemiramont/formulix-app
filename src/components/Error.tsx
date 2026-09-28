@@ -8,7 +8,7 @@ type TErrorProps = {
 
 export const Error: FunctionComponent<TErrorProps> = ({ message }) => {
 	const textStyle = css({
-		color: "red",
+		color: "accentText",
 		fontWeight: "bold",
 	});
 

@@ -5,17 +5,19 @@ import { css } from "@/../styled-system/css";
 export const Footer: FunctionComponent = () => {
 	const footerStyle = {
 		container: css({
+			position: "relative",
 			paddingBottom: "81px",
-			paddingTop: 6,
+			paddingTop: 10,
 			paddingX: 4,
 			sm: {
 				paddingX: 8,
 			},
 			md: {
-				paddingTop: 12,
+				paddingTop: 14,
 				paddingX: 16,
 			},
 			lg: {
+				paddingBottom: 10,
 				paddingX: 32,
 			},
 			xl: {
@@ -25,15 +27,25 @@ export const Footer: FunctionComponent = () => {
 			"2xl": {
 				paddingX: 72,
 			},
-			backgroundColor: "neutral.200",
+			backgroundColor: "carbon",
 			display: "grid",
 			gap: 8,
-			boxShadow: "hsla(210, 8%, 62%, 0.1) 0px -8px 24px",
+			_before: {
+				content: "\"\"",
+				position: "absolute",
+				insetX: 0,
+				top: 0,
+				height: 3,
+				backgroundImage:
+					"repeating-conic-gradient(token(colors.chalk) 0 25%, token(colors.carbon) 0 50%)",
+				backgroundSize: "token(spacing.3) token(spacing.3)",
+			},
 		}),
 		disclaimer: css({
-			color: "neutral.500",
+			color: "smoke",
 		}),
 		highlight: css({
+			color: "chalk",
 			textStyle: "highlight",
 		}),
 		copyrightContainer: css({
@@ -41,8 +53,17 @@ export const Footer: FunctionComponent = () => {
 			placeContent: "center",
 		}),
 		copyright: css({
-			color: "neutral.500",
+			color: "smoke",
 			textStyle: "label",
+			"& a": {
+				color: "chalk",
+				textDecoration: "underline",
+				textUnderlineOffset: "3px",
+				textDecorationThickness: "2px",
+				_hover: {
+					textDecorationColor: "f1Red",
+				},
+			},
 		}),
 	};
 

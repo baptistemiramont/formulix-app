@@ -103,7 +103,7 @@ export const Home: FunctionComponent = () => {
 	}, []);
 
 	const appNameStyle = {
-		color: "primary",
+		color: "accentText",
 	};
 
 	const heroSectionStyle = {
@@ -137,17 +137,35 @@ export const Home: FunctionComponent = () => {
 		},
 		title: {
 			display: "grid",
+			gap: 1,
+			fontSize: "3xl",
+			sm: {
+				fontSize: "4xl",
+			},
 			lg: {
-				fontSize: "6xl",
+				fontSize: "5xl",
+			},
+			"& span:first-child": {
+				fontSize: "4xl",
+				fontWeight: 900,
+				fontStyle: "oblique 8deg",
+				textTransform: "uppercase",
+				sm: {
+					fontSize: "5xl",
+				},
+				lg: {
+					fontSize: "7xl",
+				},
 			},
 			"& span:last-child": {
 				textTransform: "capitalize",
 			},
 		},
 		subtitle: {
-			fontSize: "xl",
+			color: "textMuted",
+			fontSize: "lg",
 			lg: {
-				fontSize: "2xl",
+				fontSize: "xl",
 			},
 		},
 		ctaContainer: {
@@ -158,7 +176,22 @@ export const Home: FunctionComponent = () => {
 				gap: 6,
 			},
 		},
+		heroImageContainer: {
+			position: "relative",
+			display: "grid",
+			placeItems: "center",
+			_before: {
+				content: "\"\"",
+				position: "absolute",
+				inset: "12% 4% 12% 18%",
+				backgroundColor: "surfaceMuted",
+				borderRightWidth: "6px",
+				borderColor: "accent",
+				transform: "skewX(-14deg)",
+			},
+		},
 		heroImage: {
+			position: "relative",
 			width: "100%",
 			height: "auto",
 			lg: {
@@ -169,7 +202,7 @@ export const Home: FunctionComponent = () => {
 
 	const aboutSectionStyle = {
 		section: {
-			backgroundColor: "neutral.200",
+			backgroundColor: "surfaceMuted",
 			display: "grid",
 			placeItems: "center",
 			gap: 8,
@@ -231,12 +264,16 @@ export const Home: FunctionComponent = () => {
 							className={css(heroSectionStyle.ctaContainer)}
 						>
 							<Button label="Drivers" path="/drivers" />
-							<Button label="Teams" path="/teams" />
+							<Button
+								label="Teams"
+								path="/teams"
+								variant="secondary"
+							/>
 						</div>
 					</div>
 				</div>
 				{isDesktop && (
-					<div>
+					<div className={css(heroSectionStyle.heroImageContainer)}>
 						<img
 							ref={refs.heroImage}
 							className={css(heroSectionStyle.heroImage)}

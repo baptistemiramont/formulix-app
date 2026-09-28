@@ -1,4 +1,4 @@
-import { type FunctionComponent, useEffect } from "react";
+import { type CSSProperties, type FunctionComponent, useEffect } from "react";
 
 import { useParams } from "@tanstack/react-router";
 
@@ -9,11 +9,19 @@ import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
+import { cornerTitle } from "@/styles/title";
 import { ROUTES } from "@/utils/constants";
+import { getTeamColor } from "@/utils/team";
 
 export const Driver: FunctionComponent = () => {
 	const { driverSlug } = useParams({ from: ROUTES.DRIVER });
-	const { setDriverSlug, isDriverLoading, driver, driverError } = useData();
+	const {
+		setDriverSlug,
+		isDriverLoading,
+		driver,
+		driverError,
+		teams: allTeams,
+	} = useData();
 
 	useEffect(() => {
 		if (driverSlug) {
@@ -38,6 +46,11 @@ export const Driver: FunctionComponent = () => {
 		teams,
 	} = driver;
 
+	const currentTeamColor = getTeamColor(
+		allTeams,
+		teams.find(({ isCurrentTeam }) => isCurrentTeam)?.originalTeamSlug
+	);
+
 	const sortedTeams = teams.sort((a, b) => {
 		if (a.isCurrentTeam && !b.isCurrentTeam) return -1;
 		if (!a.isCurrentTeam && b.isCurrentTeam) return 1;
@@ -51,9 +64,11 @@ export const Driver: FunctionComponent = () => {
 				title={name}
 				image={logo}
 				imageAlt={`${name}'s logo`}
+				imageType="logo"
 				linkPath={`/teams/${originalTeamSlug}`}
 				linkParams={{ teamSlug: originalTeamSlug }}
 				subtitle={isCurrentTeam ? "Current" : undefined}
+				accentColor={isCurrentTeam ? currentTeamColor : undefined}
 			/>
 		)
 	);
@@ -81,6 +96,8 @@ export const Driver: FunctionComponent = () => {
 		driverAvatarContainer: {
 			display: "grid",
 			justifyContent: "center",
+			backgroundImage:
+				"linear-gradient(to top, color-mix(in srgb, var(--driver-accent, token(colors.line)) 28%, transparent), transparent 75%)",
 		},
 		driverName: {
 			textAlign: "center",
@@ -91,7 +108,7 @@ export const Driver: FunctionComponent = () => {
 		driverStatList: {
 			height: "100%",
 			display: "grid",
-			gap: 6,
+			gap: 3,
 		},
 		driverTeamsContainer: {
 			display: "grid",
@@ -114,7 +131,14 @@ export const Driver: FunctionComponent = () => {
 		<section className={css(layoutGutters, driverPageStyle.container)}>
 			<div className={css(driverPageStyle.driverMainInfosContainer)}>
 				<div className={css(driverPageStyle.driverPortraitContainer)}>
-					<div className={css(driverPageStyle.driverAvatarContainer)}>
+					<div
+						className={css(driverPageStyle.driverAvatarContainer)}
+						style={
+							{
+								"--driver-accent": currentTeamColor,
+							} as CSSProperties
+						}
+					>
 						<img
 							src={avatar}
 							alt={`${firstName} ${lastName} avatar`}
@@ -128,21 +152,31 @@ export const Driver: FunctionComponent = () => {
 				</div>
 				<div className={css(driverPageStyle.driverStatListContainer)}>
 					<ul className={css(driverPageStyle.driverStatList)}>
-						<StatCard label="Country" value={country} />
+						<StatCard
+							label="Country"
+							value={country}
+							accentColor={currentTeamColor}
+						/>
 						<StatCard
 							label="World championships won"
 							value={worldChampionshipsTitle}
+							accentColor={currentTeamColor}
 						/>
-						<StatCard label="Podiums" value={podiums} />
+						<StatCard
+							label="Podiums"
+							value={podiums}
+							accentColor={currentTeamColor}
+						/>
 						<StatCard
 							label="GP participations"
 							value={grandPrixParticipation}
+							accentColor={currentTeamColor}
 						/>
 					</ul>
 				</div>
 			</div>
 			<div className={css(driverPageStyle.driverTeamsContainer)}>
-				<h2>
+				<h2 className={css(cornerTitle)}>
 					{firstName} {lastName}'s team(s)
 				</h2>
 				<ul className={css(driverPageStyle.driverTeamsList)}>
