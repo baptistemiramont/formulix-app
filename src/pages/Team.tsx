@@ -7,6 +7,7 @@ import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
@@ -41,9 +42,17 @@ export const Team: FunctionComponent = () => {
 		yearOfEnd,
 		teamDetails,
 		drivers,
+		standings,
 	} = team;
 
 	const teamColor = toTeamColor(color);
+
+	// The last season raced, or the latest one ranked while the team races on
+	const lastSeason =
+		yearOfEnd ??
+		standings[standings.length - 1]?.season ??
+		new Date().getFullYear();
+	const hasHistory = standings.length > 0 || teamDetails.length > 1;
 
 	const formerTeamIdentities =
 		teamDetails.length > 1 &&
@@ -155,6 +164,10 @@ export const Team: FunctionComponent = () => {
 				gap: 8,
 			},
 		},
+		teamHistoryCaption: {
+			color: "textMuted",
+			textStyle: "label",
+		},
 		teamList: {
 			display: "grid",
 			gap: 6,
@@ -207,12 +220,33 @@ export const Team: FunctionComponent = () => {
 					</ul>
 				</div>
 			</div>
-			{teamDetails.length > 1 && (
+			{hasHistory && (
 				<div className={css(teamPageStyle.teamContainer)}>
 					<h2 className={css(cornerTitle)}>Team's history</h2>
-					<ul className={css(teamPageStyle.teamList)}>
-						{formerTeamIdentities}
-					</ul>
+					{standings.length > 0 && (
+						<>
+							<p
+								className={css(
+									teamPageStyle.teamHistoryCaption
+								)}
+							>
+								Constructors' championship position by season
+							</p>
+							<StandingsChart
+								teamName={name}
+								identities={teamDetails}
+								standings={standings}
+								firstSeason={yearOfStart}
+								lastSeason={lastSeason}
+								teamColor={teamColor}
+							/>
+						</>
+					)}
+					{teamDetails.length > 1 && (
+						<ul className={css(teamPageStyle.teamList)}>
+							{formerTeamIdentities}
+						</ul>
+					)}
 				</div>
 			)}
 			{activeDrivers.length > 0 && (
