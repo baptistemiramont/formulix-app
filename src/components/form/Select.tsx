@@ -40,11 +40,15 @@ export const Select: FunctionComponent<TSelectProps> = ({
 	const resetButtonStyle = {
 		cursor: "pointer",
 		padding: 2,
-		outlineWidth: 2,
-		outlineOffset: "-2px",
-		outlineColor: "neutral.200",
-		outlineStyle: "solid",
+		color: "textMuted",
+		backgroundColor: "surface",
+		borderWidth: "1px",
+		borderColor: "line",
 		borderRadius: "md",
+		transition: "var(--default-animation)",
+		_hover: {
+			color: "accentText",
+		},
 	};
 
 	return (

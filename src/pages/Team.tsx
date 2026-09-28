@@ -1,4 +1,4 @@
-import { type FunctionComponent, useEffect } from "react";
+import { type CSSProperties, type FunctionComponent, useEffect } from "react";
 
 import { useParams } from "@tanstack/react-router";
 
@@ -9,6 +9,8 @@ import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
+import { cornerTitle } from "@/styles/title";
+import { toTeamColor } from "@/utils/team";
 
 export const Team: FunctionComponent = () => {
 	const { teamSlug } = useParams({ from: "/teams/$teamSlug" });
@@ -33,12 +35,15 @@ export const Team: FunctionComponent = () => {
 		name,
 		fullName,
 		logo,
+		color,
 		worldChampionships,
 		yearOfStart,
 		yearOfEnd,
 		teamDetails,
 		drivers,
 	} = team;
+
+	const teamColor = toTeamColor(color);
 
 	const formerTeamIdentities =
 		teamDetails.length > 1 &&
@@ -59,7 +64,9 @@ export const Team: FunctionComponent = () => {
 						title={name}
 						image={logo}
 						imageAlt={`${name}'s logo`}
+						imageType="logo"
 						subtitle={subtitle}
+						accentColor={yearOfEnd ? undefined : teamColor}
 					/>
 				);
 			});
@@ -72,8 +79,10 @@ export const Team: FunctionComponent = () => {
 				title={`${firstName} ${lastName}`}
 				image={avatar}
 				imageAlt={`${firstName} ${lastName}'s avatar`}
+				imageType="avatar"
 				linkPath="/drivers/$driverSlug"
 				linkParams={{ driverSlug: slug }}
+				accentColor={teamColor}
 			/>
 		));
 
@@ -85,6 +94,7 @@ export const Team: FunctionComponent = () => {
 				title={`${firstName} ${lastName}`}
 				image={avatar}
 				imageAlt={`${firstName} ${lastName}'s avatar`}
+				imageType="avatar"
 				linkPath="/drivers/$driverSlug"
 				linkParams={{ driverSlug: slug }}
 			/>
@@ -116,6 +126,12 @@ export const Team: FunctionComponent = () => {
 		teamLogoContainer: {
 			display: "grid",
 			justifyContent: "center",
+			padding: 6,
+			backgroundColor: "plate",
+			borderTopWidth: "2px",
+			borderRightWidth: "2px",
+			borderColor: "var(--team-accent)",
+			borderTopRightRadius: "2xl",
 		},
 		teamName: {
 			textAlign: "center",
@@ -126,7 +142,7 @@ export const Team: FunctionComponent = () => {
 		teamStatList: {
 			height: "100%",
 			display: "grid",
-			gap: 6,
+			gap: 3,
 		},
 		teamTeamsContainer: {
 			display: "grid",
@@ -156,7 +172,10 @@ export const Team: FunctionComponent = () => {
 		<section className={css(layoutGutters, teamPageStyle.container)}>
 			<div className={css(teamPageStyle.teamMainInfosContainer)}>
 				<div className={css(teamPageStyle.teamPortraitContainer)}>
-					<div className={css(teamPageStyle.teamLogoContainer)}>
+					<div
+						className={css(teamPageStyle.teamLogoContainer)}
+						style={{ "--team-accent": teamColor } as CSSProperties}
+					>
 						<img
 							src={logo}
 							alt={`${name}'s logo`}
@@ -171,23 +190,26 @@ export const Team: FunctionComponent = () => {
 						<StatCard
 							label="World championships won"
 							value={worldChampionships}
+							accentColor={teamColor}
 						/>
 						<StatCard
 							label="First team entry"
 							value={yearOfStart}
+							accentColor={teamColor}
 						/>
 						<StatCard
 							label="Last team entry"
 							value={
 								yearOfEnd ? yearOfEnd : new Date().getFullYear()
 							}
+							accentColor={teamColor}
 						/>
 					</ul>
 				</div>
 			</div>
 			{teamDetails.length > 1 && (
 				<div className={css(teamPageStyle.teamContainer)}>
-					<h2>Team's history</h2>
+					<h2 className={css(cornerTitle)}>Team's history</h2>
 					<ul className={css(teamPageStyle.teamList)}>
 						{formerTeamIdentities}
 					</ul>
@@ -195,7 +217,7 @@ export const Team: FunctionComponent = () => {
 			)}
 			{activeDrivers.length > 0 && (
 				<div className={css(teamPageStyle.teamContainer)}>
-					<h2>Team's current drivers</h2>
+					<h2 className={css(cornerTitle)}>Team's current drivers</h2>
 					<ul className={css(teamPageStyle.teamList)}>
 						{activeDrivers}
 					</ul>
@@ -203,7 +225,7 @@ export const Team: FunctionComponent = () => {
 			)}
 			{formerDrivers.length > 0 && (
 				<div className={css(teamPageStyle.teamContainer)}>
-					<h2>Team's former driver(s)</h2>
+					<h2 className={css(cornerTitle)}>Team's former driver(s)</h2>
 					<ul className={css(teamPageStyle.teamList)}>
 						{formerDrivers}
 					</ul>

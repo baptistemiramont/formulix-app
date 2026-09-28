@@ -4,24 +4,31 @@ import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ROUTES } from "@/utils/constants";
 
 export const Header: FunctionComponent = () => {
 	const headerStyle = {
 		headerStyle: css({
-			paddingY: 4,
+			paddingY: 3,
 			paddingX: 4,
 			position: "fixed",
 			zIndex: 10,
 			inset: "auto 0 0 0",
+			backgroundColor: "bg/85",
+			borderTopWidth: "1px",
+			borderColor: "line",
 			backdropFilter: "auto",
 			backdropBlur: "sm",
 			lg: {
+				paddingY: 4,
 				paddingX: 8,
 				position: "sticky",
 				top: 0,
 				bottom: "auto",
+				borderTopWidth: 0,
+				borderBottomWidth: "1px",
 				display: "flex",
 				justifyContent: "space-between",
 				alignItems: "center",
@@ -33,40 +40,55 @@ export const Header: FunctionComponent = () => {
 		ulStyle: css({
 			display: "grid",
 			gap: 4,
-			gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+			gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
 			lg: {
 				display: "flex",
-				gap: 6,
+				gap: 8,
 			},
 		}),
 		linkStyle: css({
-			"&.active p, &.active svg": {
-				color: "primary",
+			display: "grid",
+			color: "textMuted",
+			transition: "var(--default-animation)",
+			_hover: {
+				color: "text",
+			},
+			"&.active": {
+				color: "accentText",
+				lg: {
+					color: "text",
+				},
+			},
+			"&.active p::after": {
+				lg: {
+					content: "\"\"",
+					position: "absolute",
+					insetX: 0,
+					bottom: "-2px",
+					height: "3px",
+					backgroundColor: "accent",
+					transform: "skewX(-20deg)",
+				},
 			},
 		}),
 		labelStyle: css({
+			position: "relative",
 			width: "fit-content",
 			margin: "auto",
-			fontSize: "md",
+			color: "inherit",
+			fontSize: "xs",
 			fontWeight: 600,
-			letterSpacing: 1,
-			fontVariantCaps: "all-small-caps",
-			transition: "var(--default-animation)",
+			fontStretch: "112%",
+			letterSpacing: "0.08em",
+			textTransform: "uppercase",
 			lg: {
-				fontSize: "lg",
-			},
-			_hover: {
-				color: "primary10",
+				fontSize: "sm",
+				paddingY: 1,
 			},
 		}),
 		iconStyle: css({
 			margin: "auto",
 			fontSize: 25,
-		}),
-		logoTextStyle: css({
-			fontSize: "2xl",
-			fontWeight: 600,
-			fontFamily: "League Spartan",
 		}),
 	};
 
@@ -115,8 +137,16 @@ export const Header: FunctionComponent = () => {
 		<header className={headerStyle.headerStyle}>
 			{isDesktop && <Logo />}
 			<nav>
-				<ul className={headerStyle.ulStyle}>{linksList}</ul>
+				<ul className={headerStyle.ulStyle}>
+					{linksList}
+					{!isDesktop && (
+						<li>
+							<ThemeToggle hasLabel />
+						</li>
+					)}
+				</ul>
 			</nav>
+			{isDesktop && <ThemeToggle />}
 		</header>
 	);
 };

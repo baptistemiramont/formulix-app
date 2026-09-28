@@ -7,6 +7,8 @@ import { Select } from "@/components/form/Select";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
+import { cornerTitle } from "@/styles/title";
+import { getTeamColor } from "@/utils/team";
 
 export const Drivers: FunctionComponent = () => {
 	function handleTeamChange(
@@ -19,6 +21,7 @@ export const Drivers: FunctionComponent = () => {
 
 	const {
 		drivers,
+		teams,
 		isDriversLoading,
 		filteredDrivers,
 		driversError,
@@ -79,9 +82,11 @@ export const Drivers: FunctionComponent = () => {
 				title={`${firstName} ${lastName}`}
 				image={avatar}
 				imageAlt={`${firstName} ${lastName}'s avatar`}
+				imageType="avatar"
 				linkPath="/drivers/$driverSlug"
 				linkParams={{ driverSlug: slug }}
 				subtitle={currentTeam ? currentTeam.name : "No team/Inactive"}
+				accentColor={getTeamColor(teams, currentTeam?.slug)}
 			/>
 		)
 	);
@@ -118,7 +123,7 @@ export const Drivers: FunctionComponent = () => {
 
 	return (
 		<section className={css(layoutGutters, driversPageStyle.container)}>
-			<h1>Drivers</h1>
+			<h1 className={css(cornerTitle)}>Drivers</h1>
 			<form>
 				<div className={css(driversPageStyle.formFieldsContainer)}>
 					<Select

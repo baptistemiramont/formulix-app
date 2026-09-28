@@ -8,6 +8,24 @@
 		<meta name="description"
 			content="Formulix: Dive into F1 history and present ! Explore detailed profiles of teams and drivers from both the current season and past years, all in one app." />
 		<meta name="google-site-verification" content="E44nyDWoVX1w5Ym1kTpehjhdUY04z8f0m1NzyVK0VRs" />
+		<meta name="theme-color" content="#F2F2F4" />
+		<script>
+			// Sets the theme before the first paint to avoid a flash, mirrors useTheme.
+			(function () {
+				var stored = null;
+				try {
+					stored = localStorage.getItem("formulix-theme");
+				} catch (error) {}
+				var isDark =
+					stored === "dark" ||
+					(stored !== "light" &&
+						window.matchMedia("(prefers-color-scheme: dark)").matches);
+				document.documentElement.dataset.theme = isDark ? "dark" : "light";
+				document
+					.querySelector('meta[name="theme-color"]')
+					.setAttribute("content", isDark ? "#0D0D12" : "#F2F2F4");
+			})();
+		</script>
 		<script type="module" src="/src/main.tsx"></script>
 	</head>
 

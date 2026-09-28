@@ -6,6 +6,8 @@ import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
+import { cornerTitle } from "@/styles/title";
+import { toTeamColor } from "@/utils/team";
 
 export const Teams: FunctionComponent = () => {
 	const { isTeamsLoading, teams, teamsError } = useData();
@@ -16,17 +18,21 @@ export const Teams: FunctionComponent = () => {
 		return <Error message="An error has occurred" />;
 	}
 
-	const teamsList = teams.map(({ id, isActive, name, slug, logo }) => (
-		<Card
-			key={id}
-			title={name}
-			image={logo}
-			imageAlt={`${name}'s logo`}
-			linkPath={`/teams/${slug}`}
-			linkParams={{ teamSlug: slug }}
-			subtitle={isActive ? "Active" : "Inactive"}
-		/>
-	));
+	const teamsList = teams.map(
+		({ id, isActive, name, slug, logo, color }) => (
+			<Card
+				key={id}
+				title={name}
+				image={logo}
+				imageAlt={`${name}'s logo`}
+				imageType="logo"
+				linkPath={`/teams/${slug}`}
+				linkParams={{ teamSlug: slug }}
+				subtitle={isActive ? "Active" : "Inactive"}
+				accentColor={toTeamColor(color)}
+			/>
+		)
+	);
 
 	const teamsPageStyle = {
 		container: {
@@ -49,7 +55,7 @@ export const Teams: FunctionComponent = () => {
 
 	return (
 		<section className={css(layoutGutters, teamsPageStyle.container)}>
-			<h1>Teams</h1>
+			<h1 className={css(cornerTitle)}>Teams</h1>
 			{teamsList.length === 0 ? (
 				<p>No teams found.</p>
 			) : (
