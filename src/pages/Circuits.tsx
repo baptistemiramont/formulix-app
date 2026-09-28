@@ -18,9 +18,14 @@ const STATUS_OPTIONS = [
 export const Circuits: FunctionComponent = () => {
 	const { isCircuitsLoading, circuits, circuitsError } = useData();
 	const [status, setStatus] = useState("");
+	const [country, setCountry] = useState("");
 
 	function handleStatusChange(event: ChangeEvent<HTMLSelectElement>): void {
 		setStatus(event.target.value);
+	}
+
+	function handleCountryChange(event: ChangeEvent<HTMLSelectElement>): void {
+		setCountry(event.target.value);
 	}
 
 	if (isCircuitsLoading) return <Loader />;
@@ -29,8 +34,15 @@ export const Circuits: FunctionComponent = () => {
 		return <Error message="Failed to load circuits data" />;
 	}
 
+	const countryOptions = [
+		...new Set(circuits.map((circuit) => circuit.country)),
+	]
+		.sort((a, b) => a.localeCompare(b))
+		.map((countryName) => ({ label: countryName, value: countryName }));
+
 	const circuitsList = circuits
 		.filter(({ isActive }) => !status || isActive === (status === "active"))
+		.filter((circuit) => !country || circuit.country === country)
 		.map((circuit) => {
 			const { id, name, slug, locality, country, countryCode } = circuit;
 			const layoutUrl = getLayoutUrl(slug);
@@ -88,8 +100,9 @@ export const Circuits: FunctionComponent = () => {
 	return (
 		<section className={css(layoutGutters, circuitsPageStyle.container)}>
 			<h1 className={css(cornerTitle)}>Circuits</h1>
-			<form>
-				<div className={css(circuitsPageStyle.formFieldsContainer)}>
+			{/* A form per filter: a reset button empties every field of its form */}
+			<div className={css(circuitsPageStyle.formFieldsContainer)}>
+				<form>
 					<Select
 						id="status"
 						label="Filter by status"
@@ -98,10 +111,20 @@ export const Circuits: FunctionComponent = () => {
 						changeHandler={handleStatusChange}
 						onReset={() => setStatus("")}
 					/>
-				</div>
-			</form>
+				</form>
+				<form>
+					<Select
+						id="country"
+						label="Filter by country"
+						defaultOptionLabel="All"
+						options={countryOptions}
+						changeHandler={handleCountryChange}
+						onReset={() => setCountry("")}
+					/>
+				</form>
+			</div>
 			{circuitsList.length === 0 ? (
-				<p>No circuits match the selected status.</p>
+				<p>No circuits match the selected filters.</p>
 			) : (
 				<ul className={css(circuitsPageStyle.circuitListStyle)}>
 					{circuitsList}
