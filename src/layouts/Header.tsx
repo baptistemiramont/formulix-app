@@ -4,6 +4,7 @@ import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ROUTES } from "@/utils/constants";
 
@@ -39,7 +40,7 @@ export const Header: FunctionComponent = () => {
 		ulStyle: css({
 			display: "grid",
 			gap: 4,
-			gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+			gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
 			lg: {
 				display: "flex",
 				gap: 8,
@@ -136,8 +137,16 @@ export const Header: FunctionComponent = () => {
 		<header className={headerStyle.headerStyle}>
 			{isDesktop && <Logo />}
 			<nav>
-				<ul className={headerStyle.ulStyle}>{linksList}</ul>
+				<ul className={headerStyle.ulStyle}>
+					{linksList}
+					{!isDesktop && (
+						<li>
+							<ThemeToggle hasLabel />
+						</li>
+					)}
+				</ul>
 			</nav>
+			{isDesktop && <ThemeToggle />}
 		</header>
 	);
 };

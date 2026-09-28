@@ -12,3 +12,10 @@ export const ROUTES = {
 	TEAMS: "/teams",
 	TEAM: "/teams/$teamSlug",
 } as const;
+
+export const THEME_STORAGE_KEY = "formulix-theme";
+
+export const THEME_COLORS = {
+	light: "#F2F2F4",
+	dark: "#0D0D12",
+} as const;

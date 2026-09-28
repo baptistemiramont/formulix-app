@@ -58,6 +58,12 @@ export default defineConfig({
 	preflight: true,
 	include: ["./src/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
 	exclude: [],
+	conditions: {
+		extend: {
+			dark: "[data-theme=dark] &",
+			light: "[data-theme=light] &",
+		},
+	},
 	theme: {
 		extend: {
 			tokens: {
@@ -76,16 +82,24 @@ export default defineConfig({
 			},
 			semanticTokens: {
 				colors: {
-					bg: { value: "#F2F2F4" },
-					surface: { value: "#FFFFFF" },
-					surfaceMuted: { value: "#E6E6EB" },
-					line: { value: "#D6D6DE" },
-					text: { value: "#15151E" },
-					textMuted: { value: "#5A5A69" },
+					bg: { value: { base: "#F2F2F4", _dark: "#0D0D12" } },
+					surface: { value: { base: "#FFFFFF", _dark: "#191921" } },
+					surfaceMuted: {
+						value: { base: "#E6E6EB", _dark: "#22222C" },
+					},
+					line: { value: { base: "#D6D6DE", _dark: "#30303D" } },
+					text: { value: { base: "#15151E", _dark: "#F2F2F4" } },
+					textMuted: {
+						value: { base: "#5A5A69", _dark: "#A1A1B0" },
+					},
 					accent: { value: "{colors.f1Red}" },
-					accentHover: { value: "#B80500" },
-					accentText: { value: "#C80500" },
-					plate: { value: "#FFFFFF" },
+					accentHover: {
+						value: { base: "#B80500", _dark: "#FF2A1F" },
+					},
+					accentText: {
+						value: { base: "#C80500", _dark: "#FF4A3D" },
+					},
+					plate: { value: { base: "#FFFFFF", _dark: "#F2F2F4" } },
 				},
 			},
 			keyframes: {
@@ -115,6 +129,10 @@ export default defineConfig({
 		html: {
 			scrollBehavior: "smooth",
 			scrollbarWidth: "thin",
+			colorScheme: "light",
+			"&[data-theme=dark]": {
+				colorScheme: "dark",
+			},
 		},
 		body: {
 			color: "text",
