@@ -4,7 +4,7 @@ import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { Logo } from "@/components/Logo";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ROUTES } from "@/utils/constants";
 
@@ -29,8 +29,8 @@ export const Header: FunctionComponent = () => {
 				bottom: "auto",
 				borderTopWidth: 0,
 				borderBottomWidth: "1px",
-				display: "flex",
-				justifyContent: "space-between",
+				display: "grid",
+				gridTemplateColumns: "1fr auto 1fr",
 				alignItems: "center",
 			},
 			"2xl": {
@@ -90,6 +90,9 @@ export const Header: FunctionComponent = () => {
 			margin: "auto",
 			fontSize: 25,
 		}),
+		desktopSwitcherStyle: css({
+			justifySelf: "end",
+		}),
 		mobileBarStyle: css({
 			display: "flex",
 			justifyContent: "flex-end",
@@ -146,7 +149,7 @@ export const Header: FunctionComponent = () => {
 		<>
 			{!isDesktop && (
 				<div className={headerStyle.mobileBarStyle}>
-					<ThemeToggle />
+					<ThemeSwitcher />
 				</div>
 			)}
 			<header className={headerStyle.headerStyle}>
@@ -154,7 +157,11 @@ export const Header: FunctionComponent = () => {
 				<nav>
 					<ul className={headerStyle.ulStyle}>{linksList}</ul>
 				</nav>
-				{isDesktop && <ThemeToggle />}
+				{isDesktop && (
+					<div className={headerStyle.desktopSwitcherStyle}>
+						<ThemeSwitcher />
+					</div>
+				)}
 			</header>
 		</>
 	);
