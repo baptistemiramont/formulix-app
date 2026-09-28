@@ -4,7 +4,7 @@ import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { Logo } from "@/components/Logo";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ROUTES } from "@/utils/constants";
 
@@ -29,8 +29,8 @@ export const Header: FunctionComponent = () => {
 				bottom: "auto",
 				borderTopWidth: 0,
 				borderBottomWidth: "1px",
-				display: "flex",
-				justifyContent: "space-between",
+				display: "grid",
+				gridTemplateColumns: "1fr auto 1fr",
 				alignItems: "center",
 			},
 			"2xl": {
@@ -40,7 +40,7 @@ export const Header: FunctionComponent = () => {
 		ulStyle: css({
 			display: "grid",
 			gap: 4,
-			gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+			gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
 			lg: {
 				display: "flex",
 				gap: 8,
@@ -89,6 +89,18 @@ export const Header: FunctionComponent = () => {
 		iconStyle: css({
 			margin: "auto",
 			fontSize: 25,
+		}),
+		desktopSwitcherStyle: css({
+			justifySelf: "end",
+		}),
+		mobileBarStyle: css({
+			display: "flex",
+			justifyContent: "flex-end",
+			paddingTop: 3,
+			paddingX: 4,
+			sm: {
+				paddingX: 8,
+			},
 		}),
 	};
 
@@ -144,19 +156,23 @@ export const Header: FunctionComponent = () => {
 	});
 
 	return (
-		<header className={headerStyle.headerStyle}>
-			{isDesktop && <Logo />}
-			<nav>
-				<ul className={headerStyle.ulStyle}>
-					{linksList}
-					{!isDesktop && (
-						<li>
-							<ThemeToggle hasLabel />
-						</li>
-					)}
-				</ul>
-			</nav>
-			{isDesktop && <ThemeToggle />}
-		</header>
+		<>
+			{!isDesktop && (
+				<div className={headerStyle.mobileBarStyle}>
+					<ThemeSwitcher />
+				</div>
+			)}
+			<header className={headerStyle.headerStyle}>
+				{isDesktop && <Logo />}
+				<nav>
+					<ul className={headerStyle.ulStyle}>{linksList}</ul>
+				</nav>
+				{isDesktop && (
+					<div className={headerStyle.desktopSwitcherStyle}>
+						<ThemeSwitcher />
+					</div>
+				)}
+			</header>
+		</>
 	);
 };
