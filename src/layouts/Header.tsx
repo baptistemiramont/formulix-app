@@ -40,7 +40,7 @@ export const Header: FunctionComponent = () => {
 		ulStyle: css({
 			display: "grid",
 			gap: 4,
-			gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+			gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 			lg: {
 				display: "flex",
 				gap: 8,
@@ -90,6 +90,15 @@ export const Header: FunctionComponent = () => {
 			margin: "auto",
 			fontSize: 25,
 		}),
+		mobileBarStyle: css({
+			display: "flex",
+			justifyContent: "flex-end",
+			paddingTop: 3,
+			paddingX: 4,
+			sm: {
+				paddingX: 8,
+			},
+		}),
 	};
 
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -134,19 +143,19 @@ export const Header: FunctionComponent = () => {
 	});
 
 	return (
-		<header className={headerStyle.headerStyle}>
-			{isDesktop && <Logo />}
-			<nav>
-				<ul className={headerStyle.ulStyle}>
-					{linksList}
-					{!isDesktop && (
-						<li>
-							<ThemeToggle hasLabel />
-						</li>
-					)}
-				</ul>
-			</nav>
-			{isDesktop && <ThemeToggle />}
-		</header>
+		<>
+			{!isDesktop && (
+				<div className={headerStyle.mobileBarStyle}>
+					<ThemeToggle />
+				</div>
+			)}
+			<header className={headerStyle.headerStyle}>
+				{isDesktop && <Logo />}
+				<nav>
+					<ul className={headerStyle.ulStyle}>{linksList}</ul>
+				</nav>
+				{isDesktop && <ThemeToggle />}
+			</header>
+		</>
 	);
 };
