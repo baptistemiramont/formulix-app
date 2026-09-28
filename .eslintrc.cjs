@@ -12,6 +12,19 @@ module.exports = {
 	ignorePatterns: ["dist", ".eslintrc.cjs", "styled-system"],
 	parser: "@typescript-eslint/parser",
 	plugins: ["react-refresh", "simple-import-sort"],
+	overrides: [
+		{
+			// One-off Node scripts, run by hand and not bundled: plain JavaScript, without type annotations
+			files: ["scripts/**/*.js"],
+			env: {
+				node: true,
+			},
+			rules: {
+				"@typescript-eslint/explicit-function-return-type": "off",
+				"no-console": "off",
+			},
+		},
+	],
 	rules: {
 		"react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
 		"react-hooks/exhaustive-deps": "error",
