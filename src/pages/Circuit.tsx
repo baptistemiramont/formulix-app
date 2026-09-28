@@ -8,13 +8,14 @@ import { Link, useParams } from "@tanstack/react-router";
 
 import { css } from "@/../styled-system/css";
 import { StatCard } from "@/components/cards/StatCard";
+import { CircuitLayout } from "@/components/CircuitLayout";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import type { TCircuitDetailed } from "@/types/circuit";
-import { formatLeaders, toFlagUrl } from "@/utils/circuit";
+import { formatLeaders, getLayoutUrl, toFlagUrl } from "@/utils/circuit";
 import { ROUTES } from "@/utils/constants";
 
 type TWinner = TCircuitDetailed["grandsPrix"][number]["winners"][number];
@@ -92,6 +93,7 @@ export const Circuit: FunctionComponent = () => {
 	const {
 		isActive,
 		name,
+		slug,
 		locality,
 		country,
 		countryCode,
@@ -106,6 +108,9 @@ export const Circuit: FunctionComponent = () => {
 
 	// A single name would repeat on every line
 	const hasSeveralNames = grandPrixNames.length > 1;
+
+	const layoutUrl = getLayoutUrl(slug);
+	const flagUrl = toFlagUrl(countryCode);
 
 	const circuitPageStyle = {
 		container: {
@@ -143,6 +148,30 @@ export const Circuit: FunctionComponent = () => {
 		},
 		circuitFlag: {
 			// A thin line keeps the white of a flag apart from the plate
+			boxShadow: "0 0 0 1px token(colors.line)",
+		},
+		circuitLayoutContainer: {
+			position: "relative",
+			width: "250px",
+			aspectRatio: "1",
+			padding: 6,
+			color: "text",
+			backgroundColor: "surface",
+			borderTopWidth: "2px",
+			borderRightWidth: "2px",
+			borderColor: "accent",
+			borderTopRightRadius: "2xl",
+			lg: {
+				width: "300px",
+			},
+		},
+		circuitLayoutFlag: {
+			position: "absolute",
+			top: 3,
+			left: 3,
+			width: 10,
+			height: "auto",
+			borderRadius: "2px",
 			boxShadow: "0 0 0 1px token(colors.line)",
 		},
 		circuitLocation: {
@@ -297,15 +326,40 @@ export const Circuit: FunctionComponent = () => {
 		<section className={css(layoutGutters, circuitPageStyle.container)}>
 			<div className={css(circuitPageStyle.circuitMainInfosContainer)}>
 				<div className={css(circuitPageStyle.circuitPortraitContainer)}>
-					<div className={css(circuitPageStyle.circuitFlagContainer)}>
-						<img
-							className={css(circuitPageStyle.circuitFlag)}
-							src={toFlagUrl(countryCode)}
-							alt={`${country}'s flag`}
-							width="200"
-							loading="lazy"
-						/>
-					</div>
+					{layoutUrl ? (
+						<div
+							className={css(
+								circuitPageStyle.circuitLayoutContainer
+							)}
+						>
+							<CircuitLayout
+								url={layoutUrl}
+								label={`${name}'s layout`}
+							/>
+							<img
+								className={css(
+									circuitPageStyle.circuitLayoutFlag
+								)}
+								src={flagUrl}
+								alt={`${country}'s flag`}
+								width="40"
+							/>
+						</div>
+					) : (
+						<div
+							className={css(
+								circuitPageStyle.circuitFlagContainer
+							)}
+						>
+							<img
+								className={css(circuitPageStyle.circuitFlag)}
+								src={flagUrl}
+								alt={`${country}'s flag`}
+								width="200"
+								loading="lazy"
+							/>
+						</div>
+					)}
 					<h1>{name}</h1>
 					<p className={css(circuitPageStyle.circuitLocation)}>
 						{locality}, {country}

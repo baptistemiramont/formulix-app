@@ -30,3 +30,18 @@ export function formatLeaders(leaders: TCircuitLeaders): string {
 
 	return `${names} (${leaders.count})`;
 }
+
+// The layouts drawn by scripts/build-circuit-layouts.js, kept out of the bundle and loaded when shown
+const LAYOUT_URLS: Record<string, string> = Object.fromEntries(
+	Object.entries(
+		import.meta.glob<string>("/src/assets/circuits/*.svg", {
+			eager: true,
+			query: "?no-inline",
+			import: "default",
+		})
+	).map(([path, url]) => [path.replace(/^.*\/|\.svg$/g, ""), url])
+);
+
+export function getLayoutUrl(circuitSlug: string): string | undefined {
+	return LAYOUT_URLS[circuitSlug];
+}
