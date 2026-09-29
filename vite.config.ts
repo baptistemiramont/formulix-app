@@ -28,6 +28,8 @@ export default defineConfig({
 				globPatterns: ["**/*.{js,css,html,svg,ico,png,woff2}"],
 				cleanupOutdatedCaches: true,
 				clientsClaim: true,
+				// Shows the Grand Prix reminders the API pushes
+				importScripts: ["reminders-sw.js"],
 			},
 		}),
 	],
