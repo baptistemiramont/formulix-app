@@ -13,7 +13,3 @@ export type MinimalTeamType = {
 };
 
 export type TTeamDetailed = z.infer<typeof teamDetailedSchema>;
-
-export type TTeamIdentity = TTeamDetailed["teamDetails"][number];
-
-export type TStanding = TTeamDetailed["standings"][number];

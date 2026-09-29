@@ -7,10 +7,12 @@ import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import { ROUTES } from "@/utils/constants";
+import { listDriverBands, nameDriverSeason } from "@/utils/standings";
 import { getTeamColor } from "@/utils/team";
 
 export const Driver: FunctionComponent = () => {
@@ -44,12 +46,22 @@ export const Driver: FunctionComponent = () => {
 		podiums,
 		grandPrixParticipation,
 		teams,
+		standings,
 	} = driver;
 
-	const currentTeamColor = getTeamColor(
-		allTeams,
-		teams.find(({ isCurrentTeam }) => isCurrentTeam)?.originalTeamSlug
+	const currentTeamSlug = teams.find(
+		({ isCurrentTeam }) => isCurrentTeam
+	)?.originalTeamSlug;
+	const currentTeamColor = getTeamColor(allTeams, currentTeamSlug);
+
+	const standingsBySeason = new Map(
+		standings.map((standing) => [standing.season, standing])
 	);
+	const nameSeason = (season: number): string | undefined => {
+		const standing = standingsBySeason.get(season);
+
+		return standing && nameDriverSeason(standing);
+	};
 
 	const sortedTeams = teams.sort((a, b) => {
 		if (a.isCurrentTeam && !b.isCurrentTeam) return -1;
@@ -101,6 +113,17 @@ export const Driver: FunctionComponent = () => {
 		},
 		driverName: {
 			textAlign: "center",
+		},
+		driverCareerContainer: {
+			display: "grid",
+			gap: 4,
+			lg: {
+				gap: 8,
+			},
+		},
+		driverCareerCaption: {
+			color: "textMuted",
+			textStyle: "label",
 		},
 		driverStatListContainer: {
 			height: "100%",
@@ -175,6 +198,26 @@ export const Driver: FunctionComponent = () => {
 					</ul>
 				</div>
 			</div>
+			{standings.length > 0 && (
+				<div className={css(driverPageStyle.driverCareerContainer)}>
+					<h2 className={css(cornerTitle)}>
+						{firstName} {lastName}'s career
+					</h2>
+					<p className={css(driverPageStyle.driverCareerCaption)}>
+						Drivers' championship position by season
+					</p>
+					<StandingsChart
+						championship="drivers"
+						name={`${firstName} ${lastName}`}
+						bands={listDriverBands(standings, currentTeamSlug)}
+						standings={standings}
+						firstSeason={standings[0].season}
+						lastSeason={standings[standings.length - 1].season}
+						teamColor={currentTeamColor}
+						nameSeason={nameSeason}
+					/>
+				</div>
+			)}
 			<div className={css(driverPageStyle.driverTeamsContainer)}>
 				<h2 className={css(cornerTitle)}>
 					{firstName} {lastName}'s team(s)

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { standingSchema } from "@/types/schemas/standing";
+
 export const teamSchema = z.object({
 	id: z.number(),
 	isActive: z.boolean(),
@@ -44,16 +46,5 @@ export const teamDetailedSchema = z.object({
 			avatar: z.string(),
 		})
 	),
-	standings: z.array(
-		z.object({
-			season: z.number(),
-			// Null when unclassified: excluded, or without a point in the seasons that left such teams unranked
-			position: z.number().nullable(),
-			points: z.number(),
-			wins: z.number(),
-			isExcluded: z.boolean(),
-			isFinal: z.boolean(),
-			isTitle: z.boolean(),
-		})
-	),
+	standings: z.array(standingSchema),
 });

@@ -233,8 +233,9 @@ export const Team: FunctionComponent = () => {
 								Constructors' championship position by season
 							</p>
 							<StandingsChart
-								teamName={name}
-								identities={teamDetails}
+								championship="constructors"
+								name={name}
+								bands={teamDetails}
 								standings={standings}
 								firstSeason={yearOfStart}
 								lastSeason={lastSeason}

@@ -14,3 +14,5 @@ export type MinimalDriverType = {
 };
 
 export type TDriverDetailed = z.infer<typeof driverDetailedSchema>;
+
+export type TDriverStanding = TDriverDetailed["standings"][number];
