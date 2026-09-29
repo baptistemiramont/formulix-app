@@ -1,4 +1,4 @@
-import { Outlet, ScrollRestoration } from "@tanstack/react-router";
+import { Outlet } from "@tanstack/react-router";
 import type { FunctionComponent } from "react";
 
 import { Footer } from "@/layouts/Footer";
@@ -9,7 +9,6 @@ export const Page: FunctionComponent = () => {
 		<>
 			<Header />
 			<main>
-				<ScrollRestoration />
 				<Outlet />
 			</main>
 			<Footer />
