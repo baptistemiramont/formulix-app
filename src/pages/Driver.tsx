@@ -12,8 +12,19 @@ import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import { ROUTES } from "@/utils/constants";
+import { formatBirth } from "@/utils/driver";
 import { listDriverBands, nameDriverSeason } from "@/utils/standings";
 import { getTeamColor } from "@/utils/team";
+
+const linkStyle = css({
+	textDecoration: "underline",
+	textDecorationColor: "accent",
+	textUnderlineOffset: "3px",
+	transition: "var(--default-animation)",
+	_hover: {
+		color: "accentText",
+	},
+});
 
 export const Driver: FunctionComponent = () => {
 	const { driverSlug } = useParams({ from: ROUTES.DRIVER });
@@ -45,6 +56,10 @@ export const Driver: FunctionComponent = () => {
 		worldChampionshipsTitle,
 		podiums,
 		grandPrixParticipation,
+		raceNumber,
+		code,
+		dateOfBirth,
+		wikipediaUrl,
 		teams,
 		standings,
 	} = driver;
@@ -53,6 +68,12 @@ export const Driver: FunctionComponent = () => {
 		({ isCurrentTeam }) => isCurrentTeam
 	)?.originalTeamSlug;
 	const currentTeamColor = getTeamColor(allTeams, currentTeamSlug);
+
+	const identity = [
+		code,
+		raceNumber !== null && `#${raceNumber}`,
+		dateOfBirth && formatBirth(dateOfBirth),
+	].filter(Boolean);
 
 	const standingsBySeason = new Map(
 		standings.map((standing) => [standing.season, standing])
@@ -114,6 +135,14 @@ export const Driver: FunctionComponent = () => {
 		driverName: {
 			textAlign: "center",
 		},
+		driverIdentity: {
+			display: "grid",
+			justifyItems: "center",
+			gap: 1,
+			color: "textMuted",
+			textStyle: "label",
+			textAlign: "center",
+		},
 		driverCareerContainer: {
 			display: "grid",
 			gap: 4,
@@ -172,6 +201,21 @@ export const Driver: FunctionComponent = () => {
 					<h1 className={css(driverPageStyle.driverName)}>
 						{firstName} {lastName}
 					</h1>
+					{(identity.length > 0 || wikipediaUrl) && (
+						<div className={css(driverPageStyle.driverIdentity)}>
+							{identity.length > 0 && <p>{identity.join(" · ")}</p>}
+							{wikipediaUrl && (
+								<a
+									href={wikipediaUrl}
+									target="_blank"
+									rel="noreferrer"
+									className={linkStyle}
+								>
+									Wikipedia
+								</a>
+							)}
+						</div>
+					)}
 				</div>
 				<div className={css(driverPageStyle.driverStatListContainer)}>
 					<ul className={css(driverPageStyle.driverStatList)}>

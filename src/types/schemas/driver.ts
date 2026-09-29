@@ -30,6 +30,11 @@ export const driverDetailedSchema = z.object({
 	worldChampionshipsTitle: z.number(),
 	podiums: z.number(),
 	grandPrixParticipation: z.number(),
+	// The number the driver races under today, 1 when the world champion takes it
+	raceNumber: z.number().nullable(),
+	code: z.string().nullable(),
+	dateOfBirth: z.string().nullable(),
+	wikipediaUrl: z.string().nullable(),
 	teams: z.array(
 		z.object({
 			id: z.number(),
