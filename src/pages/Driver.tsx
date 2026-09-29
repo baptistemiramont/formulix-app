@@ -7,11 +7,24 @@ import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import { ROUTES } from "@/utils/constants";
+import { formatBirth } from "@/utils/driver";
+import { listDriverBands, nameDriverSeason } from "@/utils/standings";
 import { getTeamColor } from "@/utils/team";
+
+const linkStyle = css({
+	textDecoration: "underline",
+	textDecorationColor: "accent",
+	textUnderlineOffset: "3px",
+	transition: "var(--default-animation)",
+	_hover: {
+		color: "accentText",
+	},
+});
 
 export const Driver: FunctionComponent = () => {
 	const { driverSlug } = useParams({ from: ROUTES.DRIVER });
@@ -43,13 +56,33 @@ export const Driver: FunctionComponent = () => {
 		worldChampionshipsTitle,
 		podiums,
 		grandPrixParticipation,
+		raceNumber,
+		code,
+		dateOfBirth,
+		wikipediaUrl,
 		teams,
+		standings,
 	} = driver;
 
-	const currentTeamColor = getTeamColor(
-		allTeams,
-		teams.find(({ isCurrentTeam }) => isCurrentTeam)?.originalTeamSlug
+	const currentTeamSlug = teams.find(
+		({ isCurrentTeam }) => isCurrentTeam
+	)?.originalTeamSlug;
+	const currentTeamColor = getTeamColor(allTeams, currentTeamSlug);
+
+	const identity = [
+		code,
+		raceNumber !== null && `#${raceNumber}`,
+		dateOfBirth && formatBirth(dateOfBirth),
+	].filter(Boolean);
+
+	const standingsBySeason = new Map(
+		standings.map((standing) => [standing.season, standing])
 	);
+	const nameSeason = (season: number): string | undefined => {
+		const standing = standingsBySeason.get(season);
+
+		return standing && nameDriverSeason(standing);
+	};
 
 	const sortedTeams = teams.sort((a, b) => {
 		if (a.isCurrentTeam && !b.isCurrentTeam) return -1;
@@ -102,6 +135,25 @@ export const Driver: FunctionComponent = () => {
 		driverName: {
 			textAlign: "center",
 		},
+		driverIdentity: {
+			display: "grid",
+			justifyItems: "center",
+			gap: 1,
+			color: "textMuted",
+			textStyle: "label",
+			textAlign: "center",
+		},
+		driverCareerContainer: {
+			display: "grid",
+			gap: 4,
+			lg: {
+				gap: 8,
+			},
+		},
+		driverCareerCaption: {
+			color: "textMuted",
+			textStyle: "label",
+		},
 		driverStatListContainer: {
 			height: "100%",
 		},
@@ -149,6 +201,21 @@ export const Driver: FunctionComponent = () => {
 					<h1 className={css(driverPageStyle.driverName)}>
 						{firstName} {lastName}
 					</h1>
+					{(identity.length > 0 || wikipediaUrl) && (
+						<div className={css(driverPageStyle.driverIdentity)}>
+							{identity.length > 0 && <p>{identity.join(" · ")}</p>}
+							{wikipediaUrl && (
+								<a
+									href={wikipediaUrl}
+									target="_blank"
+									rel="noreferrer"
+									className={linkStyle}
+								>
+									Wikipedia
+								</a>
+							)}
+						</div>
+					)}
 				</div>
 				<div className={css(driverPageStyle.driverStatListContainer)}>
 					<ul className={css(driverPageStyle.driverStatList)}>
@@ -175,6 +242,26 @@ export const Driver: FunctionComponent = () => {
 					</ul>
 				</div>
 			</div>
+			{standings.length > 0 && (
+				<div className={css(driverPageStyle.driverCareerContainer)}>
+					<h2 className={css(cornerTitle)}>
+						{firstName} {lastName}'s career
+					</h2>
+					<p className={css(driverPageStyle.driverCareerCaption)}>
+						Drivers' championship position by season
+					</p>
+					<StandingsChart
+						championship="drivers"
+						name={`${firstName} ${lastName}`}
+						bands={listDriverBands(standings, currentTeamSlug)}
+						standings={standings}
+						firstSeason={standings[0].season}
+						lastSeason={standings[standings.length - 1].season}
+						teamColor={currentTeamColor}
+						nameSeason={nameSeason}
+					/>
+				</div>
+			)}
 			<div className={css(driverPageStyle.driverTeamsContainer)}>
 				<h2 className={css(cornerTitle)}>
 					{firstName} {lastName}'s team(s)

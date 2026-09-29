@@ -8,9 +8,9 @@ import {
 
 import { css } from "@/../styled-system/css";
 import { useElementWidth } from "@/hooks/useElementWidth";
-import type { TStanding, TTeamIdentity } from "@/types/team";
+import type { TStanding, TStandingsBand } from "@/types/standing";
 import {
-	findIdentity,
+	findBand,
 	FIRST_CHAMPIONSHIP_SEASON,
 	formatPointsAndWins,
 	formatPosition,
@@ -18,13 +18,49 @@ import {
 	listSeasonTicks,
 } from "@/utils/standings";
 
+type TChampionship = "constructors" | "drivers";
+
 type TStandingsChartProps = {
-	teamName: string;
-	identities: TTeamIdentity[];
+	championship: TChampionship;
+	// The team or the driver the standings belong to
+	name: string;
+	bands: TStandingsBand[];
 	standings: TStanding[];
 	firstSeason: number;
 	lastSeason: number;
-	teamColor: string;
+	// Washes the band still open: the team's current name, or the team the driver races for today
+	teamColor?: string;
+	// What a season went under, the band's name unless told otherwise
+	nameSeason?: (season: number) => string | undefined;
+};
+
+const WORDING: Record<
+	TChampionship,
+	{
+		championship: string;
+		champion: string;
+		title: string;
+		seasonName: string;
+		describeMissingStanding: (season: number) => string;
+	}
+> = {
+	constructors: {
+		championship: "constructors' championship",
+		champion: "Constructors' champion",
+		title: "Constructors' title",
+		seasonName: "Team name",
+		describeMissingStanding: (season) =>
+			season < FIRST_CHAMPIONSHIP_SEASON
+				? "No constructors' championship yet"
+				: "No standing",
+	},
+	drivers: {
+		championship: "drivers' championship",
+		champion: "World champion",
+		title: "World title",
+		seasonName: "Team",
+		describeMissingStanding: () => "Did not race",
+	},
 };
 
 // The top margin holds the names, the bottom one the seasons
@@ -33,10 +69,10 @@ const MARGIN = { top: 28, right: 8, bottom: 28, left: 32 };
 const PLOT_PADDING_BOTTOM = 10;
 const MIN_SEASON_TICK_SPACING = 44;
 // A surface gap keeps two names apart, rather than a border
-const IDENTITY_GAP = 2;
-const IDENTITY_LABEL_PADDING = 6;
+const BAND_GAP = 2;
+const BAND_LABEL_PADDING = 6;
 // Uppercase label text at 12px: an estimate, a name that may not fit is left to the tooltip and the cards
-const IDENTITY_LABEL_CHAR_WIDTH = 8.5;
+const BAND_LABEL_CHAR_WIDTH = 8.5;
 const TITLE_RADIUS = 5;
 const MIN_TITLE_RADIUS = 3;
 const MARKER_RADIUS = 4;
@@ -63,8 +99,8 @@ const RUNNING_MARKER = {
 	"--marker-stroke": "var(--colors-text)",
 } as CSSProperties;
 
-// The current name wears the team colour as a wash, the line stays readable over it
-const CURRENT_IDENTITY_OPACITY = 0.1;
+// The open band wears the team colour as a wash, the line stays readable over it
+const CURRENT_BAND_OPACITY = 0.1;
 
 const chartStyle = {
 	container: css({
@@ -87,10 +123,10 @@ const chartStyle = {
 		overflow: "visible",
 		touchAction: "pan-y",
 	}),
-	formerIdentity: css({
+	formerBand: css({
 		fill: "surfaceMuted",
 	}),
-	identityLabel: css({
+	bandLabel: css({
 		fill: "textMuted",
 		fontSize: "12px",
 		fontWeight: 600,
@@ -198,13 +234,16 @@ const chartStyle = {
 };
 
 export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
-	teamName,
-	identities,
+	championship,
+	name,
+	bands,
 	standings,
 	firstSeason,
 	lastSeason,
 	teamColor,
+	nameSeason = (season) => findBand(bands, season)?.name,
 }: TStandingsChartProps) => {
+	const wording = WORDING[championship];
 	const [containerRef, containerWidth] = useElementWidth<HTMLDivElement>();
 	const [activeSeason, setActiveSeason] = useState<number | null>(null);
 
@@ -261,29 +300,29 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 			!standingsBySeason.has(season + 1)
 	);
 
-	const identityBands = identities.flatMap((identity) => {
-		const start = Math.max(identity.yearOfStart, firstSeason);
-		const end = Math.min(identity.yearOfEnd ?? lastSeason, lastSeason);
+	const bandShapes = bands.flatMap((band) => {
+		const start = Math.max(band.yearOfStart, firstSeason);
+		const end = Math.min(band.yearOfEnd ?? lastSeason, lastSeason);
 
 		if (end < start) return [];
 
-		const x = seasonStartX(start) + IDENTITY_GAP / 2;
+		const x = seasonStartX(start) + BAND_GAP / 2;
 		const bandWidth = Math.max(
 			1,
-			(end - start + 1) * seasonWidth - IDENTITY_GAP
+			(end - start + 1) * seasonWidth - BAND_GAP
 		);
 		const isLabelled =
-			identity.name.length * IDENTITY_LABEL_CHAR_WIDTH +
-				IDENTITY_LABEL_PADDING * 2 <=
+			band.name.length * BAND_LABEL_CHAR_WIDTH +
+				BAND_LABEL_PADDING * 2 <=
 			bandWidth;
 
 		return [
 			{
-				identity,
+				band,
 				x,
 				bandWidth,
 				isLabelled,
-				isCurrent: identity.yearOfEnd === null,
+				isCurrent: band.yearOfEnd === null,
 			},
 		];
 	});
@@ -298,10 +337,8 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 
 	const activeStanding =
 		activeSeason === null ? undefined : standingsBySeason.get(activeSeason);
-	const activeIdentity =
-		activeSeason === null
-			? undefined
-			: findIdentity(identities, activeSeason);
+	const activeSeasonName =
+		activeSeason === null ? undefined : nameSeason(activeSeason);
 	const hasTitles = standings.some(({ isTitle }) => isTitle);
 	const lastStanding = standings[standings.length - 1];
 	const runningStanding =
@@ -348,16 +385,11 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 			: { top: MARGIN.top }),
 	};
 
-	const describeMissingStanding = (season: number): string =>
-		season < FIRST_CHAMPIONSHIP_SEASON
-			? "No constructors' championship yet"
-			: "No standing";
-
 	return (
 		<div
 			className={chartStyle.container}
 			role="group"
-			aria-label={`${teamName}'s constructors' championship position by season, from ${firstSeason} to ${lastSeason}`}
+			aria-label={`${name}'s ${wording.championship} position by season, from ${firstSeason} to ${lastSeason}`}
 			tabIndex={0}
 			onKeyDown={handleKeyDown}
 			onFocus={() => setActiveSeason((season) => season ?? lastSeason)}
@@ -378,20 +410,20 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 						onPointerDown={handlePointerMove}
 						onPointerLeave={() => setActiveSeason(null)}
 					>
-						{identityBands.map(
+						{bandShapes.map(
 							({
-								identity,
+								band,
 								x,
 								bandWidth,
 								isLabelled,
 								isCurrent,
 							}) => (
-								<g key={identity.id}>
+								<g key={`${band.name}-${band.yearOfStart}`}>
 									<rect
 										className={
 											isCurrent
 												? undefined
-												: chartStyle.formerIdentity
+												: chartStyle.formerBand
 										}
 										x={x}
 										y={0}
@@ -400,17 +432,17 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 										fill={isCurrent ? teamColor : undefined}
 										fillOpacity={
 											isCurrent
-												? CURRENT_IDENTITY_OPACITY
+												? CURRENT_BAND_OPACITY
 												: undefined
 										}
 									/>
 									{isLabelled && (
 										<text
-											className={chartStyle.identityLabel}
-											x={x + IDENTITY_LABEL_PADDING}
+											className={chartStyle.bandLabel}
+											x={x + BAND_LABEL_PADDING}
 											y={18}
 										>
-											{identity.name}
+											{band.name}
 										</text>
 									)}
 								</g>
@@ -531,7 +563,7 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 					>
 						<p className={chartStyle.tooltipLabel}>
 							{activeSeason}
-							{activeIdentity && ` · ${activeIdentity.name}`}
+							{activeSeasonName && ` · ${activeSeasonName}`}
 						</p>
 						{activeStanding ? (
 							<>
@@ -544,7 +576,7 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 							</>
 						) : (
 							<p className={chartStyle.tooltipDetail}>
-								{describeMissingStanding(activeSeason)}
+								{wording.describeMissingStanding(activeSeason)}
 							</p>
 						)}
 						{activeStanding?.isTitle && (
@@ -552,7 +584,7 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 								className={chartStyle.tooltipNote}
 								style={TITLE_MARKER}
 							>
-								Constructors' champion
+								{wording.champion}
 							</p>
 						)}
 						{activeStanding && !activeStanding.isFinal && (
@@ -570,7 +602,7 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 				<ul className={chartStyle.key}>
 					{hasTitles && (
 						<li className={chartStyle.keyItem} style={TITLE_MARKER}>
-							Constructors' title
+							{wording.title}
 						</li>
 					)}
 					{runningStanding && (
@@ -585,12 +617,12 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 			)}
 			<table className={chartStyle.table}>
 				<caption>
-					{teamName}'s constructors' championship position by season
+					{name}'s {wording.championship} position by season
 				</caption>
 				<thead>
 					<tr>
 						<th scope="col">Season</th>
-						<th scope="col">Team name</th>
+						<th scope="col">{wording.seasonName}</th>
 						<th scope="col">Position</th>
 						<th scope="col">Points and wins</th>
 					</tr>
@@ -599,15 +631,11 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 					{standings.map((standing) => (
 						<tr key={standing.season}>
 							<th scope="row">{standing.season}</th>
-							<td>
-								{
-									findIdentity(identities, standing.season)
-										?.name
-								}
-							</td>
+							<td>{nameSeason(standing.season)}</td>
 							<td>
 								{formatPosition(standing)}
-								{standing.isTitle && ", constructors' champion"}
+								{standing.isTitle &&
+									`, ${wording.champion.toLowerCase()}`}
 								{!standing.isFinal && ", season in progress"}
 							</td>
 							<td>{formatPointsAndWins(standing)}</td>
