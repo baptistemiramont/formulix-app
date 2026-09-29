@@ -24,6 +24,17 @@ module.exports = {
 				"no-console": "off",
 			},
 		},
+		{
+			// Imported as is into the generated service worker, not bundled: plain JavaScript, without type annotations
+			files: ["public/**/*.js"],
+			env: {
+				browser: false,
+				serviceworker: true,
+			},
+			rules: {
+				"@typescript-eslint/explicit-function-return-type": "off",
+			},
+		},
 	],
 	rules: {
 		"react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
