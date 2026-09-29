@@ -114,6 +114,7 @@ export const Team: FunctionComponent = () => {
 			paddingTop: 4,
 			paddingBottom: 12,
 			display: "grid",
+			gridTemplateColumns: "minmax(0, 1fr)",
 			gap: 8,
 			lg: {
 				gap: 12,
@@ -121,26 +122,34 @@ export const Team: FunctionComponent = () => {
 		},
 		teamMainInfosContainer: {
 			display: "grid",
+			gridTemplateColumns: "minmax(0, 1fr)",
 			gap: 4,
 			lg: {
-				gridTemplateColumns: "1fr 1fr",
+				gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
 				alignItems: "center",
 			},
 		},
 		teamPortraitContainer: {
 			display: "grid",
-			justifyContent: "center",
+			gridTemplateColumns: "minmax(0, 1fr)",
+			justifyItems: "center",
 			height: "auto",
 		},
 		teamLogoContainer: {
 			display: "grid",
-			justifyContent: "center",
+			gridTemplateColumns: "minmax(0, 1fr)",
+			justifyItems: "center",
+			maxWidth: "100%",
 			padding: 6,
 			backgroundColor: "plate",
 			borderTopWidth: "2px",
 			borderRightWidth: "2px",
 			borderColor: "var(--team-accent)",
 			borderTopRightRadius: "2xl",
+		},
+		teamLogo: {
+			maxWidth: "100%",
+			height: "auto",
 		},
 		teamName: {
 			textAlign: "center",
@@ -190,6 +199,7 @@ export const Team: FunctionComponent = () => {
 						style={{ "--team-accent": teamColor } as CSSProperties}
 					>
 						<img
+							className={css(teamPageStyle.teamLogo)}
 							src={logo}
 							alt={`${name}'s logo`}
 							width="250"
