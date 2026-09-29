@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 
 import { css } from "@/../styled-system/css";
 import { Label } from "@/components/form/Label";
+import { HapticButton } from "@/components/HapticButton";
 import { fieldContainer } from "@/styles/form";
 
 type TSelectProps = {
@@ -64,14 +65,14 @@ export const Select: FunctionComponent<TSelectProps> = ({
 					<option value="">{defaultOptionLabel}</option>
 					{optionsList}
 				</select>
-				<button
+				<HapticButton
 					onClick={onReset}
 					type="reset"
 					title="Reset"
 					className={css(resetButtonStyle)}
 				>
 					<Icon icon="mdi:refresh" />
-				</button>
+				</HapticButton>
 			</div>
 		</div>
 	);
