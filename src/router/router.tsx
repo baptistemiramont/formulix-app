@@ -62,7 +62,13 @@ const routeTree = rootRoute.addChildren([
 	}),
 ]);
 
-export const router = createRouter({ routeTree });
+export const router = createRouter({
+	routeTree,
+	scrollRestoration: true,
+	// Overrides the smooth scroll of the page, the new page shows up already in place
+	scrollRestorationBehavior: "instant",
+	defaultViewTransition: true,
+});
 
 declare module "@tanstack/react-router" {
 	interface Register {

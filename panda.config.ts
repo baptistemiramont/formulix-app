@@ -117,6 +117,17 @@ export default defineConfig({
 						boxShadow: "none",
 					},
 				},
+				pageLeave: {
+					to: {
+						opacity: 0,
+					},
+				},
+				pageEnter: {
+					from: {
+						opacity: 0,
+						transform: "translateY(12px)",
+					},
+				},
 			},
 			textStyles,
 		},
@@ -194,6 +205,19 @@ export default defineConfig({
 			color: "text",
 			backgroundColor: "surface",
 			cursor: "pointer",
+		},
+		// Page changes: the old page fades out, the new one fades in while rising into place
+		"::view-transition-old(root)": {
+			animation: "pageLeave 150ms ease-in both",
+			_motionReduce: {
+				animation: "none",
+			},
+		},
+		"::view-transition-new(root)": {
+			animation: "pageEnter 250ms ease-out both",
+			_motionReduce: {
+				animation: "none",
+			},
 		},
 		":focus-visible": {
 			outlineStyle: "solid",

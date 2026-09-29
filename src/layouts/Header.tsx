@@ -26,6 +26,8 @@ export const Header: FunctionComponent = () => {
 			borderColor: "line",
 			backdropFilter: "auto",
 			backdropBlur: "sm",
+			// Keeps the header still while the page changes
+			viewTransitionName: "header",
 			lg: {
 				paddingY: 4,
 				paddingX: 8,
