@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+	<!--
+		The F of Saira (width 125, weight 900), slanted like the logo, on a fading checkered flag.
+		By default, full-bleed carbon with a drop shadow: what the PWA assets generator rasterises.
+		In a browser, the colour-scheme media queries round the tile and follow the browser theme.
+	-->
+	<style>
+		.tile { fill: #15151E; }
+		.checker { fill: #282835; }
+		.letter { fill: #F2F2F4; }
+		.mark { filter: url(#shadow); }
+		@media (prefers-color-scheme: dark) {
+			.icon { clip-path: url(#rounded); }
+		}
+		@media (prefers-color-scheme: light) {
+			.icon { clip-path: url(#rounded); }
+			.tile { fill: #F2F2F4; }
+			.checker { fill: #DCDCE4; }
+			.letter { fill: #15151E; }
+			.mark { filter: url(#shadow-light); }
+		}
+	</style>
+	<defs>
+		<clipPath id="rounded">
+			<rect width="512" height="512" rx="112" />
+		</clipPath>
+		<pattern id="checkers" width="64" height="64" patternUnits="userSpaceOnUse">
+			<rect class="checker" width="32" height="32" />
+			<rect class="checker" x="32" y="32" width="32" height="32" />
+		</pattern>
+		<linearGradient id="fade" x1="1" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#FFFFFF" />
+			<stop offset="0.75" stop-color="#FFFFFF" stop-opacity="0" />
+		</linearGradient>
+		<mask id="fade-mask">
+			<rect width="512" height="512" fill="url(#fade)" />
+		</mask>
+		<filter id="shadow" x="-20%" y="-20%" width="150%" height="150%">
+			<feDropShadow dx="10" dy="16" stdDeviation="9" flood-color="#000000" flood-opacity="0.6" />
+		</filter>
+		<filter id="shadow-light" x="-20%" y="-20%" width="150%" height="150%">
+			<feDropShadow dx="8" dy="12" stdDeviation="8" flood-color="#15151E" flood-opacity="0.22" />
+		</filter>
+	</defs>
+	<g class="icon">
+		<rect class="tile" width="512" height="512" />
+		<rect width="512" height="512" fill="url(#checkers)" mask="url(#fade-mask)" />
+		<g class="mark">
+			<path class="letter" d="M137.1 374 L178.7 138 L374.9 138 L364.1 199.1 L258.5 199.1 L251.5 238.5 L340.9 238.5 L330.1 299.9 L240.7 299.9 L227.6 374 Z" />
+		</g>
+	</g>
+</svg>
