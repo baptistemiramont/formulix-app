@@ -6,7 +6,9 @@ export const Footer: FunctionComponent = () => {
 	const footerStyle = {
 		container: css({
 			position: "relative",
-			paddingBottom: "81px",
+			// Clears the fixed tab bar, plus what it grows by above the iPhone home indicator
+			paddingBottom:
+				"calc(81px + max(0px, env(safe-area-inset-bottom) - token(spacing.3)))",
 			paddingTop: 10,
 			paddingX: 4,
 			sm: {

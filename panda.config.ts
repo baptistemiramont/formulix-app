@@ -138,6 +138,9 @@ export default defineConfig({
 			color: "text",
 			backgroundColor: "bg",
 			fontFamily: "saira",
+			// Keeps the page clear of the notch in landscape
+			paddingLeft: "env(safe-area-inset-left)",
+			paddingRight: "env(safe-area-inset-right)",
 		},
 		p: {
 			color: "text",

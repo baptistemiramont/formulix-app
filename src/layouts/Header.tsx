@@ -11,8 +11,11 @@ import { ROUTES } from "@/utils/constants";
 export const Header: FunctionComponent = () => {
 	const headerStyle = {
 		headerStyle: css({
-			paddingY: 3,
-			paddingX: 4,
+			paddingTop: 3,
+			// The links keep clear of the iPhone home indicator, and of the notch in landscape, like a native tab bar
+			paddingRight: "max(token(spacing.4), env(safe-area-inset-right))",
+			paddingBottom: "max(token(spacing.3), env(safe-area-inset-bottom))",
+			paddingLeft: "max(token(spacing.4), env(safe-area-inset-left))",
 			position: "fixed",
 			zIndex: 10,
 			inset: "auto 0 0 0",
@@ -96,7 +99,8 @@ export const Header: FunctionComponent = () => {
 		mobileBarStyle: css({
 			display: "flex",
 			justifyContent: "flex-end",
-			paddingTop: 3,
+			// Clears the status bar whenever the app is drawn under it
+			paddingTop: "max(token(spacing.3), env(safe-area-inset-top))",
 			paddingX: 4,
 			sm: {
 				paddingX: 8,
