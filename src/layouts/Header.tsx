@@ -29,7 +29,9 @@ export const Header: FunctionComponent = () => {
 			// Keeps the header still while the page changes
 			viewTransitionName: "header",
 			lg: {
-				paddingY: 4,
+				// On an iPad, the header's blurred background runs under the status bar, its content below it
+				paddingTop: "calc(token(spacing.4) + env(safe-area-inset-top))",
+				paddingBottom: 4,
 				paddingX: 8,
 				position: "sticky",
 				top: 0,
@@ -106,8 +108,8 @@ export const Header: FunctionComponent = () => {
 			display: "flex",
 			justifyContent: "flex-end",
 			gap: 2,
-			// Clears the status bar whenever the app is drawn under it
-			paddingTop: "max(token(spacing.3), env(safe-area-inset-top))",
+			// The usual spacing below the status bar, whose blur spills a little past it when the app is drawn under it
+			paddingTop: "calc(token(spacing.3) + env(safe-area-inset-top))",
 			paddingX: 4,
 			sm: {
 				paddingX: 8,
