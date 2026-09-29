@@ -1,3 +1,5 @@
+import { isAppleMobile } from "@/utils/haptics";
+
 export const REMINDER_HINTS = {
 	on: "Reminders on: three days before each Grand Prix, at 10 am.",
 	install:
@@ -28,13 +30,8 @@ export function canPush(): boolean {
 
 // Safari on iPhone and iPad only pushes to the app added to the Home Screen
 export function needsInstall(): boolean {
-	const isAppleMobile =
-		/iPhone|iPad|iPod/.test(navigator.userAgent) ||
-		// iPadOS asks for the desktop site, as a Mac with a touch screen
-		(/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
-
 	return (
-		isAppleMobile &&
+		isAppleMobile() &&
 		!window.matchMedia("(display-mode: standalone)").matches
 	);
 }

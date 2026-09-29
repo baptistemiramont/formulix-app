@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react";
 import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
+import { HapticButton } from "@/components/HapticButton";
 import { type TThemePreference, useTheme } from "@/hooks/useTheme";
 
 const THEME_OPTIONS: {
@@ -52,7 +53,7 @@ export const ThemeSwitcher: FunctionComponent = () => {
 	return (
 		<div role="group" aria-label="Theme" className={switcherStyle.group}>
 			{THEME_OPTIONS.map(({ value, label, icon }) => (
-				<button
+				<HapticButton
 					key={value}
 					type="button"
 					onClick={() => setPreference(value)}
@@ -60,9 +61,10 @@ export const ThemeSwitcher: FunctionComponent = () => {
 					aria-pressed={preference === value}
 					aria-label={label}
 					title={label}
+					haptic={preference !== value}
 				>
 					<Icon icon={icon} className={switcherStyle.icon} />
-				</button>
+				</HapticButton>
 			))}
 		</div>
 	);

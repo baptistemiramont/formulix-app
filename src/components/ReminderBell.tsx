@@ -3,8 +3,10 @@ import { type FunctionComponent, useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
 import { css } from "@/../styled-system/css";
+import { HapticButton } from "@/components/HapticButton";
 import type { TReminderState } from "@/hooks/useReminders";
 import { REMINDER_HINTS } from "@/utils/reminder";
+import { playRadioBeep, unlockSounds } from "@/utils/sounds";
 
 const HINT_DURATION_MS = 5000;
 
@@ -89,6 +91,7 @@ export const ReminderBell: FunctionComponent<TReminderBellProps> = ({
 	if (state === "unavailable") return null;
 
 	const isOn = state === "on";
+	const isToggle = state === "on" || state === "off";
 	const label = isOn ? "Stop Grand Prix reminders" : "Remind me of each Grand Prix";
 	const icon = {
 		on: "mdi:bell-ring",
@@ -103,24 +106,34 @@ export const ReminderBell: FunctionComponent<TReminderBellProps> = ({
 			return;
 		}
 
+		// On the tap itself: subscribing takes a while, and Safari only starts audio from a gesture
+		if (state === "off") {
+			unlockSounds();
+		}
+
 		const nextState = await toggle();
+
+		if (state === "off" && nextState === "on") {
+			playRadioBeep();
+		}
 
 		setHint(nextState === "blocked" || nextState === "on" ? REMINDER_HINTS[nextState] : null);
 	}
 
 	return (
 		<div className={bellStyle.container}>
-			<button
+			<HapticButton
 				type="button"
 				onClick={handleClick}
 				className={bellStyle.button}
-				aria-pressed={state === "on" || state === "off" ? isOn : undefined}
+				aria-pressed={isToggle ? isOn : undefined}
 				aria-label={label}
 				title={label}
 				disabled={isPending}
+				haptic={isToggle && !isPending}
 			>
 				<Icon icon={icon} className={bellStyle.icon} />
-			</button>
+			</HapticButton>
 			<p role="status" className={hint ? bellStyle.hint : bellStyle.status}>
 				{hint}
 			</p>
