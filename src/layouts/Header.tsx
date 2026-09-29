@@ -4,8 +4,10 @@ import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { Logo } from "@/components/Logo";
+import { ReminderBell } from "@/components/ReminderBell";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useReminders } from "@/hooks/useReminders";
 import { ROUTES } from "@/utils/constants";
 
 export const Header: FunctionComponent = () => {
@@ -95,10 +97,13 @@ export const Header: FunctionComponent = () => {
 		}),
 		desktopSwitcherStyle: css({
 			justifySelf: "end",
+			display: "flex",
+			gap: 2,
 		}),
 		mobileBarStyle: css({
 			display: "flex",
 			justifyContent: "flex-end",
+			gap: 2,
 			// Clears the status bar whenever the app is drawn under it
 			paddingTop: "max(token(spacing.3), env(safe-area-inset-top))",
 			paddingX: 4,
@@ -109,6 +114,8 @@ export const Header: FunctionComponent = () => {
 	};
 
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
+	// Here rather than in the bell: the mobile and desktop bars each show one, and switch at the first render
+	const reminders = useReminders();
 
 	const links = [
 		{
@@ -164,6 +171,7 @@ export const Header: FunctionComponent = () => {
 			{!isDesktop && (
 				<div className={headerStyle.mobileBarStyle}>
 					<ThemeSwitcher />
+					<ReminderBell {...reminders} />
 				</div>
 			)}
 			<header className={headerStyle.headerStyle}>
@@ -174,6 +182,7 @@ export const Header: FunctionComponent = () => {
 				{isDesktop && (
 					<div className={headerStyle.desktopSwitcherStyle}>
 						<ThemeSwitcher />
+						<ReminderBell {...reminders} />
 					</div>
 				)}
 			</header>
