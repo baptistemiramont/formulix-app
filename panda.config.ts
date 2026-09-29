@@ -137,6 +137,10 @@ export default defineConfig({
 			transition:
 				"padding 0.25s ease, margin 0.25s ease, font-size 0.25s ease, width 0.25s ease, height 0.25s ease",
 		},
+		// No horizontal scrolling, on desktop or mobile: what overflows is clipped, and clip (unlike hidden) keeps the header sticky
+		"html, body": {
+			overflowX: "clip",
+		},
 		html: {
 			scrollBehavior: "smooth",
 			scrollbarWidth: "thin",
