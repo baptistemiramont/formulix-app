@@ -95,28 +95,29 @@ export const Drivers: FunctionComponent = () => {
 		container: {
 			paddingY: 12,
 			display: "grid",
+			gridTemplateColumns: "minmax(0, 1fr)",
 			gap: 6,
 		},
 		teamListStyle: {
 			display: "grid",
 			gap: 6,
-			gridTemplateColumns: "repeat(2, 1fr)",
+			gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
 			lg: {
-				gridTemplateColumns: "repeat(3, 1fr)",
+				gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 			},
 			"2xl": {
-				gridTemplateColumns: "repeat(4, 1fr)",
+				gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
 			},
 		},
 		formFieldsContainer: {
 			display: "grid",
-			gridTemplateColumns: "repeat(2, 1fr)",
+			gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
 			gap: 6,
 			lg: {
-				gridTemplateColumns: "repeat(3, 1fr)",
+				gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 			},
 			"2xl": {
-				gridTemplateColumns: "repeat(4, 1fr)",
+				gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
 			},
 		},
 	};

@@ -228,7 +228,8 @@ const chartStyle = {
 		},
 		_before: markerBefore,
 	}),
-	table: css({
+	// A table keeps its content width despite srOnly: a hidden block clips it, so it doesn't widen the page
+	tableContainer: css({
 		srOnly: true,
 	}),
 };
@@ -615,34 +616,36 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 					)}
 				</ul>
 			)}
-			<table className={chartStyle.table}>
-				<caption>
-					{name}'s {wording.championship} position by season
-				</caption>
-				<thead>
-					<tr>
-						<th scope="col">Season</th>
-						<th scope="col">{wording.seasonName}</th>
-						<th scope="col">Position</th>
-						<th scope="col">Points and wins</th>
-					</tr>
-				</thead>
-				<tbody>
-					{standings.map((standing) => (
-						<tr key={standing.season}>
-							<th scope="row">{standing.season}</th>
-							<td>{nameSeason(standing.season)}</td>
-							<td>
-								{formatPosition(standing)}
-								{standing.isTitle &&
-									`, ${wording.champion.toLowerCase()}`}
-								{!standing.isFinal && ", season in progress"}
-							</td>
-							<td>{formatPointsAndWins(standing)}</td>
+			<div className={chartStyle.tableContainer}>
+				<table>
+					<caption>
+						{name}'s {wording.championship} position by season
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">Season</th>
+							<th scope="col">{wording.seasonName}</th>
+							<th scope="col">Position</th>
+							<th scope="col">Points and wins</th>
 						</tr>
-					))}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{standings.map((standing) => (
+							<tr key={standing.season}>
+								<th scope="row">{standing.season}</th>
+								<td>{nameSeason(standing.season)}</td>
+								<td>
+									{formatPosition(standing)}
+									{standing.isTitle &&
+										`, ${wording.champion.toLowerCase()}`}
+									{!standing.isFinal && ", season in progress"}
+								</td>
+								<td>{formatPointsAndWins(standing)}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	);
 };

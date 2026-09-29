@@ -45,6 +45,7 @@ export const Card: FunctionComponent<TCardProps> = ({
 		content: css({
 			padding: 3,
 			display: "grid",
+			gridTemplateColumns: "minmax(0, 1fr)",
 			alignContent: "start",
 			height: "100%",
 			gap: 3,
@@ -115,6 +116,8 @@ export const Card: FunctionComponent<TCardProps> = ({
 			fontWeight: 700,
 			fontStretch: "112%",
 			lineHeight: 1.2,
+			// A name longer than the card, on the narrowest screens, wraps instead of spilling out
+			overflowWrap: "anywhere",
 			lg: {
 				fontSize: "lg",
 			},
@@ -122,6 +125,7 @@ export const Card: FunctionComponent<TCardProps> = ({
 		subtitle: css({
 			display: "flex",
 			alignItems: "center",
+			overflowWrap: "anywhere",
 			gap: 1.5,
 			color: "textMuted",
 			textStyle: "label",
