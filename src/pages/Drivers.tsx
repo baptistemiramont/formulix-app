@@ -5,19 +5,29 @@ import { Card } from "@/components/cards/Card";
 import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { Loader } from "@/components/Loader";
+import { Pagination } from "@/components/Pagination";
 import { useData } from "@/hooks/useData";
 import { useFilter } from "@/hooks/useFilter";
+import { usePage } from "@/hooks/usePage";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
-import { FILTER_STORAGE_KEYS } from "@/utils/constants";
+import { FILTER_STORAGE_KEYS, PAGE_STORAGE_KEYS } from "@/utils/constants";
+import { paginate } from "@/utils/pagination";
 import { getTeamColor } from "@/utils/team";
 
 export const Drivers: FunctionComponent = () => {
 	const { drivers, teams, isDriversLoading, driversError } = useData();
 	const [team, setTeam] = useFilter(FILTER_STORAGE_KEYS.DRIVERS_TEAM);
+	const [page, setPage] = usePage(PAGE_STORAGE_KEYS.DRIVERS);
+
+	// Another filter makes another list: it starts from its first page
+	function filterByTeam(nextTeam: string): void {
+		setTeam(nextTeam);
+		setPage(1);
+	}
 
 	function handleTeamChange(event: ChangeEvent<HTMLSelectElement>): void {
-		setTeam(event.target.value);
+		filterByTeam(event.target.value);
 	}
 
 	if (isDriversLoading) return <Loader />;
@@ -39,11 +49,17 @@ export const Drivers: FunctionComponent = () => {
 		value,
 	}));
 
-	const driversList = drivers
-		.filter(({ currentTeam }) =>
-			team === "off" ? !currentTeam : !team || currentTeam?.slug === team
-		)
-		.map(({ id, firstName, lastName, slug, avatar, currentTeam }) => (
+	const filteredDrivers = drivers.filter(({ currentTeam }) =>
+		team === "off" ? !currentTeam : !team || currentTeam?.slug === team
+	);
+	const {
+		pageItems,
+		page: currentPage,
+		pageCount,
+	} = paginate(filteredDrivers, page);
+
+	const driversList = pageItems.map(
+		({ id, firstName, lastName, slug, avatar, currentTeam }) => (
 			<Card
 				key={id}
 				title={`${firstName} ${lastName}`}
@@ -55,7 +71,8 @@ export const Drivers: FunctionComponent = () => {
 				subtitle={currentTeam ? currentTeam.name : "No team/Inactive"}
 				accentColor={getTeamColor(teams, currentTeam?.slug)}
 			/>
-		));
+		)
+	);
 
 	const driversPageStyle = {
 		container: {
@@ -100,7 +117,7 @@ export const Drivers: FunctionComponent = () => {
 						options={teamOptions}
 						value={team}
 						changeHandler={handleTeamChange}
-						onReset={() => setTeam("")}
+						onReset={() => filterByTeam("")}
 					/>
 				</div>
 			</form>
@@ -111,6 +128,11 @@ export const Drivers: FunctionComponent = () => {
 					{driversList}
 				</ul>
 			)}
+			<Pagination
+				page={currentPage}
+				pageCount={pageCount}
+				onPageChange={setPage}
+			/>
 		</section>
 	);
 };

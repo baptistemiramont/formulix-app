@@ -23,6 +23,15 @@ export const FILTER_STORAGE_KEYS = {
 	CIRCUITS_COUNTRY: "formulix-circuits-country",
 } as const;
 
+export const PAGE_STORAGE_KEYS = {
+	DRIVERS: "formulix-drivers-page",
+	TEAMS: "formulix-teams-page",
+	CIRCUITS: "formulix-circuits-page",
+} as const;
+
+// Fills whole rows on two, three and four columns alike
+export const LIST_PAGE_SIZE = 24;
+
 export const THEME_COLORS = {
 	light: "#F2F2F4",
 	dark: "#0D0D12",
