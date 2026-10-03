@@ -8,6 +8,14 @@ export const REMINDER_HINTS = {
 		"Notifications are blocked: allow them for Formulix in your settings.",
 } as const;
 
+// The bell of each reminder state but unavailable, where no button shows
+export const REMINDER_ICONS = {
+	on: "mdi:bell-ring",
+	blocked: "mdi:bell-off-outline",
+	off: "mdi:bell-outline",
+	install: "mdi:bell-outline",
+} as const;
+
 // The API gives the VAPID key in base64url, the push manager takes its bytes
 export function toApplicationServerKey(publicKey: string): Uint8Array {
 	const base64 = publicKey
