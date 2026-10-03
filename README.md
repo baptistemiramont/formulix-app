@@ -29,10 +29,10 @@
 ## Features
 
 - **Standings**: the drivers' and constructors' championships of the current season, then of every season before it, back to 1950 for the drivers and 1958 for the constructors.
-- **Drivers**: every driver who started a Grand Prix since 1950, with their stats, identity and teams, and a chart of their championship position season by season. The list filters by team.
-- **Teams**: every team since 1950 with its titles, successive identities, current and former drivers, and its constructors' championship position season by season.
-- **Circuits**: the layout and stats of each circuit, with the winner, team and pole position of every Grand Prix it hosted. The list filters by status and by country.
-- **Paginated lists**: drivers, teams and circuits come 24 to a page, and the list finds its page again on the way back.
+- **Drivers**: every driver who started a Grand Prix since 1950, with their stats, identity and teams, and a chart of their championship position season by season. The list searches by name and filters by current team, nationality and world champions.
+- **Teams**: every team since 1950 with its titles, successive identities, current and former drivers, and its constructors' championship position season by season. The list searches by name and filters by status and constructors' champions.
+- **Circuits**: the layout and stats of each circuit, with the winner, team and pole position of every Grand Prix it hosted. The list searches by name, city or country and filters by status and country.
+- **Searchable lists**: drivers, teams and circuits come 24 to a page, searched and filtered by the API, with the count of what is left; each list finds its search, filters and page again on the way back.
 - **Grand Prix reminders**: a push notification three days before each Grand Prix, at 10 am in the device's time zone.
 - **Light, dark or system theme**, in a visual identity drawn from Formula 1: F1 red, carbon, the wide Saira typeface and team colours.
 - **Installable app** on iOS, Android and desktop, edge to edge, with haptic feedback on key gestures.
