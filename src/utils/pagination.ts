@@ -1,23 +1,3 @@
-import { LIST_PAGE_SIZE } from "@/utils/constants";
-
-// The page asked for, within the pages the list fills now that a filter may have shortened it
-export function paginate<T>(
-	items: T[],
-	page: number
-): { pageItems: T[]; page: number; pageCount: number } {
-	const pageCount = Math.max(1, Math.ceil(items.length / LIST_PAGE_SIZE));
-	const currentPage = Math.min(page, pageCount);
-
-	return {
-		pageItems: items.slice(
-			(currentPage - 1) * LIST_PAGE_SIZE,
-			currentPage * LIST_PAGE_SIZE
-		),
-		page: currentPage,
-		pageCount,
-	};
-}
-
 // The first page, the last one and the current one with its neighbours; null stands for the pages left out between them
 export function listPageNumbers(
 	page: number,
