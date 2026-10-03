@@ -11,6 +11,7 @@ import { Select } from "@/components/form/Select";
 import { HapticButton } from "@/components/HapticButton";
 import { Loader } from "@/components/Loader";
 import { StandingsList, type TStandingsRow } from "@/components/StandingsList";
+import { StandingsPodium } from "@/components/StandingsPodium";
 import { useData } from "@/hooks/useData";
 import { useFilter } from "@/hooks/useFilter";
 import { fieldContainer } from "@/styles/form";
@@ -24,6 +25,7 @@ import type {
 import { FILTER_STORAGE_KEYS, ROUTES } from "@/utils/constants";
 import {
 	FIRST_CHAMPIONSHIP_SEASON,
+	splitPodium,
 	toChampionshipSeason,
 } from "@/utils/standings";
 import { toTeamColor } from "@/utils/team";
@@ -214,6 +216,8 @@ export const Standings: FunctionComponent = () => {
 	) {
 		standings = <Loader />;
 	} else {
+		const [podiumRows, listRows] = splitPodium(shownChampionship.rows);
+
 		standings = (
 			<div className={css(standingsPageStyle.standingsContainer)}>
 				<p className={css(standingsPageStyle.standingsCaption)}>
@@ -221,8 +225,12 @@ export const Standings: FunctionComponent = () => {
 						? "Final standings"
 						: "Provisional standings"}
 				</p>
+				<StandingsPodium
+					rows={podiumRows}
+					titleLabel={shownChampionship.titleLabel}
+				/>
 				<StandingsList
-					rows={shownChampionship.rows}
+					rows={listRows}
 					titleLabel={shownChampionship.titleLabel}
 				/>
 			</div>
