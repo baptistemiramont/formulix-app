@@ -5,12 +5,15 @@ import { Card } from "@/components/cards/Card";
 import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { Loader } from "@/components/Loader";
+import { Pagination } from "@/components/Pagination";
 import { useData } from "@/hooks/useData";
 import { useFilter } from "@/hooks/useFilter";
+import { usePage } from "@/hooks/usePage";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import { formatSeasons, getLayoutUrl, toFlagUrl } from "@/utils/circuit";
-import { FILTER_STORAGE_KEYS } from "@/utils/constants";
+import { FILTER_STORAGE_KEYS, PAGE_STORAGE_KEYS } from "@/utils/constants";
+import { paginate } from "@/utils/pagination";
 
 const STATUS_OPTIONS = [
 	{ label: "Active", value: "active" },
@@ -23,13 +26,25 @@ export const Circuits: FunctionComponent = () => {
 	const [country, setCountry] = useFilter(
 		FILTER_STORAGE_KEYS.CIRCUITS_COUNTRY
 	);
+	const [page, setPage] = usePage(PAGE_STORAGE_KEYS.CIRCUITS);
+
+	// Another filter makes another list: it starts from its first page
+	function filterByStatus(nextStatus: string): void {
+		setStatus(nextStatus);
+		setPage(1);
+	}
+
+	function filterByCountry(nextCountry: string): void {
+		setCountry(nextCountry);
+		setPage(1);
+	}
 
 	function handleStatusChange(event: ChangeEvent<HTMLSelectElement>): void {
-		setStatus(event.target.value);
+		filterByStatus(event.target.value);
 	}
 
 	function handleCountryChange(event: ChangeEvent<HTMLSelectElement>): void {
-		setCountry(event.target.value);
+		filterByCountry(event.target.value);
 	}
 
 	if (isCircuitsLoading) return <Loader />;
@@ -44,32 +59,38 @@ export const Circuits: FunctionComponent = () => {
 		.sort((a, b) => a.localeCompare(b))
 		.map((countryName) => ({ label: countryName, value: countryName }));
 
-	const circuitsList = circuits
+	const filteredCircuits = circuits
 		.filter(({ isActive }) => !status || isActive === (status === "active"))
-		.filter((circuit) => !country || circuit.country === country)
-		.map((circuit) => {
-			const { id, name, slug, locality, country, countryCode } = circuit;
-			const layoutUrl = getLayoutUrl(slug);
-			const flag = {
-				image: toFlagUrl(countryCode),
-				alt: `${country}'s flag`,
-			};
+		.filter((circuit) => !country || circuit.country === country);
+	const {
+		pageItems,
+		page: currentPage,
+		pageCount,
+	} = paginate(filteredCircuits, page);
 
-			return (
-				<Card
-					key={id}
-					title={name}
-					// Without a known layout, the flag takes the whole picture
-					image={layoutUrl ?? flag.image}
-					imageAlt={layoutUrl ? `${name}'s layout` : flag.alt}
-					imageType={layoutUrl ? "layout" : "flag"}
-					badge={layoutUrl ? flag : undefined}
-					linkPath="/circuits/$circuitSlug"
-					linkParams={{ circuitSlug: slug }}
-					subtitle={`${locality} · ${formatSeasons(circuit)}`}
-				/>
-			);
-		});
+	const circuitsList = pageItems.map((circuit) => {
+		const { id, name, slug, locality, country, countryCode } = circuit;
+		const layoutUrl = getLayoutUrl(slug);
+		const flag = {
+			image: toFlagUrl(countryCode),
+			alt: `${country}'s flag`,
+		};
+
+		return (
+			<Card
+				key={id}
+				title={name}
+				// Without a known layout, the flag takes the whole picture
+				image={layoutUrl ?? flag.image}
+				imageAlt={layoutUrl ? `${name}'s layout` : flag.alt}
+				imageType={layoutUrl ? "layout" : "flag"}
+				badge={layoutUrl ? flag : undefined}
+				linkPath="/circuits/$circuitSlug"
+				linkParams={{ circuitSlug: slug }}
+				subtitle={`${locality} · ${formatSeasons(circuit)}`}
+			/>
+		);
+	});
 
 	const circuitsPageStyle = {
 		container: {
@@ -115,7 +136,7 @@ export const Circuits: FunctionComponent = () => {
 						options={STATUS_OPTIONS}
 						value={status}
 						changeHandler={handleStatusChange}
-						onReset={() => setStatus("")}
+						onReset={() => filterByStatus("")}
 					/>
 				</form>
 				<form>
@@ -126,7 +147,7 @@ export const Circuits: FunctionComponent = () => {
 						options={countryOptions}
 						value={country}
 						changeHandler={handleCountryChange}
-						onReset={() => setCountry("")}
+						onReset={() => filterByCountry("")}
 					/>
 				</form>
 			</div>
@@ -137,6 +158,11 @@ export const Circuits: FunctionComponent = () => {
 					{circuitsList}
 				</ul>
 			)}
+			<Pagination
+				page={currentPage}
+				pageCount={pageCount}
+				onPageChange={setPage}
+			/>
 		</section>
 	);
 };

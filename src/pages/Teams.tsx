@@ -4,13 +4,18 @@ import { css } from "@/../styled-system/css";
 import { Card } from "@/components/cards/Card";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { Pagination } from "@/components/Pagination";
 import { useData } from "@/hooks/useData";
+import { usePage } from "@/hooks/usePage";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
+import { PAGE_STORAGE_KEYS } from "@/utils/constants";
+import { paginate } from "@/utils/pagination";
 import { toTeamColor } from "@/utils/team";
 
 export const Teams: FunctionComponent = () => {
 	const { isTeamsLoading, teams, teamsError } = useData();
+	const [page, setPage] = usePage(PAGE_STORAGE_KEYS.TEAMS);
 
 	if (isTeamsLoading) return <Loader />;
 
@@ -18,7 +23,9 @@ export const Teams: FunctionComponent = () => {
 		return <Error message="An error has occurred" />;
 	}
 
-	const teamsList = teams.map(
+	const { pageItems, page: currentPage, pageCount } = paginate(teams, page);
+
+	const teamsList = pageItems.map(
 		({ id, isActive, name, slug, logo, color }) => (
 			<Card
 				key={id}
@@ -63,6 +70,11 @@ export const Teams: FunctionComponent = () => {
 					{teamsList}
 				</ul>
 			)}
+			<Pagination
+				page={currentPage}
+				pageCount={pageCount}
+				onPageChange={setPage}
+			/>
 		</section>
 	);
 };
