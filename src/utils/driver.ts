@@ -1,3 +1,5 @@
+import type { TPhotoCredit } from "@/types/photoCredit";
+
 const BIRTH_DATE_FORMAT = new Intl.DateTimeFormat("en-GB", {
 	day: "numeric",
 	month: "long",
@@ -17,4 +19,11 @@ export function formatBirth(dateOfBirth: string, today = new Date()): string {
 	);
 
 	return `Born ${date} (${age})`;
+}
+
+// A photo taken from Wikipedia fills its frame, where a cutout stands on its team's colour
+export function toPortraitType(
+	avatarCredit: TPhotoCredit | null
+): "photo" | "avatar" {
+	return avatarCredit ? "photo" : "avatar";
 }

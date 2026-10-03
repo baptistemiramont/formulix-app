@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { avatarCreditSchema } from "@/types/schemas/photoCredit";
+
 export const standingSchema = z.object({
 	season: z.number(),
 	// Null when unclassified: excluded, or without a point in the seasons that left such teams or drivers unranked
@@ -32,6 +34,7 @@ export const driversChampionshipSchema = championshipSchema.extend({
 				lastName: z.string(),
 				slug: z.string(),
 				avatar: z.string(),
+				avatarCredit: avatarCreditSchema,
 			}),
 			// The team the driver ended the season with, under its name of that season
 			team: z.object({

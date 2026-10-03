@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { avatarCreditSchema } from "@/types/schemas/photoCredit";
 import { standingSchema } from "@/types/schemas/standing";
 
 export const teamSchema = z.object({
@@ -44,6 +45,7 @@ export const teamDetailedSchema = z.object({
 			lastName: z.string(),
 			slug: z.string(),
 			avatar: z.string(),
+			avatarCredit: avatarCreditSchema,
 		})
 	),
 	standings: z.array(standingSchema),

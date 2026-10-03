@@ -23,6 +23,7 @@ import type {
 	TDriversChampionship,
 } from "@/types/standing";
 import { FILTER_STORAGE_KEYS, ROUTES } from "@/utils/constants";
+import { toPortraitType } from "@/utils/driver";
 import {
 	FIRST_CHAMPIONSHIP_SEASON,
 	splitPodium,
@@ -43,7 +44,7 @@ function listDriverRows({ standings }: TDriversChampionship): TStandingsRow[] {
 		name: `${driver.firstName} ${driver.lastName}`,
 		teamName: team.name,
 		image: driver.avatar,
-		imageType: "avatar",
+		imageType: toPortraitType(driver.avatarCredit),
 		imageAlt: `${driver.firstName} ${driver.lastName}'s avatar`,
 		accentColor: team.color ? toTeamColor(team.color) : undefined,
 		linkPath: ROUTES.DRIVER,

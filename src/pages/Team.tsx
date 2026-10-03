@@ -11,6 +11,7 @@ import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
+import { toPortraitType } from "@/utils/driver";
 import { toTeamColor } from "@/utils/team";
 
 export const Team: FunctionComponent = () => {
@@ -82,13 +83,13 @@ export const Team: FunctionComponent = () => {
 
 	const activeDrivers = drivers
 		.filter((driver) => driver.isCurrentDriver)
-		.map(({ id, firstName, lastName, slug, avatar }) => (
+		.map(({ id, firstName, lastName, slug, avatar, avatarCredit }) => (
 			<Card
 				key={id}
 				title={`${firstName} ${lastName}`}
 				image={avatar}
 				imageAlt={`${firstName} ${lastName}'s avatar`}
-				imageType="avatar"
+				imageType={toPortraitType(avatarCredit)}
 				linkPath="/drivers/$driverSlug"
 				linkParams={{ driverSlug: slug }}
 				accentColor={teamColor}
@@ -97,13 +98,13 @@ export const Team: FunctionComponent = () => {
 
 	const formerDrivers = drivers
 		.filter((driver) => !driver.isCurrentDriver)
-		.map(({ id, firstName, lastName, slug, avatar }) => (
+		.map(({ id, firstName, lastName, slug, avatar, avatarCredit }) => (
 			<Card
 				key={id}
 				title={`${firstName} ${lastName}`}
 				image={avatar}
 				imageAlt={`${firstName} ${lastName}'s avatar`}
-				imageType="avatar"
+				imageType={toPortraitType(avatarCredit)}
 				linkPath="/drivers/$driverSlug"
 				linkParams={{ driverSlug: slug }}
 			/>
