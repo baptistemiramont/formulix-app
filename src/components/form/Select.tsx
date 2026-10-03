@@ -12,6 +12,7 @@ type TSelectProps = {
 	label: string;
 	defaultOptionLabel: string;
 	options: { label: string; value: string }[];
+	value: string;
 	changeHandler: (event: ChangeEvent<HTMLSelectElement>) => void;
 	onReset: () => void;
 };
@@ -21,6 +22,7 @@ export const Select: FunctionComponent<TSelectProps> = ({
 	label,
 	defaultOptionLabel,
 	options,
+	value,
 	changeHandler,
 	onReset,
 }) => {
@@ -58,7 +60,7 @@ export const Select: FunctionComponent<TSelectProps> = ({
 			<div className={css(inputsContainerStyle)}>
 				<select
 					id={id}
-					defaultValue=""
+					value={value}
 					onChange={changeHandler}
 					className={css({ width: "full" })}
 				>

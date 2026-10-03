@@ -17,6 +17,12 @@ export const ROUTES = {
 
 export const THEME_STORAGE_KEY = "formulix-theme";
 
+export const FILTER_STORAGE_KEYS = {
+	DRIVERS_TEAM: "formulix-drivers-team",
+	CIRCUITS_STATUS: "formulix-circuits-status",
+	CIRCUITS_COUNTRY: "formulix-circuits-country",
+} as const;
+
 export const THEME_COLORS = {
 	light: "#F2F2F4",
 	dark: "#0D0D12",
