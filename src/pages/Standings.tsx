@@ -10,63 +10,28 @@ import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { HapticButton } from "@/components/HapticButton";
 import { Loader } from "@/components/Loader";
-import { StandingsList, type TStandingsRow } from "@/components/StandingsList";
+import { StandingsList } from "@/components/StandingsList";
 import { StandingsPodium } from "@/components/StandingsPodium";
 import { useData } from "@/hooks/useData";
 import { useFilter } from "@/hooks/useFilter";
 import { fieldContainer } from "@/styles/form";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
-import type {
-	TChampionship,
-	TConstructorsChampionship,
-	TDriversChampionship,
-} from "@/types/standing";
-import { FILTER_STORAGE_KEYS, ROUTES } from "@/utils/constants";
-import { toPortraitType } from "@/utils/driver";
+import type { TChampionship } from "@/types/standing";
+import { FILTER_STORAGE_KEYS } from "@/utils/constants";
 import {
 	FIRST_CHAMPIONSHIP_SEASON,
+	listConstructorRows,
+	listDriverRows,
 	splitPodium,
 	toChampionshipSeason,
 } from "@/utils/standings";
-import { toTeamColor } from "@/utils/team";
 
 // The drivers' championship first: it opens the page, so only choosing the constructors' one needs keeping
 const CHAMPIONSHIPS: { value: TChampionship; label: string }[] = [
 	{ value: "drivers", label: "Drivers" },
 	{ value: "constructors", label: "Constructors" },
 ];
-
-function listDriverRows({ standings }: TDriversChampionship): TStandingsRow[] {
-	return standings.map(({ driver, team, ...standing }) => ({
-		...standing,
-		key: driver.slug,
-		name: `${driver.firstName} ${driver.lastName}`,
-		teamName: team.name,
-		image: driver.avatar,
-		imageType: toPortraitType(driver.avatarCredit),
-		imageAlt: `${driver.firstName} ${driver.lastName}'s avatar`,
-		accentColor: team.color ? toTeamColor(team.color) : undefined,
-		linkPath: ROUTES.DRIVER,
-		linkParams: { driverSlug: driver.slug },
-	}));
-}
-
-function listConstructorRows({
-	standings,
-}: TConstructorsChampionship): TStandingsRow[] {
-	return standings.map(({ team, ...standing }) => ({
-		...standing,
-		key: team.slug,
-		name: team.name,
-		image: team.logo,
-		imageType: "logo",
-		imageAlt: `${team.name}'s logo`,
-		accentColor: team.color ? toTeamColor(team.color) : undefined,
-		linkPath: ROUTES.TEAM,
-		linkParams: { teamSlug: team.slug },
-	}));
-}
 
 export const Standings: FunctionComponent = () => {
 	const {

@@ -10,11 +10,13 @@ import { canPush, needsInstall, toApplicationServerKey } from "@/utils/reminder"
 // unavailable: no push here, the bell stays hidden; install: Safari on iPhone before the app is on the Home Screen
 export type TReminderState = "unavailable" | "install" | "off" | "on" | "blocked";
 
-export const useReminders = (): {
+export type TReminders = {
 	state: TReminderState;
 	isPending: boolean;
 	toggle: () => Promise<TReminderState>;
-} => {
+};
+
+export const useReminders = (): TReminders => {
 	const [state, setState] = useState<TReminderState>("unavailable");
 	const [isPending, setIsPending] = useState(false);
 	const registration = useRef<ServiceWorkerRegistration | null>(null);

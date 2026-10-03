@@ -1,35 +1,16 @@
-import { type FunctionComponent, useEffect, useState } from "react";
-
 import { Icon } from "@iconify/react";
+import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { HapticButton } from "@/components/HapticButton";
-import type { TReminderState } from "@/hooks/useReminders";
-import { REMINDER_HINTS } from "@/utils/reminder";
-import { playRadioBeep, unlockSounds } from "@/utils/sounds";
+import type { TReminders } from "@/hooks/useReminders";
+import { useReminderToggle } from "@/hooks/useReminderToggle";
+import { REMINDER_ICONS } from "@/utils/reminder";
 
-const HINT_DURATION_MS = 5000;
-
-type TReminderBellProps = {
-	state: TReminderState;
-	isPending: boolean;
-	toggle: () => Promise<TReminderState>;
-};
-
-export const ReminderBell: FunctionComponent<TReminderBellProps> = ({
-	state,
-	isPending,
-	toggle,
-}) => {
-	const [hint, setHint] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (!hint) return;
-
-		const timeout = setTimeout(() => setHint(null), HINT_DURATION_MS);
-
-		return () => clearTimeout(timeout);
-	}, [hint]);
+export const ReminderBell: FunctionComponent<TReminders> = (reminders) => {
+	const { state, isPending } = reminders;
+	const { hint, isOn, isToggle, label, handleClick } =
+		useReminderToggle(reminders);
 
 	const bellStyle = {
 		container: css({
@@ -90,35 +71,7 @@ export const ReminderBell: FunctionComponent<TReminderBellProps> = ({
 
 	if (state === "unavailable") return null;
 
-	const isOn = state === "on";
-	const isToggle = state === "on" || state === "off";
-	const label = isOn ? "Stop Grand Prix reminders" : "Remind me of each Grand Prix";
-	const icon = {
-		on: "mdi:bell-ring",
-		blocked: "mdi:bell-off-outline",
-		off: "mdi:bell-outline",
-		install: "mdi:bell-outline",
-	}[state];
-
-	async function handleClick(): Promise<void> {
-		if (state === "install" || state === "blocked") {
-			setHint(REMINDER_HINTS[state]);
-			return;
-		}
-
-		// On the tap itself: subscribing takes a while, and Safari only starts audio from a gesture
-		if (state === "off") {
-			unlockSounds();
-		}
-
-		const nextState = await toggle();
-
-		if (state === "off" && nextState === "on") {
-			playRadioBeep();
-		}
-
-		setHint(nextState === "blocked" || nextState === "on" ? REMINDER_HINTS[nextState] : null);
-	}
+	const icon = REMINDER_ICONS[state];
 
 	return (
 		<div className={bellStyle.container}>

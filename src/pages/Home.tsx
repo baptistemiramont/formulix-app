@@ -1,42 +1,164 @@
-import { type FunctionComponent, useRef } from "react";
+import { type FunctionComponent, type ReactNode, useRef } from "react";
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { css } from "@/../styled-system/css";
-import { fromSettings, scrollOptions, toSettings } from "@/animations";
-import landoNorrisCelebrationDesktop from "@/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_desktop.webp";
-import landoNorrisCelebrationMobile from "@/assets/images/lando-norris-celebrating-his-first-victory-in-the-2024-miami-gp_mobile.webp";
-import mclarenF1 from "@/assets/images/mclaren-mcl37.webp";
+import { fromSettings } from "@/animations";
 import { Button } from "@/components/Button";
+import { GatewayCard } from "@/components/cards/GatewayCard";
+import { RecordCard } from "@/components/cards/RecordCard";
+import { Loader } from "@/components/Loader";
 import { Logo } from "@/components/Logo";
+import { NextGrandPrixCard } from "@/components/NextGrandPrixCard";
+import { StandingsList } from "@/components/StandingsList";
+import { useConstructorsChampionship } from "@/hooks/useConstructorsChampionship";
+import { useDriversChampionship } from "@/hooks/useDriversChampionship";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { layoutGutters, sectionSpacing } from "@/styles/layout";
+import { useNextGrandPrix } from "@/hooks/useNextGrandPrix";
+import { useRecords } from "@/hooks/useRecords";
+import { layoutGutters } from "@/styles/layout";
+import { cornerTitle } from "@/styles/title";
+import { ROUTES } from "@/utils/constants";
+import { formatCount, listRecordCards } from "@/utils/record";
+import { listConstructorRows, listDriverRows } from "@/utils/standings";
 
-gsap.registerPlugin(ScrollTrigger);
+// The leaders the home page shows of each championship, the rest on the standings page
+const DRIVERS_SHOWN = 5;
+const CONSTRUCTORS_SHOWN = 3;
+
+const appNameStyle = {
+	color: "accentText",
+};
+
+const heroSectionStyle = {
+	section: {
+		display: "grid",
+		gridTemplateColumns: "minmax(0, 1fr)",
+		gap: 8,
+		alignItems: "center",
+		paddingTop: 8,
+		paddingBottom: 12,
+		lg: {
+			gridTemplateColumns: "3fr 2fr",
+			gap: 12,
+			paddingY: 24,
+		},
+	},
+	// Without the next Grand Prix, out of reach, the text takes the whole width
+	sectionWithoutCard: {
+		lg: {
+			gridTemplateColumns: "minmax(0, 1fr)",
+		},
+	},
+	textContainer: {
+		display: "grid",
+		gap: 6,
+		lg: {
+			gap: 8,
+		},
+	},
+	title: {
+		display: "grid",
+		gap: 1,
+		fontSize: "3xl",
+		sm: {
+			fontSize: "4xl",
+		},
+		lg: {
+			fontSize: "5xl",
+		},
+		"& span:first-child": {
+			fontSize: "4xl",
+			fontWeight: 900,
+			fontStyle: "oblique 8deg",
+			textTransform: "uppercase",
+			sm: {
+				fontSize: "5xl",
+			},
+			lg: {
+				fontSize: "7xl",
+			},
+		},
+		"& span:last-child": {
+			textTransform: "capitalize",
+		},
+	},
+	subtitle: {
+		color: "textMuted",
+		fontSize: "lg",
+		lg: {
+			fontSize: "xl",
+		},
+	},
+};
+
+const homeSectionStyle = {
+	section: {
+		display: "grid",
+		gridTemplateColumns: "minmax(0, 1fr)",
+		gap: 6,
+		paddingY: 12,
+		lg: {
+			gap: 8,
+			paddingY: 16,
+		},
+	},
+	header: {
+		display: "flex",
+		flexWrap: "wrap",
+		justifyContent: "space-between",
+		alignItems: "end",
+		gap: 4,
+	},
+	caption: {
+		color: "textMuted",
+		textStyle: "label",
+	},
+	championships: {
+		display: "grid",
+		gridTemplateColumns: "minmax(0, 1fr)",
+		gap: 8,
+		lg: {
+			gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+			alignItems: "start",
+		},
+	},
+	championship: {
+		display: "grid",
+		gap: 3,
+	},
+	cards: {
+		display: "grid",
+		gridTemplateColumns: "minmax(0, 1fr)",
+		gap: 4,
+		md: {
+			gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+		},
+		lg: {
+			gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+			gap: 6,
+		},
+	},
+};
 
 export const Home: FunctionComponent = () => {
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
+	const nextGrandPrix = useNextGrandPrix();
+	const records = useRecords();
+	// The current season's, whichever season the standings page shows
+	const driversChampionship = useDriversChampionship(null);
+	const constructorsChampionship = useConstructorsChampionship(null);
 
 	const refs = {
-		heroImage: useRef<HTMLImageElement>(null),
 		heroAppName: useRef<HTMLSpanElement>(null),
 		heroTitle: useRef<HTMLSpanElement>(null),
-		heroSubtitle: useRef<HTMLHeadingElement>(null),
-		heroCtasContainer: useRef<HTMLDivElement>(null),
-		aboutImage: useRef<HTMLImageElement>(null),
-		aboutTitle: useRef<HTMLHeadingElement>(null),
-		aboutSubtitle: useRef<HTMLHeadingElement>(null),
-		aboutText1: useRef<HTMLParagraphElement>(null),
-		aboutText2: useRef<HTMLParagraphElement>(null),
+		heroSubtitle: useRef<HTMLParagraphElement>(null),
+		heroCard: useRef<HTMLDivElement>(null),
 	};
 
 	useGSAP(() => {
 		const animations = [
-			gsap.from(refs.heroImage.current, {
-				...fromSettings.bottom,
-			}),
 			gsap.from(refs.heroAppName.current, {
 				...fromSettings.top,
 			}),
@@ -48,298 +170,173 @@ export const Home: FunctionComponent = () => {
 				...fromSettings.left,
 				delay: 0.5,
 			}),
-			gsap.from(refs.heroCtasContainer.current, {
-				...fromSettings.left,
-				delay: 0.75,
-			}),
-			gsap.fromTo(refs.aboutImage.current, fromSettings.bottom, {
-				...toSettings,
-				scrollTrigger: {
-					trigger: refs.aboutImage.current,
-					...scrollOptions,
-					start: "top 80%",
-					end: "bottom 70%",
-				},
-			}),
-			gsap.fromTo(refs.aboutTitle.current, fromSettings.right, {
-				...toSettings,
-				scrollTrigger: {
-					trigger: refs.aboutTitle.current,
-					...scrollOptions,
-					start: "top 80%",
-					end: "bottom 70%",
-				},
-			}),
-			gsap.fromTo(refs.aboutSubtitle.current, fromSettings.right, {
-				...toSettings,
-				scrollTrigger: {
-					trigger: refs.aboutSubtitle.current,
-					...scrollOptions,
-					start: "top 80%",
-					end: "bottom 70%",
-				},
-			}),
-			gsap.fromTo(refs.aboutText1.current, fromSettings.right, {
-				...toSettings,
-				scrollTrigger: {
-					trigger: refs.aboutText1.current,
-					...scrollOptions,
-					start: "top 80%",
-					end: "bottom 70%",
-				},
-			}),
-			gsap.fromTo(refs.aboutText2.current, fromSettings.right, {
-				...toSettings,
-				scrollTrigger: {
-					trigger: refs.aboutText2.current,
-					...scrollOptions,
-					start: "top 80%",
-					end: "bottom 70%",
-				},
+			gsap.from(refs.heroCard.current, {
+				...fromSettings.bottom,
+				delay: 0.25,
 			}),
 		];
 
 		return animations;
 	}, []);
 
-	const appNameStyle = {
-		color: "accentText",
-	};
+	let nextGrandPrixCard: ReactNode = null;
 
-	const heroSectionStyle = {
-		section: {
-			display: "grid",
-			gap: 6,
-			alignItems: "center",
-			overflowX: "hidden",
-			lg: {
-				gridTemplateColumns: "3fr 2fr",
-				gap: 12,
-				paddingY: 36,
-			},
-		},
-		ctaSectionContainer: {
-			paddingY: 8,
-			display: "grid",
-			gap: "25dvh",
-			placeItems: "center",
-			placeContent: "start",
-			height: "100dvh",
-			lg: {
-				paddingY: 0,
-				height: "auto",
-				gap: 12,
-			},
-		},
-		ctaSectionContentContainer: {
-			display: "grid",
-			gap: 6,
-		},
-		title: {
-			display: "grid",
-			gap: 1,
-			fontSize: "3xl",
-			sm: {
-				fontSize: "4xl",
-			},
-			lg: {
-				fontSize: "5xl",
-			},
-			"& span:first-child": {
-				fontSize: "4xl",
-				fontWeight: 900,
-				fontStyle: "oblique 8deg",
-				textTransform: "uppercase",
-				sm: {
-					fontSize: "5xl",
-				},
-				lg: {
-					fontSize: "7xl",
-				},
-			},
-			"& span:last-child": {
-				textTransform: "capitalize",
-			},
-		},
-		subtitle: {
-			color: "textMuted",
-			fontSize: "lg",
-			lg: {
-				fontSize: "xl",
-			},
-		},
-		ctaContainer: {
-			display: "flex",
-			gap: 4,
-			lg: {
-				gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-				gap: 6,
-			},
-		},
-		heroImageContainer: {
-			position: "relative",
-			display: "grid",
-			placeItems: "center",
-			_before: {
-				content: "\"\"",
-				position: "absolute",
-				inset: "12% 4% 12% 18%",
-				backgroundColor: "surfaceMuted",
-				borderRightWidth: "6px",
-				borderColor: "accent",
-				transform: "skewX(-14deg)",
-			},
-		},
-		heroImage: {
-			position: "relative",
-			width: "100%",
-			height: "auto",
-			lg: {
-				maxWidth: "500px",
-			},
-		},
-	};
+	if (nextGrandPrix.isLoading) {
+		nextGrandPrixCard = <Loader />;
+	} else if (nextGrandPrix.data !== undefined) {
+		nextGrandPrixCard = <NextGrandPrixCard grandPrix={nextGrandPrix.data} />;
+	}
 
-	const aboutSectionStyle = {
-		section: {
-			backgroundColor: "surfaceMuted",
-			display: "grid",
-			placeItems: "center",
-			gap: 8,
-			overflow: "hidden",
-			lg: {
-				gap: 12,
-				gridTemplateColumns: "repeat(2, 1fr)",
-			},
+	const hasCard = nextGrandPrixCard !== null;
+
+	const totals = records.data?.totals ?? null;
+	const gateways = [
+		{
+			title: "Drivers",
+			icon: "mdi-racing-helmet",
+			path: ROUTES.DRIVERS,
+			total: totals?.drivers ?? null,
+			totalLabel: "drivers since 1950",
+			details: totals ? [`${totals.gridDrivers} on the grid`] : [],
 		},
-		aboutContentContainer: {
-			display: "grid",
-			gap: 6,
+		{
+			title: "Teams",
+			icon: "mdi-flag-checkered",
+			path: ROUTES.TEAMS,
+			total: totals?.teams ?? null,
+			totalLabel: "teams since 1950",
+			details: totals ? [`${totals.activeTeams} on the grid`] : [],
 		},
-		titlesContainer: {
-			display: "grid",
-			gap: 2,
+		{
+			title: "Circuits",
+			icon: "mdi-go-kart-track",
+			path: ROUTES.CIRCUITS,
+			total: totals?.circuits ?? null,
+			totalLabel: "circuits since 1950",
+			details: totals
+				? [
+						`${totals.activeCircuits} on the calendar`,
+						`${formatCount(totals.grandsPrix)} Grands Prix over ${totals.seasons} seasons`,
+					]
+				: [],
 		},
-		imageContainer: {
-			lg: {
-				order: -1,
-			},
-		},
-		image: {
-			width: "100%",
-		},
-	};
+	];
+
+	let championshipSection: ReactNode = null;
+
+	if (driversChampionship.isLoading) {
+		championshipSection = <Loader />;
+	} else if (driversChampionship.data) {
+		const { season, isFinal } = driversChampionship.data;
+
+		championshipSection = (
+			<section
+				className={css(layoutGutters, homeSectionStyle.section)}
+				aria-labelledby="championship-title"
+			>
+				<div className={css(homeSectionStyle.header)}>
+					<div>
+						<h2 id="championship-title" className={css(cornerTitle)}>
+							{season} Championship
+						</h2>
+						<p className={css(homeSectionStyle.caption)}>
+							{isFinal ? "Final standings" : "Provisional standings"}
+						</p>
+					</div>
+					<Button
+						label="Full standings"
+						path={ROUTES.STANDINGS}
+						variant="secondary"
+					/>
+				</div>
+				<div className={css(homeSectionStyle.championships)}>
+					<div className={css(homeSectionStyle.championship)}>
+						<h3>Drivers</h3>
+						<StandingsList
+							rows={listDriverRows(driversChampionship.data).slice(
+								0,
+								DRIVERS_SHOWN
+							)}
+							titleLabel="World champion"
+						/>
+					</div>
+					{constructorsChampionship.data?.season === season && (
+						<div className={css(homeSectionStyle.championship)}>
+							<h3>Constructors</h3>
+							<StandingsList
+								rows={listConstructorRows(
+									constructorsChampionship.data
+								).slice(0, CONSTRUCTORS_SHOWN)}
+								titleLabel="Constructors' champion"
+							/>
+						</div>
+					)}
+				</div>
+			</section>
+		);
+	}
+
+	const recordCards = records.data
+		? listRecordCards(records.data.records)
+		: [];
 
 	return (
 		<>
-			<section className={css(layoutGutters, heroSectionStyle.section)}>
-				<div className={css(heroSectionStyle.ctaSectionContainer)}>
-					{!isDesktop && <Logo />}
-					<div
-						className={css(
-							heroSectionStyle.ctaSectionContentContainer
-						)}
-					>
-						<h1 className={css(heroSectionStyle.title)}>
-							<span
-								ref={refs.heroAppName}
-								className={css(appNameStyle)}
-							>
-								Formulix
-							</span>
-							<span ref={refs.heroTitle}>
-								Your ultimate F1 companion
-							</span>
-						</h1>
-						<p
-							ref={refs.heroSubtitle}
-							className={css(heroSectionStyle.subtitle)}
-						>
-							Explore the rich history and current excitement of
-							Formula 1. Follow your favorite drivers and teams
-							through over 70 years of thrilling competition.
-						</p>
-						<div
-							ref={refs.heroCtasContainer}
-							className={css(heroSectionStyle.ctaContainer)}
-						>
-							<Button label="Drivers" path="/drivers" />
-							<Button
-								label="Teams"
-								path="/teams"
-								variant="secondary"
-							/>
-						</div>
-					</div>
-				</div>
-				{isDesktop && (
-					<div className={css(heroSectionStyle.heroImageContainer)}>
-						<img
-							ref={refs.heroImage}
-							className={css(heroSectionStyle.heroImage)}
-							src={mclarenF1}
-							alt="McLaren 2023 F1 car (MCL37)"
-							title="McLaren 2023 F1 car (MCL37)"
-							width="500"
-							loading="lazy"
-						/>
-					</div>
-				)}
-			</section>
 			<section
 				className={css(
 					layoutGutters,
-					sectionSpacing,
-					aboutSectionStyle.section
+					heroSectionStyle.section,
+					!hasCard && heroSectionStyle.sectionWithoutCard
 				)}
 			>
-				<div className={css(aboutSectionStyle.aboutContentContainer)}>
-					<div className={css(aboutSectionStyle.titlesContainer)}>
-						<h2 ref={refs.aboutTitle}>
-							More about{" "}
-							<span className={css(appNameStyle)}>Formulix</span>
-						</h2>
-						<h3 ref={refs.aboutSubtitle}>
-							Purpose of the Application
-						</h3>
-					</div>
-					<p ref={refs.aboutText1}>
-						Formulix is a web application dedicated to bringing fans
-						closer to the excitement and legacy of the Formula 1
-						World Championship. It offers users the chance to dive
-						into the sport’s rich history and stay updated on the
-						latest thrills, following their favorite drivers and
-						teams across more than 70 years of legendary
-						competition.
-					</p>
-					<p ref={refs.aboutText2}>
-						At present, the app features information on drivers and
-						teams from the latest season. However, our vision is to
-						expand and eventually cover the entire history of
-						Formula 1, starting from its inception in the 1950s. In
-						future updates, we also plan to introduce detailed
-						information about the legendary tracks that have shaped
-						this iconic sport.
+				<div className={css(heroSectionStyle.textContainer)}>
+					{!isDesktop && <Logo />}
+					<h1 className={css(heroSectionStyle.title)}>
+						<span ref={refs.heroAppName} className={css(appNameStyle)}>
+							Formulix
+						</span>
+						<span ref={refs.heroTitle}>Your ultimate F1 companion</span>
+					</h1>
+					<p
+						ref={refs.heroSubtitle}
+						className={css(heroSectionStyle.subtitle)}
+					>
+						Every driver, team and circuit of Formula 1 since 1950,
+						with the standings of each season. Follow the current
+						championship and count down to the next Grand Prix.
 					</p>
 				</div>
-				<div className={css(aboutSectionStyle.imageContainer)}>
-					<picture>
-						<source
-							srcSet={landoNorrisCelebrationDesktop}
-							media="(min-width: 1024px)"
-						/>
-						<img
-							ref={refs.aboutImage}
-							className={css(aboutSectionStyle.image)}
-							src={landoNorrisCelebrationMobile}
-							alt="Lando Norris celebrating his first GP win (Miami 2024)."
-							title="Lando Norris celebrating his first GP win (Miami 2024)."
-							width="300"
-							loading="lazy"
-						/>
-					</picture>
-				</div>
+				<div ref={refs.heroCard}>{nextGrandPrixCard}</div>
 			</section>
+			{championshipSection}
+			<section
+				className={css(layoutGutters, homeSectionStyle.section)}
+				aria-labelledby="explore-title"
+			>
+				<h2 id="explore-title" className={css(cornerTitle)}>
+					Explore
+				</h2>
+				<ul className={css(homeSectionStyle.cards)}>
+					{gateways.map((gateway) => (
+						<GatewayCard key={gateway.path} {...gateway} />
+					))}
+				</ul>
+			</section>
+			{recordCards.length > 0 && (
+				<section
+					className={css(layoutGutters, homeSectionStyle.section)}
+					aria-labelledby="records-title"
+				>
+					<h2 id="records-title" className={css(cornerTitle)}>
+						All-time records
+					</h2>
+					<ul className={css(homeSectionStyle.cards)}>
+						{recordCards.map(({ key, ...recordCard }) => (
+							<RecordCard key={key} {...recordCard} />
+						))}
+					</ul>
+				</section>
+			)}
 		</>
 	);
 };

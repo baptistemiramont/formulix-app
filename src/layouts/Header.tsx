@@ -7,7 +7,7 @@ import { Logo } from "@/components/Logo";
 import { ReminderBell } from "@/components/ReminderBell";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { useReminders } from "@/hooks/useReminders";
+import { useSharedReminders } from "@/hooks/useSharedReminders";
 import { ROUTES } from "@/utils/constants";
 
 export const Header: FunctionComponent = () => {
@@ -120,8 +120,7 @@ export const Header: FunctionComponent = () => {
 	};
 
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
-	// Here rather than in the bell: the mobile and desktop bars each show one, and switch at the first render
-	const reminders = useReminders();
+	const reminders = useSharedReminders();
 
 	const links = [
 		{
