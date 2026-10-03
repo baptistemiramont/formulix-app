@@ -7,6 +7,7 @@ export const QUERY_HEADERS = {
 
 export const ROUTES = {
 	HOME: "/",
+	STANDINGS: "/standings",
 	DRIVERS: "/drivers",
 	DRIVER: "/drivers/$driverSlug",
 	TEAMS: "/teams",
@@ -21,6 +22,8 @@ export const FILTER_STORAGE_KEYS = {
 	DRIVERS_TEAM: "formulix-drivers-team",
 	CIRCUITS_STATUS: "formulix-circuits-status",
 	CIRCUITS_COUNTRY: "formulix-circuits-country",
+	STANDINGS_CHAMPIONSHIP: "formulix-standings-championship",
+	STANDINGS_SEASON: "formulix-standings-season",
 } as const;
 
 export const PAGE_STORAGE_KEYS = {

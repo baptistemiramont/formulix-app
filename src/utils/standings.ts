@@ -105,12 +105,34 @@ export function listPositionTicks(lowestPosition: number): number[] {
 	return ticks;
 }
 
-export function formatPosition({ position, isExcluded }: TStanding): string {
+export function formatPosition({
+	position,
+	isExcluded,
+}: Pick<TStanding, "position" | "isExcluded">): string {
 	if (isExcluded) return "Excluded";
 
 	return position === null ? "Not classified" : `P${position}`;
 }
 
 export function formatPointsAndWins({ points, wins }: TStanding): string {
-	return `${points} pts · ${wins} ${wins === 1 ? "win" : "wins"}`;
+	return `${points} pts · ${formatWins(wins)}`;
+}
+
+// In a column a few characters wide: NC when not classified, EX when excluded
+export function formatShortPosition({
+	position,
+	isExcluded,
+}: Pick<TStanding, "position" | "isExcluded">): string {
+	if (isExcluded) return "EX";
+
+	return position === null ? "NC" : String(position);
+}
+
+export function formatWins(wins: number): string {
+	return `${wins} ${wins === 1 ? "win" : "wins"}`;
+}
+
+// A season kept for the session, or null for the current one
+export function toChampionshipSeason(storedSeason: string): number | null {
+	return /^\d{4}$/.test(storedSeason) ? Number(storedSeason) : null;
 }

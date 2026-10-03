@@ -8,7 +8,11 @@ import {
 
 import { css } from "@/../styled-system/css";
 import { useElementWidth } from "@/hooks/useElementWidth";
-import type { TStanding, TStandingsBand } from "@/types/standing";
+import type {
+	TChampionship,
+	TStanding,
+	TStandingsBand,
+} from "@/types/standing";
 import {
 	findBand,
 	FIRST_CHAMPIONSHIP_SEASON,
@@ -17,8 +21,6 @@ import {
 	listPositionTicks,
 	listSeasonTicks,
 } from "@/utils/standings";
-
-type TChampionship = "constructors" | "drivers";
 
 type TStandingsChartProps = {
 	championship: TChampionship;

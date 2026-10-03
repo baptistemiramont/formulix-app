@@ -48,8 +48,8 @@ export const Header: FunctionComponent = () => {
 		}),
 		ulStyle: css({
 			display: "grid",
-			gap: 4,
-			gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+			gap: 1,
+			gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
 			lg: {
 				display: "flex",
 				gap: 8,
@@ -85,13 +85,15 @@ export const Header: FunctionComponent = () => {
 			width: "fit-content",
 			margin: "auto",
 			color: "inherit",
-			fontSize: "xs",
+			// Five tabs share a phone's width, as small as a native tab bar's labels
+			fontSize: "0.625rem",
 			fontWeight: 600,
-			fontStretch: "112%",
-			letterSpacing: "0.08em",
+			letterSpacing: "0.04em",
 			textTransform: "uppercase",
 			lg: {
 				fontSize: "sm",
+				fontStretch: "112%",
+				letterSpacing: "0.08em",
 				paddingY: 1,
 			},
 		}),
@@ -126,6 +128,11 @@ export const Header: FunctionComponent = () => {
 			href: ROUTES.HOME,
 			icon: <Icon icon="mdi-home" className={headerStyle.iconStyle} />,
 			label: "Home",
+		},
+		{
+			href: ROUTES.STANDINGS,
+			icon: <Icon icon="mdi-podium" className={headerStyle.iconStyle} />,
+			label: "Standings",
 		},
 		{
 			href: ROUTES.DRIVERS,

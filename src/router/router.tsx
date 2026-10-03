@@ -11,6 +11,7 @@ import { Driver } from "@/pages/Driver";
 import { Drivers } from "@/pages/Drivers";
 import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
+import { Standings } from "@/pages/Standings";
 import { Team } from "@/pages/Team";
 import { Teams } from "@/pages/Teams";
 import { ROUTES } from "@/utils/constants";
@@ -24,6 +25,11 @@ const routeTree = rootRoute.addChildren([
 		getParentRoute: () => rootRoute,
 		path: ROUTES.HOME,
 		component: () => <Home />,
+	}),
+	createRoute({
+		getParentRoute: () => rootRoute,
+		path: ROUTES.STANDINGS,
+		component: () => <Standings />,
 	}),
 	createRoute({
 		getParentRoute: () => rootRoute,
