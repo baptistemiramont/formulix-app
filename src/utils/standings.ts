@@ -1,5 +1,13 @@
+import type { TStandingsRow } from "@/components/StandingsList";
 import type { TDriverStanding } from "@/types/driver";
-import type { TStanding, TStandingsBand } from "@/types/standing";
+import type {
+	TConstructorsChampionship,
+	TDriversChampionship,
+	TStanding,
+	TStandingsBand,
+} from "@/types/standing";
+import { ROUTES } from "@/utils/constants";
+import { toTeamColor } from "@/utils/team";
 
 // The constructors' championship started in 1958: earlier seasons have no standings
 export const FIRST_CHAMPIONSHIP_SEASON = 1958;
@@ -146,4 +154,37 @@ export function splitPodium<T extends Pick<TStanding, "position">>(
 // A season kept for the session, or null for the current one
 export function toChampionshipSeason(storedSeason: string): number | null {
 	return /^\d{4}$/.test(storedSeason) ? Number(storedSeason) : null;
+}
+
+export function listDriverRows({
+	standings,
+}: TDriversChampionship): TStandingsRow[] {
+	return standings.map(({ driver, team, ...standing }) => ({
+		...standing,
+		key: driver.slug,
+		name: `${driver.firstName} ${driver.lastName}`,
+		teamName: team.name,
+		image: driver.avatar,
+		imageType: "avatar",
+		imageAlt: `${driver.firstName} ${driver.lastName}'s avatar`,
+		accentColor: team.color ? toTeamColor(team.color) : undefined,
+		linkPath: ROUTES.DRIVER,
+		linkParams: { driverSlug: driver.slug },
+	}));
+}
+
+export function listConstructorRows({
+	standings,
+}: TConstructorsChampionship): TStandingsRow[] {
+	return standings.map(({ team, ...standing }) => ({
+		...standing,
+		key: team.slug,
+		name: team.name,
+		image: team.logo,
+		imageType: "logo",
+		imageAlt: `${team.name}'s logo`,
+		accentColor: team.color ? toTeamColor(team.color) : undefined,
+		linkPath: ROUTES.TEAM,
+		linkParams: { teamSlug: team.slug },
+	}));
 }
