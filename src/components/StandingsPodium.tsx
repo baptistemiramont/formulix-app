@@ -75,6 +75,11 @@ const standingsPodiumStyle = {
 		objectFit: "contain",
 		objectPosition: "bottom",
 	}),
+	// A photo fills the frame of a cutout, cropped from the top where the face is
+	photo: css({
+		objectFit: "cover",
+		objectPosition: "top",
+	}),
 	identity: css({
 		display: "grid",
 		justifyItems: "center",
@@ -196,13 +201,16 @@ export const StandingsPodium: FunctionComponent<TStandingsPodiumProps> = ({
 				<span
 					className={cx(
 						standingsPodiumStyle.imageContainer,
-						imageType === "avatar"
-							? standingsPodiumStyle.avatarContainer
-							: standingsPodiumStyle.logoContainer
+						imageType === "logo"
+							? standingsPodiumStyle.logoContainer
+							: standingsPodiumStyle.avatarContainer
 					)}
 				>
 					<img
-						className={standingsPodiumStyle.image}
+						className={cx(
+							standingsPodiumStyle.image,
+							imageType === "photo" && standingsPodiumStyle.photo
+						)}
 						src={image}
 						alt={imageAlt}
 						width="120"

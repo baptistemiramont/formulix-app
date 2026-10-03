@@ -17,6 +17,7 @@ import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import { driverSchema } from "@/types/schemas/driver";
 import { FILTER_STORAGE_KEYS, PAGE_STORAGE_KEYS } from "@/utils/constants";
+import { toPortraitType } from "@/utils/driver";
 import { toSelectOptions } from "@/utils/list";
 import { getTeamColor } from "@/utils/team";
 
@@ -99,13 +100,21 @@ export const Drivers: FunctionComponent = () => {
 				className={css(driversPageStyle.teamListStyle)}
 			>
 				{data.data.map(
-					({ id, firstName, lastName, slug, avatar, currentTeam }) => (
+					({
+						id,
+						firstName,
+						lastName,
+						slug,
+						avatar,
+						avatarCredit,
+						currentTeam,
+					}) => (
 						<Card
 							key={id}
 							title={`${firstName} ${lastName}`}
 							image={avatar}
 							imageAlt={`${firstName} ${lastName}'s avatar`}
-							imageType="avatar"
+							imageType={toPortraitType(avatarCredit)}
 							linkPath="/drivers/$driverSlug"
 							linkParams={{ driverSlug: slug }}
 							subtitle={

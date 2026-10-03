@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { avatarCreditSchema } from "@/types/schemas/photoCredit";
 import { standingSchema } from "@/types/schemas/standing";
 
 export const driverSchema = z.object({
@@ -8,6 +9,7 @@ export const driverSchema = z.object({
 	lastName: z.string(),
 	slug: z.string(),
 	avatar: z.string(),
+	avatarCredit: avatarCreditSchema,
 	country: z.string(),
 	worldChampionshipsTitle: z.number(),
 	podiums: z.number(),
@@ -26,6 +28,7 @@ export const driverDetailedSchema = z.object({
 	lastName: z.string(),
 	slug: z.string(),
 	avatar: z.string(),
+	avatarCredit: avatarCreditSchema,
 	country: z.string(),
 	worldChampionshipsTitle: z.number(),
 	podiums: z.number(),

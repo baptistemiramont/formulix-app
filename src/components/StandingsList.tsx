@@ -19,7 +19,7 @@ export type TStandingsRow = Pick<
 	// The team a driver ended the season with
 	teamName?: string;
 	image: string;
-	imageType: "avatar" | "logo";
+	imageType: "avatar" | "photo" | "logo";
 	imageAlt: string;
 	accentColor?: string;
 	linkPath?: string;
@@ -113,6 +113,11 @@ const standingsListStyle = {
 		height: "full",
 		objectFit: "contain",
 		objectPosition: "bottom",
+	}),
+	// A photo fills the frame of a cutout, cropped from the top where the face is
+	photo: css({
+		objectFit: "cover",
+		objectPosition: "top",
 	}),
 	identity: css({
 		display: "grid",
@@ -217,13 +222,16 @@ export const StandingsList: FunctionComponent<TStandingsListProps> = ({
 				<span
 					className={cx(
 						standingsListStyle.imageContainer,
-						imageType === "avatar"
-							? standingsListStyle.avatarContainer
-							: standingsListStyle.logoContainer
+						imageType === "logo"
+							? standingsListStyle.logoContainer
+							: standingsListStyle.avatarContainer
 					)}
 				>
 					<img
-						className={standingsListStyle.image}
+						className={cx(
+							standingsListStyle.image,
+							imageType === "photo" && standingsListStyle.photo
+						)}
 						src={image}
 						alt={imageAlt}
 						width="48"

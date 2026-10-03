@@ -52,6 +52,7 @@ export const Driver: FunctionComponent = () => {
 		firstName,
 		lastName,
 		avatar,
+		avatarCredit,
 		country,
 		worldChampionshipsTitle,
 		podiums,
@@ -132,6 +133,28 @@ export const Driver: FunctionComponent = () => {
 			backgroundImage:
 				"linear-gradient(to top, color-mix(in srgb, var(--driver-accent, token(colors.line)) 28%, transparent), transparent 75%)",
 		},
+		// The team's colour shows behind a cutout only: around a photo, it would only border it
+		driverPhotoContainer: {
+			backgroundImage: "none",
+		},
+		// A photo takes the square of a cutout, cropped from the top where the face is
+		driverPhoto: {
+			width: "200px",
+			aspectRatio: "1",
+			objectFit: "cover",
+			objectPosition: "top",
+		},
+		photoCredit: {
+			justifySelf: "center",
+			maxWidth: "40ch",
+			color: "textMuted",
+			fontSize: "xs",
+			lineHeight: 1.4,
+			textAlign: "center",
+			overflowWrap: "anywhere",
+			// An author's name can run long, with an archive's references: the photo's page has it whole
+			lineClamp: 2,
+		},
 		driverName: {
 			textAlign: "center",
 		},
@@ -184,7 +207,10 @@ export const Driver: FunctionComponent = () => {
 			<div className={css(driverPageStyle.driverMainInfosContainer)}>
 				<div className={css(driverPageStyle.driverPortraitContainer)}>
 					<div
-						className={css(driverPageStyle.driverAvatarContainer)}
+						className={css(
+							driverPageStyle.driverAvatarContainer,
+							avatarCredit && driverPageStyle.driverPhotoContainer
+						)}
 						style={
 							{
 								"--driver-accent": currentTeamColor,
@@ -196,8 +222,39 @@ export const Driver: FunctionComponent = () => {
 							alt={`${firstName} ${lastName} avatar`}
 							width="200"
 							loading="lazy"
+							className={
+								avatarCredit
+									? css(driverPageStyle.driverPhoto)
+									: undefined
+							}
 						/>
 					</div>
+					{avatarCredit && (
+						<p className={css(driverPageStyle.photoCredit)}>
+							<a
+								href={avatarCredit.source}
+								target="_blank"
+								rel="noreferrer"
+								className={linkStyle}
+							>
+								Photo
+							</a>
+							{avatarCredit.author && ` · ${avatarCredit.author}`}
+							{" · "}
+							{avatarCredit.licenseUrl ? (
+								<a
+									href={avatarCredit.licenseUrl}
+									target="_blank"
+									rel="noreferrer"
+									className={linkStyle}
+								>
+									{avatarCredit.license}
+								</a>
+							) : (
+								avatarCredit.license
+							)}
+						</p>
+					)}
 					<h1 className={css(driverPageStyle.driverName)}>
 						{firstName} {lastName}
 					</h1>
