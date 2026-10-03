@@ -7,6 +7,7 @@ import type {
 	TStandingsBand,
 } from "@/types/standing";
 import { ROUTES } from "@/utils/constants";
+import { toPortraitType } from "@/utils/driver";
 import { toTeamColor } from "@/utils/team";
 
 // The constructors' championship started in 1958: earlier seasons have no standings
@@ -165,7 +166,7 @@ export function listDriverRows({
 		name: `${driver.firstName} ${driver.lastName}`,
 		teamName: team.name,
 		image: driver.avatar,
-		imageType: "avatar",
+		imageType: toPortraitType(driver.avatarCredit),
 		imageAlt: `${driver.firstName} ${driver.lastName}'s avatar`,
 		accentColor: team.color ? toTeamColor(team.color) : undefined,
 		linkPath: ROUTES.DRIVER,

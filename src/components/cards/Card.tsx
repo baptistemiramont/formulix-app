@@ -8,7 +8,7 @@ type TCardProps = {
 	title: string;
 	image: string;
 	imageAlt: string;
-	imageType: "avatar" | "logo" | "flag" | "layout";
+	imageType: "avatar" | "photo" | "logo" | "flag" | "layout";
 	badge?: { image: string; alt: string };
 	linkPath?: string;
 	linkParams?: object;
@@ -60,7 +60,8 @@ export const Card: FunctionComponent<TCardProps> = ({
 				width: "100%",
 				overflow: "hidden",
 			},
-			imageType === "avatar"
+			// A photo takes the frame of a cutout, which it fills
+			imageType === "avatar" || imageType === "photo"
 				? {
 						placeItems: "end center",
 						aspectRatio: "1",
@@ -98,14 +99,21 @@ export const Card: FunctionComponent<TCardProps> = ({
 				objectFit: "contain",
 				objectPosition: "center",
 			},
-			imageType === "avatar"
-				? {
-						width: "88%",
-					}
-				: {
-						width: "60%",
-						maxHeight: "100%",
-					},
+			imageType === "avatar" && {
+				width: "88%",
+			},
+			// Cropped from the top, where the face is
+			imageType === "photo" && {
+				width: "100%",
+				height: "100%",
+				objectFit: "cover",
+				objectPosition: "top",
+			},
+			imageType !== "avatar" &&
+				imageType !== "photo" && {
+					width: "60%",
+					maxHeight: "100%",
+				},
 			// A thin line keeps the white of a flag apart from the plate
 			imageType === "flag" && {
 				boxShadow: "0 0 0 1px token(colors.line)",
