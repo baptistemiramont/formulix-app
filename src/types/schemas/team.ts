@@ -46,6 +46,17 @@ export const teamDetailedSchema = z.object({
 			slug: z.string(),
 			avatar: z.string(),
 			avatarCredit: avatarCreditSchema,
+			// Null once the driver no longer races in Formula 1; the team itself for its current drivers
+			currentTeam: z
+				.object({
+					name: z.string(),
+					slug: z.string(),
+					color: z.string(),
+				})
+				.nullable(),
+			// The seasons the driver raced for the team, under any of its names
+			firstSeason: z.number().nullable(),
+			lastSeason: z.number().nullable(),
 		})
 	),
 	standings: z.array(standingSchema),

@@ -1,4 +1,11 @@
-import { type CSSProperties, type FunctionComponent, useEffect } from "react";
+import {
+	type CSSProperties,
+	type FunctionComponent,
+	type ReactNode,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 import { useParams } from "@tanstack/react-router";
 
@@ -7,12 +14,87 @@ import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { Pagination } from "@/components/Pagination";
 import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
+import type { TTeamDetailed } from "@/types/team";
+import { TEAM_DRIVERS_PAGE_SIZE } from "@/utils/constants";
 import { toPortraitType } from "@/utils/driver";
 import { toTeamColor } from "@/utils/team";
+
+type TTeamDriver = TTeamDetailed["drivers"][number];
+
+const sectionStyle = {
+	display: "grid",
+	gap: 4,
+	lg: {
+		gap: 8,
+	},
+};
+
+const cardListStyle = {
+	display: "grid",
+	gap: 6,
+	gridTemplateColumns: "repeat(2, 1fr)",
+	lg: {
+		gridTemplateColumns: "repeat(3, 1fr)",
+	},
+	"2xl": {
+		gridTemplateColumns: "repeat(4, 1fr)",
+	},
+};
+
+// A long section comes a page at a time, and a new page shows from the section's title
+const DriversSection: FunctionComponent<{
+	title: string;
+	cards: ReactNode[];
+}> = ({ title, cards }) => {
+	const [page, setPage] = useState(1);
+	const sectionRef = useRef<HTMLDivElement>(null);
+
+	if (!cards.length) return null;
+
+	const pageCount = Math.ceil(cards.length / TEAM_DRIVERS_PAGE_SIZE);
+
+	return (
+		<div
+			ref={sectionRef}
+			className={css(sectionStyle, {
+				scrollMarginTop: 4,
+				// Clear of the header, which stays at the top of a desktop screen
+				lg: { scrollMarginTop: 28 },
+			})}
+		>
+			<h2 className={css(cornerTitle)}>{title}</h2>
+			<ul className={css(cardListStyle)}>
+				{cards.slice(
+					(page - 1) * TEAM_DRIVERS_PAGE_SIZE,
+					page * TEAM_DRIVERS_PAGE_SIZE
+				)}
+			</ul>
+			<Pagination
+				page={page}
+				pageCount={pageCount}
+				onPageChange={setPage}
+				scrollTarget={sectionRef}
+			/>
+		</div>
+	);
+};
+
+// Seasons with the team: one, or the first and the last
+function formatTeamSeasons({
+	firstSeason,
+	lastSeason,
+}: TTeamDriver): string | undefined {
+	if (firstSeason === null || lastSeason === null) return undefined;
+
+	return firstSeason === lastSeason
+		? String(firstSeason)
+		: `${firstSeason} - ${lastSeason}`;
+}
 
 export const Team: FunctionComponent = () => {
 	const { teamSlug } = useParams({ from: "/teams/$teamSlug" });
@@ -81,24 +163,14 @@ export const Team: FunctionComponent = () => {
 				);
 			});
 
-	const activeDrivers = drivers
-		.filter((driver) => driver.isCurrentDriver)
-		.map(({ id, firstName, lastName, slug, avatar, avatarCredit }) => (
-			<Card
-				key={id}
-				title={`${firstName} ${lastName}`}
-				image={avatar}
-				imageAlt={`${firstName} ${lastName}'s avatar`}
-				imageType={toPortraitType(avatarCredit)}
-				linkPath="/drivers/$driverSlug"
-				linkParams={{ driverSlug: slug }}
-				accentColor={teamColor}
-			/>
-		));
+	const toDriverCard = (
+		driver: TTeamDriver,
+		subtitle?: string,
+		accentColor?: string
+	): ReactNode => {
+		const { id, firstName, lastName, slug, avatar, avatarCredit } = driver;
 
-	const formerDrivers = drivers
-		.filter((driver) => !driver.isCurrentDriver)
-		.map(({ id, firstName, lastName, slug, avatar, avatarCredit }) => (
+		return (
 			<Card
 				key={id}
 				title={`${firstName} ${lastName}`}
@@ -107,8 +179,38 @@ export const Team: FunctionComponent = () => {
 				imageType={toPortraitType(avatarCredit)}
 				linkPath="/drivers/$driverSlug"
 				linkParams={{ driverSlug: slug }}
+				subtitle={subtitle}
+				accentColor={accentColor}
 			/>
-		));
+		);
+	};
+
+	// Drivers come the latest to race for the team first, each section keeping that order
+	const currentDrivers = drivers
+		.filter(({ isCurrentDriver }) => isCurrentDriver)
+		.map((driver) => toDriverCard(driver, undefined, teamColor));
+
+	// A former driver with a Current team still races in Formula 1, shown in its colours
+	const racingDrivers = drivers.flatMap((driver) => {
+		const { isCurrentDriver, currentTeam } = driver;
+
+		return !isCurrentDriver && currentTeam
+			? [
+					toDriverCard(
+						driver,
+						currentTeam.name,
+						toTeamColor(currentTeam.color)
+					),
+				]
+			: [];
+	});
+
+	const retiredDrivers = drivers
+		.filter(
+			({ isCurrentDriver, currentTeam }) =>
+				!isCurrentDriver && !currentTeam
+		)
+		.map((driver) => toDriverCard(driver, formatTeamSeasons(driver)));
 
 	const teamPageStyle = {
 		container: {
@@ -167,28 +269,12 @@ export const Team: FunctionComponent = () => {
 			display: "grid",
 			gap: 8,
 		},
-		teamContainer: {
-			display: "grid",
-			gap: 4,
-			lg: {
-				gap: 8,
-			},
-		},
+		teamContainer: sectionStyle,
 		teamHistoryCaption: {
 			color: "textMuted",
 			textStyle: "label",
 		},
-		teamList: {
-			display: "grid",
-			gap: 6,
-			gridTemplateColumns: "repeat(2, 1fr)",
-			lg: {
-				gridTemplateColumns: "repeat(3, 1fr)",
-			},
-			"2xl": {
-				gridTemplateColumns: "repeat(4, 1fr)",
-			},
-		},
+		teamList: cardListStyle,
 	};
 
 	return (
@@ -261,22 +347,22 @@ export const Team: FunctionComponent = () => {
 					)}
 				</div>
 			)}
-			{activeDrivers.length > 0 && (
-				<div className={css(teamPageStyle.teamContainer)}>
-					<h2 className={css(cornerTitle)}>Team's current drivers</h2>
-					<ul className={css(teamPageStyle.teamList)}>
-						{activeDrivers}
-					</ul>
-				</div>
-			)}
-			{formerDrivers.length > 0 && (
-				<div className={css(teamPageStyle.teamContainer)}>
-					<h2 className={css(cornerTitle)}>Team's former driver(s)</h2>
-					<ul className={css(teamPageStyle.teamList)}>
-						{formerDrivers}
-					</ul>
-				</div>
-			)}
+			{/* Keyed by team: another team's page starts each section from its first page */}
+			<DriversSection
+				key={`${teamSlug}-current`}
+				title="Team's current drivers"
+				cards={currentDrivers}
+			/>
+			<DriversSection
+				key={`${teamSlug}-racing`}
+				title="Former drivers still racing"
+				cards={racingDrivers}
+			/>
+			<DriversSection
+				key={`${teamSlug}-retired`}
+				title="Former drivers"
+				cards={retiredDrivers}
+			/>
 		</section>
 	);
 };
