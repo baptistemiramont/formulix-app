@@ -28,7 +28,7 @@
 
 ## Features
 
-- **Standings**: the drivers' and constructors' championships of the current season, then of every season before it, back to 1950 for the drivers and 1958 for the constructors.
+- **Standings**: the drivers' and constructors' championships of the current season, then of every season before it, back to 1950 for the drivers and 1958 for the constructors, the top three on a podium.
 - **Drivers**: every driver who started a Grand Prix since 1950, with their stats, identity and teams, and a chart of their championship position season by season. The list filters by team.
 - **Teams**: every team since 1950 with its titles, successive identities, current and former drivers, and its constructors' championship position season by season.
 - **Circuits**: the layout and stats of each circuit, with the winner, team and pole position of every Grand Prix it hosted. The list filters by status and by country.

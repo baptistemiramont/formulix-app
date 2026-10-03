@@ -132,6 +132,17 @@ export function formatWins(wins: number): string {
 	return `${wins} ${wins === 1 ? "win" : "wins"}`;
 }
 
+// The first three go up on the podium, the list goes on from the fourth
+export function splitPodium<T extends Pick<TStanding, "position">>(
+	standings: T[]
+): [T[], T[]] {
+	const podium = standings
+		.slice(0, 3)
+		.filter(({ position }) => position !== null);
+
+	return [podium, standings.slice(podium.length)];
+}
+
 // A season kept for the session, or null for the current one
 export function toChampionshipSeason(storedSeason: string): number | null {
 	return /^\d{4}$/.test(storedSeason) ? Number(storedSeason) : null;
