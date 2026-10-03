@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import type { FunctionComponent } from "react";
+import type { FunctionComponent, RefObject } from "react";
 
 import { css } from "@/../styled-system/css";
 import { HapticButton } from "@/components/HapticButton";
@@ -9,12 +9,15 @@ type TPaginationProps = {
 	page: number;
 	pageCount: number;
 	onPageChange: (page: number) => void;
+	// The section a new page shows from, for a list inside a page; the top of the page otherwise
+	scrollTarget?: RefObject<HTMLElement | null>;
 };
 
 export const Pagination: FunctionComponent<TPaginationProps> = ({
 	page,
 	pageCount,
 	onPageChange,
+	scrollTarget,
 }) => {
 	if (pageCount <= 1) return null;
 
@@ -23,7 +26,11 @@ export const Pagination: FunctionComponent<TPaginationProps> = ({
 
 		onPageChange(nextPage);
 		// The new page shows from its first cards, whichever end of the list it was asked from
-		window.scrollTo({ top: 0 });
+		if (scrollTarget?.current) {
+			scrollTarget.current.scrollIntoView({ block: "start" });
+		} else {
+			window.scrollTo({ top: 0 });
+		}
 	}
 
 	const paginationStyle = {

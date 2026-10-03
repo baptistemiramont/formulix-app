@@ -33,6 +33,9 @@ export const FILTER_STORAGE_KEYS = {
 	STANDINGS_SEASON: "formulix-standings-season",
 } as const;
 
+// A team's drivers by section, whole rows on two, three and four columns alike
+export const TEAM_DRIVERS_PAGE_SIZE = 12;
+
 export const PAGE_STORAGE_KEYS = {
 	DRIVERS: "formulix-drivers-page",
 	TEAMS: "formulix-teams-page",
