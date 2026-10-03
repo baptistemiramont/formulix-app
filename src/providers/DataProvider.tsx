@@ -8,12 +8,18 @@ import {
 import { DataContext } from "@/contexts/DataContext";
 import { useCircuit } from "@/hooks/useCircuit";
 import { useCircuits } from "@/hooks/useCircuits";
+import { useConstructorsChampionship } from "@/hooks/useConstructorsChampionship";
 import { useDriver } from "@/hooks/useDriver";
 import { useDrivers } from "@/hooks/useDrivers";
+import { useDriversChampionship } from "@/hooks/useDriversChampionship";
 import { useTeam } from "@/hooks/useTeam";
 import { useTeams } from "@/hooks/useTeams";
 import type { TCircuit, TCircuitDetailed } from "@/types/circuit";
 import type { TDriver, TDriverDetailed } from "@/types/driver";
+import type {
+	TConstructorsChampionship,
+	TDriversChampionship,
+} from "@/types/standing";
 import type { TTeam, TTeamDetailed } from "@/types/team";
 
 type TError = Error | unknown | null;
@@ -40,6 +46,14 @@ export type TDataState = {
 	isCircuitLoading: boolean;
 	circuit: TCircuitDetailed | null;
 	circuitError: TError;
+	// Null for the current season
+	setChampionshipSeason: (season: number | null) => void;
+	isDriversChampionshipLoading: boolean;
+	driversChampionship: TDriversChampionship | null;
+	driversChampionshipError: TError;
+	isConstructorsChampionshipLoading: boolean;
+	constructorsChampionship: TConstructorsChampionship | null;
+	constructorsChampionshipError: TError;
 };
 
 export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
@@ -52,6 +66,13 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 	const [circuits, setCircuits] = useState<TCircuit[]>([]);
 	const [circuitSlug, setCircuitSlug] = useState<string | null>(null);
 	const [circuit, setCircuit] = useState<TCircuitDetailed | null>(null);
+	const [championshipSeason, setChampionshipSeason] = useState<number | null>(
+		null
+	);
+	const [driversChampionship, setDriversChampionship] =
+		useState<TDriversChampionship | null>(null);
+	const [constructorsChampionship, setConstructorsChampionship] =
+		useState<TConstructorsChampionship | null>(null);
 
 	const {
 		data: driversData,
@@ -89,6 +110,18 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 		error: circuitError,
 	} = useCircuit(circuitSlug ? circuitSlug : "");
 
+	const {
+		data: driversChampionshipData,
+		isLoading: isDriversChampionshipLoading,
+		error: driversChampionshipError,
+	} = useDriversChampionship(championshipSeason);
+
+	const {
+		data: constructorsChampionshipData,
+		isLoading: isConstructorsChampionshipLoading,
+		error: constructorsChampionshipError,
+	} = useConstructorsChampionship(championshipSeason);
+
 	useEffect(() => {
 		if (driversData) {
 			setDrivers(driversData as TDriver[]);
@@ -125,6 +158,18 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 		}
 	}, [circuitData]);
 
+	useEffect(() => {
+		if (driversChampionshipData) {
+			setDriversChampionship(driversChampionshipData);
+		}
+	}, [driversChampionshipData]);
+
+	useEffect(() => {
+		if (constructorsChampionshipData) {
+			setConstructorsChampionship(constructorsChampionshipData);
+		}
+	}, [constructorsChampionshipData]);
+
 	return (
 		<DataContext.Provider
 			children={children}
@@ -150,6 +195,13 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 				isCircuitLoading,
 				circuit,
 				circuitError,
+				setChampionshipSeason,
+				isDriversChampionshipLoading,
+				driversChampionship,
+				driversChampionshipError,
+				isConstructorsChampionshipLoading,
+				constructorsChampionship,
+				constructorsChampionshipError,
 			}}
 		/>
 	);
