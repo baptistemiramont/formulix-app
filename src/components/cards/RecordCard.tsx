@@ -12,7 +12,7 @@ export type TRecordHolder = {
 	linkParams: object;
 	// Undefined for a circuit whose layout is not drawn yet
 	image?: string;
-	imageType: "avatar" | "logo" | "layout";
+	imageType: "avatar" | "photo" | "logo" | "layout";
 	imageAlt: string;
 };
 
@@ -105,10 +105,17 @@ const recordCardStyle = {
 		objectFit: "contain",
 		objectPosition: "bottom",
 	}),
+	// Cropped from the top, where the face is
+	photo: css({
+		objectFit: "cover",
+		objectPosition: "top",
+	}),
 };
 
+// A photo takes the frame of a cutout, which it fills
 const IMAGE_CONTAINER_STYLES = {
 	avatar: recordCardStyle.avatarContainer,
+	photo: recordCardStyle.avatarContainer,
 	logo: recordCardStyle.logoContainer,
 	layout: recordCardStyle.layoutContainer,
 };
@@ -139,12 +146,16 @@ export const RecordCard: FunctionComponent<TRecordCardProps> = ({
 				</span>
 			))}
 		</p>
+		{/* The names already lead there: the thumbnails do too, out of the keyboard's way */}
 		<div className={recordCardStyle.images} aria-hidden="true">
 			{holders
 				.filter(({ image }) => image)
-				.map(({ key, image = "", imageType, imageAlt }) => (
-					<span
+				.map(({ key, linkPath, linkParams, image = "", imageType, imageAlt }) => (
+					<Link
 						key={key}
+						to={linkPath}
+						params={linkParams}
+						tabIndex={-1}
 						className={cx(
 							recordCardStyle.imageContainer,
 							IMAGE_CONTAINER_STYLES[imageType]
@@ -154,7 +165,10 @@ export const RecordCard: FunctionComponent<TRecordCardProps> = ({
 							<CircuitLayout url={image} label={imageAlt} />
 						) : (
 							<img
-								className={recordCardStyle.image}
+								className={cx(
+									recordCardStyle.image,
+									imageType === "photo" && recordCardStyle.photo
+								)}
 								src={image}
 								alt={imageAlt}
 								width="80"
@@ -162,7 +176,7 @@ export const RecordCard: FunctionComponent<TRecordCardProps> = ({
 								loading="lazy"
 							/>
 						)}
-					</span>
+					</Link>
 				))}
 		</div>
 	</li>

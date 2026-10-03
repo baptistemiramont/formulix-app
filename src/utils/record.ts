@@ -2,6 +2,7 @@ import type { TRecordCardProps, TRecordHolder } from "@/components/cards/RecordC
 import type { TRecords } from "@/types/record";
 import { getLayoutUrl } from "@/utils/circuit";
 import { ROUTES } from "@/utils/constants";
+import { toPortraitType } from "@/utils/driver";
 import { toTeamColor } from "@/utils/team";
 
 type TRecordsByKey = TRecords["records"];
@@ -30,6 +31,7 @@ function toDriverHolder({
 	lastName,
 	slug,
 	avatar,
+	avatarCredit,
 }: TDriverHolder): TRecordHolder {
 	return {
 		key: slug,
@@ -37,7 +39,7 @@ function toDriverHolder({
 		linkPath: ROUTES.DRIVER,
 		linkParams: { driverSlug: slug },
 		image: avatar,
-		imageType: "avatar",
+		imageType: toPortraitType(avatarCredit),
 		imageAlt: `${firstName} ${lastName}'s avatar`,
 	};
 }

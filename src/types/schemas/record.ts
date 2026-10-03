@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { avatarCreditSchema } from "@/types/schemas/photoCredit";
+
 // Every driver, team or circuit tied on the best mark; null while nobody holds it
 const recordSchema = <T extends z.ZodTypeAny>(
 	holderSchema: T
@@ -18,6 +20,7 @@ const driverHolderSchema = z.object({
 	lastName: z.string(),
 	slug: z.string(),
 	avatar: z.string(),
+	avatarCredit: avatarCreditSchema,
 });
 
 export const recordsSchema = z.object({
