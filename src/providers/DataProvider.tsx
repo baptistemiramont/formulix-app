@@ -20,8 +20,6 @@ type TError = Error | unknown | null;
 
 export type TDataState = {
 	drivers: TDriver[];
-	filteredDrivers: TDriver[];
-	resetFilteredDrivers: () => void;
 	isTeamsLoading: boolean;
 	teams: TTeam[];
 	teamsError: TError;
@@ -29,8 +27,6 @@ export type TDataState = {
 	isTeamLoading: boolean;
 	team: TTeamDetailed | null;
 	teamError: TError;
-	setFilteredDrivers: (drivers: TDriver[]) => void;
-	filterByTeam: (teamSlug: string) => void;
 	setDriverSlug: (slug: string | null) => void;
 	isDriversLoading: boolean;
 	driversError: TError;
@@ -50,35 +46,12 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 	const [drivers, setDrivers] = useState<TDriver[]>([]);
 	const [driverSlug, setDriverSlug] = useState<string | null>(null);
 	const [driver, setDriver] = useState<TDriverDetailed | null>(null);
-	const [filteredDrivers, setFilteredDrivers] = useState<TDriver[]>([]);
 	const [teams, setTeams] = useState<TTeam[]>([]);
 	const [teamSlug, setTeamSlug] = useState<string | null>(null);
 	const [team, setTeam] = useState<TTeamDetailed | null>(null);
 	const [circuits, setCircuits] = useState<TCircuit[]>([]);
 	const [circuitSlug, setCircuitSlug] = useState<string | null>(null);
 	const [circuit, setCircuit] = useState<TCircuitDetailed | null>(null);
-
-	function filterByTeam(teamSlug: string): void {
-		if (!teamSlug || teamSlug === "") {
-			setFilteredDrivers(drivers);
-			return;
-		}
-
-		if (teamSlug === "off") {
-			setFilteredDrivers(drivers.filter((driver) => !driver.currentTeam));
-			return;
-		}
-
-		const filtered = drivers.filter(
-			(driver) => driver.currentTeam?.slug === teamSlug
-		);
-
-		setFilteredDrivers(filtered);
-	}
-
-	function resetFilteredDrivers(): void {
-		setFilteredDrivers(drivers);
-	}
 
 	const {
 		data: driversData,
@@ -119,7 +92,6 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 	useEffect(() => {
 		if (driversData) {
 			setDrivers(driversData as TDriver[]);
-			setFilteredDrivers(driversData as TDriver[]);
 		}
 	}, [driversData]);
 
@@ -158,8 +130,6 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 			children={children}
 			value={{
 				drivers,
-				filteredDrivers,
-				resetFilteredDrivers,
 				isTeamsLoading,
 				teams,
 				teamsError,
@@ -167,8 +137,6 @@ export const DataProvider = ({ children }: PropsWithChildren): ReactNode => {
 				isTeamLoading,
 				team,
 				teamError,
-				setFilteredDrivers,
-				filterByTeam,
 				isDriversLoading,
 				driversError,
 				setDriverSlug,

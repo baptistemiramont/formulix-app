@@ -1,4 +1,4 @@
-import { type ChangeEvent, type FunctionComponent, useState } from "react";
+import { type ChangeEvent, type FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { Card } from "@/components/cards/Card";
@@ -6,9 +6,11 @@ import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
+import { useFilter } from "@/hooks/useFilter";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import { formatSeasons, getLayoutUrl, toFlagUrl } from "@/utils/circuit";
+import { FILTER_STORAGE_KEYS } from "@/utils/constants";
 
 const STATUS_OPTIONS = [
 	{ label: "Active", value: "active" },
@@ -17,8 +19,10 @@ const STATUS_OPTIONS = [
 
 export const Circuits: FunctionComponent = () => {
 	const { isCircuitsLoading, circuits, circuitsError } = useData();
-	const [status, setStatus] = useState("");
-	const [country, setCountry] = useState("");
+	const [status, setStatus] = useFilter(FILTER_STORAGE_KEYS.CIRCUITS_STATUS);
+	const [country, setCountry] = useFilter(
+		FILTER_STORAGE_KEYS.CIRCUITS_COUNTRY
+	);
 
 	function handleStatusChange(event: ChangeEvent<HTMLSelectElement>): void {
 		setStatus(event.target.value);
@@ -109,6 +113,7 @@ export const Circuits: FunctionComponent = () => {
 						label="Filter by status"
 						defaultOptionLabel="All"
 						options={STATUS_OPTIONS}
+						value={status}
 						changeHandler={handleStatusChange}
 						onReset={() => setStatus("")}
 					/>
@@ -119,6 +124,7 @@ export const Circuits: FunctionComponent = () => {
 						label="Filter by country"
 						defaultOptionLabel="All"
 						options={countryOptions}
+						value={country}
 						changeHandler={handleCountryChange}
 						onReset={() => setCountry("")}
 					/>

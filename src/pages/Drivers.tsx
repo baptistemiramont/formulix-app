@@ -1,4 +1,4 @@
-import { type FunctionComponent, useEffect, useState } from "react";
+import { type ChangeEvent, type FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { Card } from "@/components/cards/Card";
@@ -6,77 +6,44 @@ import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { Loader } from "@/components/Loader";
 import { useData } from "@/hooks/useData";
+import { useFilter } from "@/hooks/useFilter";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
+import { FILTER_STORAGE_KEYS } from "@/utils/constants";
 import { getTeamColor } from "@/utils/team";
 
 export const Drivers: FunctionComponent = () => {
-	function handleTeamChange(
-		event: React.ChangeEvent<HTMLSelectElement>
-	): void {
-		if (filteredDrivers) {
-			filterByTeam(event.target.value);
-		}
+	const { drivers, teams, isDriversLoading, driversError } = useData();
+	const [team, setTeam] = useFilter(FILTER_STORAGE_KEYS.DRIVERS_TEAM);
+
+	function handleTeamChange(event: ChangeEvent<HTMLSelectElement>): void {
+		setTeam(event.target.value);
 	}
-
-	const {
-		drivers,
-		teams,
-		isDriversLoading,
-		filteredDrivers,
-		driversError,
-		resetFilteredDrivers,
-		filterByTeam,
-	} = useData();
-
-	const [filteredTeams, setFilteredTeams] = useState<
-		{ label: string; value: string }[]
-	>([]);
-
-	useEffect(
-		() => {
-			return () => {
-				resetFilteredDrivers();
-			};
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[]
-	);
-
-	useEffect(() => {
-		if (drivers && drivers.length > 0) {
-			const mappedTeams = new Map<string, string>();
-
-			drivers.forEach((driver) => {
-				if (driver.currentTeam) {
-					mappedTeams.set(
-						driver.currentTeam.name,
-						driver.currentTeam.slug
-					);
-				}
-			});
-
-			mappedTeams.set("No team/Inactive", "off");
-
-			setFilteredTeams(
-				Array.from(mappedTeams, ([k, v]) => ({
-					label: k,
-					value: v,
-				}))
-			);
-		}
-	}, [drivers]);
 
 	if (isDriversLoading) return <Loader />;
 
 	if (driversError) return <Error message="Failed to load drivers data" />;
 
-	if (!filteredDrivers) return <Error message="No driver found" />;
+	const mappedTeams = new Map<string, string>();
 
-	if (!filterByTeam) return <Error message="No team found" />;
+	drivers.forEach((driver) => {
+		if (driver.currentTeam) {
+			mappedTeams.set(driver.currentTeam.name, driver.currentTeam.slug);
+		}
+	});
 
-	const driversList = filteredDrivers.map(
-		({ id, firstName, lastName, slug, avatar, currentTeam }) => (
+	mappedTeams.set("No team/Inactive", "off");
+
+	const teamOptions = Array.from(mappedTeams, ([label, value]) => ({
+		label,
+		value,
+	}));
+
+	const driversList = drivers
+		.filter(({ currentTeam }) =>
+			team === "off" ? !currentTeam : !team || currentTeam?.slug === team
+		)
+		.map(({ id, firstName, lastName, slug, avatar, currentTeam }) => (
 			<Card
 				key={id}
 				title={`${firstName} ${lastName}`}
@@ -88,8 +55,7 @@ export const Drivers: FunctionComponent = () => {
 				subtitle={currentTeam ? currentTeam.name : "No team/Inactive"}
 				accentColor={getTeamColor(teams, currentTeam?.slug)}
 			/>
-		)
-	);
+		));
 
 	const driversPageStyle = {
 		container: {
@@ -131,9 +97,10 @@ export const Drivers: FunctionComponent = () => {
 						id="teams"
 						label="Filter by team"
 						defaultOptionLabel="All"
-						options={filteredTeams}
+						options={teamOptions}
+						value={team}
 						changeHandler={handleTeamChange}
-						onReset={resetFilteredDrivers}
+						onReset={() => setTeam("")}
 					/>
 				</div>
 			</form>
