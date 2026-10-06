@@ -3,6 +3,8 @@ import {
 	type FunctionComponent,
 	type KeyboardEvent,
 	type PointerEvent,
+	useEffect,
+	useRef,
 	useState,
 } from "react";
 
@@ -110,6 +112,10 @@ const chartStyle = {
 		padding: 3,
 		backgroundColor: "surface",
 		outline: "none",
+		// A finger resting on a season reads it: iOS must not select the labels nor open its Copy menu
+		userSelect: "none",
+		WebkitUserSelect: "none",
+		WebkitTouchCallout: "none",
 		_focusVisible: {
 			boxShadow: "0 0 0 2px token(colors.accent)",
 		},
@@ -249,6 +255,23 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 	const wording = WORDING[championship];
 	const [containerRef, containerWidth] = useElementWidth<HTMLDivElement>();
 	const [activeSeason, setActiveSeason] = useState<number | null>(null);
+	const chartRef = useRef<HTMLDivElement>(null);
+
+	// A season read by touch stays once the finger lifts, until a tap elsewhere on the page
+	useEffect(() => {
+		if (activeSeason === null) return;
+
+		const closeOnTapElsewhere = (event: Event): void => {
+			if (!chartRef.current?.contains(event.target as Node)) {
+				setActiveSeason(null);
+			}
+		};
+
+		document.addEventListener("pointerdown", closeOnTapElsewhere);
+
+		return () =>
+			document.removeEventListener("pointerdown", closeOnTapElsewhere);
+	}, [activeSeason]);
 
 	const standingsBySeason = new Map(
 		standings.map((standing) => [standing.season, standing])
@@ -390,6 +413,7 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 
 	return (
 		<div
+			ref={chartRef}
 			className={chartStyle.container}
 			role="group"
 			aria-label={`${name}'s ${wording.championship} position by season, from ${firstSeason} to ${lastSeason}`}
@@ -411,7 +435,14 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 						aria-hidden="true"
 						onPointerMove={handlePointerMove}
 						onPointerDown={handlePointerMove}
-						onPointerLeave={() => setActiveSeason(null)}
+						// A lifted finger leaves the chart too: only the mouse closes the season by leaving
+						onPointerLeave={(event) => {
+							if (event.pointerType !== "touch") {
+								setActiveSeason(null);
+							}
+						}}
+						// The page took the finger to scroll: no season was read
+						onPointerCancel={() => setActiveSeason(null)}
 					>
 						{bandShapes.map(
 							({
