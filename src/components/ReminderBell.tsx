@@ -5,6 +5,7 @@ import { css } from "@/../styled-system/css";
 import { HapticButton } from "@/components/HapticButton";
 import type { TReminders } from "@/hooks/useReminders";
 import { useReminderToggle } from "@/hooks/useReminderToggle";
+import { hintBubble, hintStatus } from "@/styles/hint";
 import { REMINDER_ICONS } from "@/utils/reminder";
 
 export const ReminderBell: FunctionComponent<TReminders> = (reminders) => {
@@ -45,28 +46,8 @@ export const ReminderBell: FunctionComponent<TReminders> = (reminders) => {
 		icon: css({
 			fontSize: 18,
 		}),
-		hint: css({
-			position: "absolute",
-			zIndex: 20,
-			top: "calc(100% + token(spacing.2))",
-			right: 0,
-			width: "max-content",
-			maxWidth: "16rem",
-			paddingY: 2,
-			paddingX: 3,
-			color: "text",
-			fontSize: "sm",
-			lineHeight: 1.4,
-			backgroundColor: "surface",
-			borderWidth: "1px",
-			borderColor: "line",
-			borderRadius: "md",
-			boxShadow: "lg",
-		}),
-		// Kept in the page while empty, for screen readers to announce the next hint
-		status: css({
-			srOnly: true,
-		}),
+		hint: css(hintBubble),
+		status: css(hintStatus),
 	};
 
 	if (state === "unavailable") return null;

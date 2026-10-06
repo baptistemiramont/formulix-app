@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
-
+import { useHint } from "@/hooks/useHint";
 import type { TReminders } from "@/hooks/useReminders";
 import { REMINDER_HINTS } from "@/utils/reminder";
 import { playRadioBeep, unlockSounds } from "@/utils/sounds";
-
-const HINT_DURATION_MS = 5000;
 
 // What a tap on a reminder button does, and the hint it leaves for a few seconds
 export const useReminderToggle = ({
@@ -17,15 +14,7 @@ export const useReminderToggle = ({
 	label: string;
 	handleClick: () => Promise<void>;
 } => {
-	const [hint, setHint] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (!hint) return;
-
-		const timeout = setTimeout(() => setHint(null), HINT_DURATION_MS);
-
-		return () => clearTimeout(timeout);
-	}, [hint]);
+	const [hint, setHint] = useHint();
 
 	const isOn = state === "on";
 	const isToggle = state === "on" || state === "off";
