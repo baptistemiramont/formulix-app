@@ -15,6 +15,7 @@ import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { Pagination } from "@/components/Pagination";
+import { ShareButton } from "@/components/ShareButton";
 import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
@@ -236,6 +237,7 @@ export const Team: FunctionComponent = () => {
 			display: "grid",
 			gridTemplateColumns: "minmax(0, 1fr)",
 			justifyItems: "center",
+			gap: 3,
 			height: "auto",
 		},
 		teamLogoContainer: {
@@ -294,6 +296,7 @@ export const Team: FunctionComponent = () => {
 						/>
 					</div>
 					<h1 className={css(teamPageStyle.teamName)}>{fullName}</h1>
+					<ShareButton title={fullName} />
 				</div>
 				<div className={css(teamPageStyle.teamStatListContainer)}>
 					<ul className={css(teamPageStyle.teamStatList)}>

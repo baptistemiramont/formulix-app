@@ -11,6 +11,7 @@ import { StatCard } from "@/components/cards/StatCard";
 import { CircuitLayout } from "@/components/CircuitLayout";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { ShareButton } from "@/components/ShareButton";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
@@ -365,6 +366,7 @@ export const Circuit: FunctionComponent = () => {
 						{locality}, {country}
 					</p>
 					{hasSeveralNames && <p>{grandPrixNames.join(" · ")}</p>}
+					<ShareButton title={name} />
 				</div>
 				<ul className={css(circuitPageStyle.circuitStatList)}>
 					<StatCard
