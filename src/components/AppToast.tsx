@@ -1,4 +1,4 @@
-import { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode, useEffect, useState } from "react";
 
 import { Icon } from "@iconify/react";
 import { useRegisterSW } from "virtual:pwa-register/react";
@@ -8,6 +8,13 @@ import { HapticButton } from "@/components/HapticButton";
 
 // An installed app may stay open for days: it looks for a new version every hour
 const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
+
+const OFFLINE_READY_DURATION_MS = 6000;
+
+type TAppToastProps = {
+	// True once the first Offline copy is saved
+	isOfflineReady: boolean;
+};
 
 const toastStyle = {
 	region: css({
@@ -77,8 +84,10 @@ const toastStyle = {
 	}),
 };
 
-// A new version waiting for a reload
-export const AppToast: FunctionComponent = () => {
+// A new version waiting for a reload, or the first Offline copy just saved
+export const AppToast: FunctionComponent<TAppToastProps> = ({
+	isOfflineReady,
+}) => {
 	const {
 		needRefresh: [needRefresh, setNeedRefresh],
 		updateServiceWorker,
@@ -93,6 +102,19 @@ export const AppToast: FunctionComponent = () => {
 			}, UPDATE_CHECK_INTERVAL_MS);
 		},
 	});
+	const [isOfflineReadyClosed, setIsOfflineReadyClosed] = useState(false);
+
+	useEffect(() => {
+		if (!isOfflineReady) return;
+
+		const timeout = setTimeout(
+			() => setIsOfflineReadyClosed(true),
+			OFFLINE_READY_DURATION_MS
+		);
+
+		return () => clearTimeout(timeout);
+	}, [isOfflineReady]);
+
 	function reload(): void {
 		// Once the new version controls the page: the plugin only reloads it when a version controlled it from its opening
 		navigator.serviceWorker.addEventListener(
@@ -123,6 +145,24 @@ export const AppToast: FunctionComponent = () => {
 					className={toastStyle.close}
 					aria-label="Later"
 					title="Later"
+				>
+					<Icon icon="mdi:close" />
+				</button>
+			</div>
+		);
+	} else if (isOfflineReady && !isOfflineReadyClosed) {
+		toast = (
+			<div className={toastStyle.toast}>
+				<Icon icon="mdi:cloud-check-outline" className={toastStyle.icon} />
+				<p className={toastStyle.text}>
+					Formulix now works offline
+				</p>
+				<button
+					type="button"
+					onClick={() => setIsOfflineReadyClosed(true)}
+					className={toastStyle.close}
+					aria-label="Close"
+					title="Close"
 				>
 					<Icon icon="mdi:close" />
 				</button>

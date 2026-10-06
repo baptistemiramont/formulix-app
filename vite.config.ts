@@ -9,6 +9,10 @@ export default defineConfig({
 		react(),
 		TanStackRouterVite(),
 		VitePWA({
+			// The service worker is written in src/sw.ts: it keeps the API's answers and images for offline
+			strategies: "injectManifest",
+			srcDir: "src",
+			filename: "sw.ts",
 			// A new version waits for the visitor to reload, which the app offers
 			registerType: "prompt",
 			injectRegister: false,
@@ -25,12 +29,8 @@ export default defineConfig({
 				theme_color: "#15151E",
 				background_color: "#15151E",
 			},
-			workbox: {
-				globPatterns: ["**/*.{js,css,html,svg,ico,png,woff2}"],
-				cleanupOutdatedCaches: true,
-				clientsClaim: true,
-				// Shows the Grand Prix reminders the API pushes
-				importScripts: ["reminders-sw.js"],
+			injectManifest: {
+				globPatterns: ["**/*.{js,css,html,svg,ico,png,webp,woff2}"],
 			},
 		}),
 	],

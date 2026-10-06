@@ -19,6 +19,7 @@ import { driverSchema } from "@/types/schemas/driver";
 import { FILTER_STORAGE_KEYS, PAGE_STORAGE_KEYS } from "@/utils/constants";
 import { toPortraitType } from "@/utils/driver";
 import { toSelectOptions } from "@/utils/list";
+import { OFFLINE_MESSAGES } from "@/utils/offline";
 import { getTeamColor } from "@/utils/team";
 
 export const Drivers: FunctionComponent = () => {
@@ -84,7 +85,14 @@ export const Drivers: FunctionComponent = () => {
 	function renderDrivers(): ReactNode {
 		if (!data) {
 			return error ? (
-				<Error message="Failed to load drivers data" />
+				<Error
+					message="Failed to load drivers data"
+					offlineMessage={
+						searchQuery || team || nationality || champion
+							? OFFLINE_MESSAGES.SEARCH
+							: undefined
+					}
+				/>
 			) : (
 				<Loader />
 			);
