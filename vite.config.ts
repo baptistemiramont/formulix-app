@@ -9,8 +9,9 @@ export default defineConfig({
 		react(),
 		TanStackRouterVite(),
 		VitePWA({
-			registerType: "autoUpdate",
-			injectRegister: "auto",
+			// A new version waits for the visitor to reload, which the app offers
+			registerType: "prompt",
+			injectRegister: false,
 			pwaAssets: {
 				disabled: false,
 				config: true,
