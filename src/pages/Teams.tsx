@@ -20,6 +20,7 @@ import {
 	PAGE_STORAGE_KEYS,
 	STATUS_OPTIONS,
 } from "@/utils/constants";
+import { OFFLINE_MESSAGES } from "@/utils/offline";
 import { toTeamColor } from "@/utils/team";
 
 export const Teams: FunctionComponent = () => {
@@ -76,7 +77,18 @@ export const Teams: FunctionComponent = () => {
 
 	function renderTeams(): ReactNode {
 		if (!data) {
-			return error ? <Error message="An error has occurred" /> : <Loader />;
+			return error ? (
+				<Error
+					message="An error has occurred"
+					offlineMessage={
+						searchQuery || status || titled
+							? OFFLINE_MESSAGES.SEARCH
+							: undefined
+					}
+				/>
+			) : (
+				<Loader />
+			);
 		}
 
 		if (data.data.length === 0) {

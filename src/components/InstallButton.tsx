@@ -3,17 +3,21 @@ import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
 import { HapticButton } from "@/components/HapticButton";
-import type { TReminders } from "@/hooks/useReminders";
-import { useReminderToggle } from "@/hooks/useReminderToggle";
+import { useHint } from "@/hooks/useHint";
+import { useInstall } from "@/hooks/useInstall";
 import { hintBubble, hintStatus } from "@/styles/hint";
-import { REMINDER_ICONS } from "@/utils/reminder";
+import { promptInstall } from "@/utils/install";
 
-export const ReminderBell: FunctionComponent<TReminders> = (reminders) => {
-	const { state, isPending } = reminders;
-	const { hint, isOn, isToggle, label, handleClick } =
-		useReminderToggle(reminders);
+const INSTALL_LABEL = "Install Formulix";
 
-	const bellStyle = {
+const IOS_HINT =
+	"Tap Share, then Add to Home Screen: Formulix opens like an app, offline too.";
+
+export const InstallButton: FunctionComponent = () => {
+	const state = useInstall();
+	const [hint, setHint] = useHint();
+
+	const installStyle = {
 		container: css({
 			position: "relative",
 			display: "inline-flex",
@@ -35,13 +39,6 @@ export const ReminderBell: FunctionComponent<TReminders> = (reminders) => {
 			_hover: {
 				color: "text",
 			},
-			"&[aria-pressed=true]": {
-				color: "accentText",
-				backgroundColor: "surfaceMuted",
-			},
-			_disabled: {
-				cursor: "progress",
-			},
 		}),
 		icon: css({
 			fontSize: 18,
@@ -52,23 +49,27 @@ export const ReminderBell: FunctionComponent<TReminders> = (reminders) => {
 
 	if (state === "unavailable") return null;
 
-	const icon = REMINDER_ICONS[state];
+	function handleClick(): void {
+		if (state === "ios") {
+			setHint(IOS_HINT);
+			return;
+		}
+
+		promptInstall();
+	}
 
 	return (
-		<div className={bellStyle.container}>
+		<div className={installStyle.container}>
 			<HapticButton
 				type="button"
 				onClick={handleClick}
-				className={bellStyle.button}
-				aria-pressed={isToggle ? isOn : undefined}
-				aria-label={label}
-				title={label}
-				disabled={isPending}
-				haptic={isToggle && !isPending}
+				className={installStyle.button}
+				aria-label={INSTALL_LABEL}
+				title={INSTALL_LABEL}
 			>
-				<Icon icon={icon} className={bellStyle.icon} />
+				<Icon icon="mdi:cellphone-arrow-down" className={installStyle.icon} />
 			</HapticButton>
-			<p role="status" className={hint ? bellStyle.hint : bellStyle.status}>
+			<p role="status" className={hint ? installStyle.hint : installStyle.status}>
 				{hint}
 			</p>
 		</div>

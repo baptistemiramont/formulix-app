@@ -36,7 +36,10 @@
 - **Searchable lists**: drivers, teams and circuits come 24 to a page, searched and filtered by the API, with the count of what is left; each list finds its search, filters and page again on the way back.
 - **Grand Prix reminders**: a push notification three days before each Grand Prix, at 10 am in the device's time zone.
 - **Light, dark or system theme**, in a visual identity drawn from Formula 1: F1 red, carbon, the wide Saira typeface and team colours.
-- **Installable app** on iOS, Android and desktop, edge to edge, with haptic feedback on key gestures.
+- **Works offline**: from the first visit, every driver, team and circuit page, the standings of every season, the records and the lists as they open stay on the device, with the teams' logos and the drivers' cutouts; a photo once its page was seen. A search made online stays too; another one waits for the connection.
+- **Installable app** on iOS, Android and desktop, edge to edge, with haptic feedback on key gestures: an install button where the browser allows it, the steps to follow on an iPhone, shortcuts to the standings and lists on a long press of the icon.
+- **Share** a driver, team or circuit page from the device's share sheet, or copy its link.
+- **New versions** wait for a tap on Reload, rather than reloading the app under the visitor's fingers.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/readme/screens-dark.webp">
@@ -112,8 +115,9 @@ src/
 ├── layouts/      Header, footer and page shell
 ├── pages/        One component per route
 ├── router/       Route tree
-└── styles/       Shared style objects
-public/           Icon source and service worker for reminders
+├── styles/       Shared style objects
+└── sw.ts         Service worker: the app, the API's answers and images kept for offline
+public/           Icon source, reminders for the service worker, install screenshots and shortcut icons
 scripts/          Circuit layout generation
 ```
 

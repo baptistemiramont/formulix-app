@@ -7,6 +7,7 @@ import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { ShareButton } from "@/components/ShareButton";
 import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
 import { layoutGutters } from "@/styles/layout";
@@ -273,6 +274,7 @@ export const Driver: FunctionComponent = () => {
 							)}
 						</div>
 					)}
+					<ShareButton title={`${firstName} ${lastName}`} />
 				</div>
 				<div className={css(driverPageStyle.driverStatListContainer)}>
 					<ul className={css(driverPageStyle.driverStatList)}>

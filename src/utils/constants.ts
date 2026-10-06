@@ -61,3 +61,21 @@ export const THEME_COLORS = {
 	light: "#F2F2F4",
 	dark: "#0D0D12",
 } as const;
+
+// The caches the service worker answers from without a connection, which the Offline copy fills
+export const OFFLINE_CACHES = {
+	API: "formulix-api",
+	IMAGES: "formulix-images",
+	FLAGS: "formulix-flags",
+} as const;
+
+// The API's images for a driver without a Portrait and a team without a logo: offline, they stand in for an image not kept
+export const DEFAULT_IMAGE_PATHS = {
+	DRIVERS: "/assets/images/drivers/default-driver-avatar.webp",
+	TEAMS: "/assets/images/teams/default-team-logo.webp",
+} as const;
+
+export const OFFLINE_COPY_STORAGE_KEY = "formulix-offline-copy";
+
+// The data changes with the API's weekly refresh: a day keeps the copy close to it, without downloading it at each opening
+export const OFFLINE_COPY_MAX_AGE_MS = 24 * 60 * 60 * 1000;

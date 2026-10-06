@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import type { FunctionComponent } from "react";
 
 import { css } from "@/../styled-system/css";
+import { InstallButton } from "@/components/InstallButton";
 import { Logo } from "@/components/Logo";
 import { ReminderBell } from "@/components/ReminderBell";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
@@ -182,6 +183,7 @@ export const Header: FunctionComponent = () => {
 				<div className={headerStyle.mobileBarStyle}>
 					<ThemeSwitcher />
 					<ReminderBell {...reminders} />
+					<InstallButton />
 				</div>
 			)}
 			<header className={headerStyle.headerStyle}>
@@ -193,6 +195,7 @@ export const Header: FunctionComponent = () => {
 					<div className={headerStyle.desktopSwitcherStyle}>
 						<ThemeSwitcher />
 						<ReminderBell {...reminders} />
+						<InstallButton />
 					</div>
 				)}
 			</header>

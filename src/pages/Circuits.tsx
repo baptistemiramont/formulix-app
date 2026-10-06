@@ -22,6 +22,7 @@ import {
 	STATUS_OPTIONS,
 } from "@/utils/constants";
 import { toSelectOptions } from "@/utils/list";
+import { OFFLINE_MESSAGES } from "@/utils/offline";
 
 export const Circuits: FunctionComponent = () => {
 	const [search, setSearch] = useFilter(FILTER_STORAGE_KEYS.CIRCUITS_SEARCH);
@@ -80,7 +81,14 @@ export const Circuits: FunctionComponent = () => {
 	function renderCircuits(): ReactNode {
 		if (!data) {
 			return error ? (
-				<Error message="Failed to load circuits data" />
+				<Error
+					message="Failed to load circuits data"
+					offlineMessage={
+						searchQuery || status || country
+							? OFFLINE_MESSAGES.SEARCH
+							: undefined
+					}
+				/>
 			) : (
 				<Loader />
 			);
