@@ -1,0 +1,30 @@
+# Security updates only: a limit of 0 turns version updates off, while the alerts still open their
+# pull requests. Each one is assigned so it sends a notification, and the fixes land together in the
+# security group: one pull request, one deployment.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    assignees:
+      - baptistemiramont
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    assignees:
+      - baptistemiramont
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
