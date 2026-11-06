@@ -1,12 +1,18 @@
 import type { z } from "zod";
 
 import type {
+	afterRoundSchema,
 	constructorsChampionshipSchema,
 	driversChampionshipSchema,
+	roundSchema,
 	standingSchema,
 } from "@/types/schemas/standing";
 
 export type TStanding = z.infer<typeof standingSchema>;
+
+export type TRound = z.infer<typeof roundSchema>;
+
+export type TAfterRound = z.infer<typeof afterRoundSchema>;
 
 export type TChampionship = "constructors" | "drivers";
 

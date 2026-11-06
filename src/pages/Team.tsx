@@ -15,6 +15,7 @@ import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
 import { Pagination } from "@/components/Pagination";
+import { TeamSeasonRounds } from "@/components/SeasonRounds";
 import { ShareButton } from "@/components/ShareButton";
 import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
@@ -340,6 +341,12 @@ export const Team: FunctionComponent = () => {
 								firstSeason={yearOfStart}
 								lastSeason={lastSeason}
 								teamColor={teamColor}
+							/>
+							<TeamSeasonRounds
+								// Another team's page starts from its latest season
+								key={teamSlug}
+								slug={teamSlug}
+								seasons={standings.map(({ season }) => season)}
 							/>
 						</>
 					)}
