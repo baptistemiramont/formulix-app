@@ -12,5 +12,5 @@ export const listMetaSchema = z.object({
 	page: z.number(),
 	pageCount: z.number(),
 	pageSize: z.number(),
-	filters: z.record(z.array(filterOptionSchema)),
+	filters: z.record(z.string(), z.array(filterOptionSchema)),
 });
