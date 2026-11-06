@@ -367,8 +367,11 @@ export const StandingsChart: FunctionComponent<TStandingsChartProps> = ({
 		activeSeason === null ? undefined : nameSeason(activeSeason);
 	const hasTitles = standings.some(({ isTitle }) => isTitle);
 	const lastStanding = standings[standings.length - 1];
+	// A title clinched before the season is over shows as a title: first place can no longer change
 	const runningStanding =
-		lastStanding && !lastStanding.isFinal ? lastStanding : undefined;
+		lastStanding && !lastStanding.isFinal && !lastStanding.isTitle
+			? lastStanding
+			: undefined;
 
 	const clampSeason = (season: number): number =>
 		Math.min(lastSeason, Math.max(firstSeason, season));
