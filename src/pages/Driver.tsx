@@ -7,6 +7,7 @@ import { Card } from "@/components/cards/Card";
 import { StatCard } from "@/components/cards/StatCard";
 import { Error } from "@/components/Error";
 import { Loader } from "@/components/Loader";
+import { DriverSeasonRounds } from "@/components/SeasonRounds";
 import { ShareButton } from "@/components/ShareButton";
 import { StandingsChart } from "@/components/StandingsChart";
 import { useData } from "@/hooks/useData";
@@ -318,6 +319,12 @@ export const Driver: FunctionComponent = () => {
 						lastSeason={standings[standings.length - 1].season}
 						teamColor={currentTeamColor}
 						nameSeason={nameSeason}
+					/>
+					<DriverSeasonRounds
+						// Another driver's page starts from their latest season
+						key={driver.slug}
+						slug={driver.slug}
+						seasons={standings.map(({ season }) => season)}
 					/>
 				</div>
 			)}
