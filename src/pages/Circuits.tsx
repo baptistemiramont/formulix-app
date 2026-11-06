@@ -1,7 +1,7 @@
 import { type FunctionComponent, type ReactNode } from "react";
 
 import { css } from "@/../styled-system/css";
-import { Card } from "@/components/cards/Card";
+import { CircuitCard } from "@/components/cards/CircuitCard";
 import { Error } from "@/components/Error";
 import { FilterPanel } from "@/components/form/FilterPanel";
 import { SegmentedControl } from "@/components/form/SegmentedControl";
@@ -15,7 +15,6 @@ import { useSearchQuery } from "@/hooks/useSearchQuery";
 import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import { circuitSchema } from "@/types/schemas/circuit";
-import { formatSeasons, getLayoutUrl, toFlagUrl } from "@/utils/circuit";
 import {
 	FILTER_STORAGE_KEYS,
 	PAGE_STORAGE_KEYS,
@@ -103,30 +102,9 @@ export const Circuits: FunctionComponent = () => {
 				aria-busy={isPlaceholderData}
 				className={css(circuitsPageStyle.circuitListStyle)}
 			>
-				{data.data.map((circuit) => {
-					const { id, name, slug, locality, country, countryCode } =
-						circuit;
-					const layoutUrl = getLayoutUrl(slug);
-					const flag = {
-						image: toFlagUrl(countryCode),
-						alt: `${country}'s flag`,
-					};
-
-					return (
-						<Card
-							key={id}
-							title={name}
-							// Without a known layout, the flag takes the whole picture
-							image={layoutUrl ?? flag.image}
-							imageAlt={layoutUrl ? `${name}'s layout` : flag.alt}
-							imageType={layoutUrl ? "layout" : "flag"}
-							badge={layoutUrl ? flag : undefined}
-							linkPath="/circuits/$circuitSlug"
-							linkParams={{ circuitSlug: slug }}
-							subtitle={`${locality} · ${formatSeasons(circuit)}`}
-						/>
-					);
-				})}
+				{data.data.map((circuit) => (
+					<CircuitCard key={circuit.id} circuit={circuit} />
+				))}
 			</ul>
 		);
 	}
