@@ -14,13 +14,17 @@ import flagCheckered from "@iconify-icons/mdi/flag-checkered";
 import goKartTrack from "@iconify-icons/mdi/go-kart-track";
 import home from "@iconify-icons/mdi/home";
 import magnify from "@iconify-icons/mdi/magnify";
+import mapOutline from "@iconify-icons/mdi/map-outline";
+import minus from "@iconify-icons/mdi/minus";
 import monitor from "@iconify-icons/mdi/monitor";
+import plus from "@iconify-icons/mdi/plus";
 import podium from "@iconify-icons/mdi/podium";
 import racingHelmet from "@iconify-icons/mdi/racing-helmet";
 import refresh from "@iconify-icons/mdi/refresh";
 import shareVariant from "@iconify-icons/mdi/share-variant";
 import trophy from "@iconify-icons/mdi/trophy";
 import trophyOutline from "@iconify-icons/mdi/trophy-outline";
+import viewGridOutline from "@iconify-icons/mdi/view-grid-outline";
 import weatherNight from "@iconify-icons/mdi/weather-night";
 import whiteBalanceSunny from "@iconify-icons/mdi/white-balance-sunny";
 
@@ -42,13 +46,17 @@ const ICONS = {
 	"go-kart-track": goKartTrack,
 	home,
 	magnify,
+	"map-outline": mapOutline,
+	minus,
 	monitor,
+	plus,
 	podium,
 	"racing-helmet": racingHelmet,
 	refresh,
 	"share-variant": shareVariant,
 	trophy,
 	"trophy-outline": trophyOutline,
+	"view-grid-outline": viewGridOutline,
 	"weather-night": weatherNight,
 	"white-balance-sunny": whiteBalanceSunny,
 };

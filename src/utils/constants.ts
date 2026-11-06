@@ -29,6 +29,7 @@ export const FILTER_STORAGE_KEYS = {
 	CIRCUITS_SEARCH: "formulix-circuits-search",
 	CIRCUITS_STATUS: "formulix-circuits-status",
 	CIRCUITS_COUNTRY: "formulix-circuits-country",
+	CIRCUITS_VIEW: "formulix-circuits-view",
 	STANDINGS_CHAMPIONSHIP: "formulix-standings-championship",
 	STANDINGS_SEASON: "formulix-standings-season",
 } as const;
@@ -50,6 +51,12 @@ export const SEARCH_MIN_LENGTH = 2;
 
 // The value of the team filter for the drivers without a current team
 export const NO_CURRENT_TEAM = "none";
+
+// The circuits as cards, page by page, or all of them on the world map
+export const CIRCUITS_VIEWS = {
+	LIST: "",
+	MAP: "map",
+} as const;
 
 export const STATUS_OPTIONS = [
 	{ label: "All", value: "" },
