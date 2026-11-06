@@ -25,6 +25,12 @@ export const circuitSchema = z.object({
 	lastSeason: z.number().nullable(),
 });
 
+// Apart from the list's: an answer kept from before the positions still opens the list
+export const circuitOnMapSchema = circuitSchema.extend({
+	latitude: z.number(),
+	longitude: z.number(),
+});
+
 export const circuitDetailedSchema = circuitSchema.extend({
 	grandPrixNames: z.array(z.string()),
 	mostWins: circuitLeadersSchema,

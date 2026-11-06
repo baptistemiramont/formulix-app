@@ -6,6 +6,18 @@ import { API_URL, QUERY_HEADERS } from "@/utils/constants";
 
 export type TListResource = "drivers" | "teams" | "circuits";
 
+// A filter left empty stays out of the query: the API reads it as no filter
+// Without any, the address has no query at all, the one the Offline copy files the whole list under
+export function toListUrl(resource: TListResource, query: TListQuery): string {
+	const params = new URLSearchParams(
+		Object.entries(query)
+			.filter(([, value]) => value !== "")
+			.map(([name, value]) => [name, String(value)])
+	).toString();
+
+	return params ? `${API_URL}/${resource}?${params}` : `${API_URL}/${resource}`;
+}
+
 export async function getListPage<T extends z.ZodTypeAny>(
 	resource: TListResource,
 	query: TListQuery,
@@ -13,14 +25,7 @@ export async function getListPage<T extends z.ZodTypeAny>(
 ): Promise<TListPage<z.infer<T>>> {
 	const options = { headers: QUERY_HEADERS };
 
-	// A filter left empty stays out of the query: the API reads it as no filter
-	const params = new URLSearchParams(
-		Object.entries(query)
-			.filter(([, value]) => value !== "")
-			.map(([name, value]) => [name, String(value)])
-	);
-
-	const response = await fetch(`${API_URL}/${resource}?${params}`, options);
+	const response = await fetch(toListUrl(resource, query), options);
 
 	if (!response.ok) {
 		throw new Error(`Failed to fetch ${resource}`);
