@@ -10,6 +10,7 @@ import { Error } from "@/components/Error";
 import { Select } from "@/components/form/Select";
 import { HapticButton } from "@/components/HapticButton";
 import { Loader } from "@/components/Loader";
+import { RoundsChart } from "@/components/RoundsChart";
 import { StandingsList } from "@/components/StandingsList";
 import { StandingsPodium } from "@/components/StandingsPodium";
 import { useData } from "@/hooks/useData";
@@ -19,6 +20,11 @@ import { layoutGutters } from "@/styles/layout";
 import { cornerTitle } from "@/styles/title";
 import type { TChampionship } from "@/types/standing";
 import { FILTER_STORAGE_KEYS } from "@/utils/constants";
+import {
+	listConstructorLines,
+	listDriverLines,
+	ROUNDS_FOCUS_SIZE,
+} from "@/utils/rounds";
 import {
 	FIRST_CHAMPIONSHIP_SEASON,
 	listConstructorRows,
@@ -148,12 +154,16 @@ export const Standings: FunctionComponent = () => {
 				season: constructorsChampionship.season,
 				isFinal: constructorsChampionship.isFinal,
 				rows: listConstructorRows(constructorsChampionship),
+				rounds: constructorsChampionship.rounds,
+				lines: listConstructorLines(constructorsChampionship),
 				titleLabel: "Constructors' champion",
 			}
 		: driversChampionship && {
 				season: driversChampionship.season,
 				isFinal: driversChampionship.isFinal,
 				rows: listDriverRows(driversChampionship),
+				rounds: driversChampionship.rounds,
+				lines: listDriverLines(driversChampionship),
 				titleLabel: "World champion",
 			};
 	const isLoading = isConstructors
@@ -195,6 +205,25 @@ export const Standings: FunctionComponent = () => {
 					rows={podiumRows}
 					titleLabel={shownChampionship.titleLabel}
 				/>
+				{/* A single round draws no line yet */}
+				{shownChampionship.rounds.length > 1 && (
+					<>
+						<p className={css(standingsPageStyle.standingsCaption)}>
+							Points after each round
+						</p>
+						<RoundsChart
+							// Another season or championship lights up its own leaders
+							key={`${championship}-${shownChampionship.season}`}
+							championship={championship}
+							season={shownChampionship.season}
+							rounds={shownChampionship.rounds}
+							lines={shownChampionship.lines}
+							initialFocus={shownChampionship.lines
+								.slice(0, ROUNDS_FOCUS_SIZE)
+								.map(({ key }) => key)}
+						/>
+					</>
+				)}
 				<StandingsList
 					rows={listRows}
 					titleLabel={shownChampionship.titleLabel}

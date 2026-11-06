@@ -29,7 +29,7 @@
 ## Features
 
 - **Home**: the next Grand Prix with its layout, its race start in the device's time zone, a countdown and the reminders at hand, then the leaders of the current championships, Formula 1 since 1950 in numbers and its all-time records.
-- **Standings**: the drivers' and constructors' championships of the current season, then of every season before it, back to 1950 for the drivers and 1958 for the constructors, the top three on a podium.
+- **Standings**: the drivers' and constructors' championships of the current season, then of every season before it, back to 1950 for the drivers and 1958 for the constructors, the top three on a podium, then everyone's points after each round, the top five lit up in their team colours and any other a tap away.
 - **Drivers**: every driver who started a Grand Prix since 1950, with their stats, identity and teams, and a chart of their championship position season by season. The list searches by name and filters by current team, nationality and world champions.
 - **Teams**: every team since 1950 with its titles, successive identities, its current drivers, its former drivers still racing and those who stopped, a page at a time, and its constructors' championship position season by season. The list searches by name and filters by status and constructors' champions.
 - **Circuits**: the layout and stats of each circuit, with the winner, team and pole position of every Grand Prix it hosted. The list searches by name, city or country and filters by status and country.

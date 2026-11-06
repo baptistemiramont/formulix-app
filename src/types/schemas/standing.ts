@@ -13,17 +13,39 @@ export const standingSchema = z.object({
 	isTitle: z.boolean(),
 });
 
-// A season's standing, whose season and finality the championship gives once for all
-const championshipStandingSchema = standingSchema.omit({
-	season: true,
-	isFinal: true,
+// A Grand Prix by its place in the season's calendar
+export const roundSchema = z.object({
+	round: z.number(),
+	// Null when Formulix does not know its Grand Prix
+	name: z.string().nullable(),
 });
+
+// The place and points as the championship stood after a round
+export const afterRoundSchema = z.object({
+	// Null when unclassified
+	position: z.number().nullable(),
+	points: z.number(),
+});
+
+// A season's standing, whose season and finality the championship gives once for all
+const championshipStandingSchema = standingSchema
+	.omit({
+		season: true,
+		isFinal: true,
+	})
+	.extend({
+		// After each of the championship's rounds, in their order: null before the first one raced
+		// Empty in an answer kept from before the API gave them
+		afterRounds: z.array(afterRoundSchema.nullable()).default([]),
+	});
 
 const championshipSchema = z.object({
 	season: z.number(),
 	isFinal: z.boolean(),
 	// Every season with standings, the latest first
 	seasons: z.array(z.number()),
+	// The rounds raced, in order
+	rounds: z.array(roundSchema).default([]),
 });
 
 export const driversChampionshipSchema = championshipSchema.extend({
