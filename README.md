@@ -104,6 +104,7 @@ Requirements: Node.js 20.19 or later (or 22.12 or later) and npm.
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | ESLint over the whole project |
 | `npm run build-circuit-layouts` | Redraw the circuit layouts in `src/assets/circuits` |
+| `npm run build-world-map` | Redraw the land and borders of the circuits' map in `src/assets/world-map.json`, from Natural Earth |
 
 ## Project structure
 
@@ -118,7 +119,7 @@ src/
 ├── styles/       Shared style objects
 └── sw.ts         Service worker: the app, the API's answers and images kept for offline
 public/           Icon source, reminders for the service worker, install screenshots and shortcut icons
-scripts/          Circuit layout generation
+scripts/          Circuit layout and world map generation
 ```
 
 ## Deployment

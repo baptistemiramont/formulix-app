@@ -9,7 +9,8 @@
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"prepare": "panda codegen",
-		"build-circuit-layouts": "node scripts/build-circuit-layouts.js"
+		"build-circuit-layouts": "node scripts/build-circuit-layouts.js",
+		"build-world-map": "node scripts/build-world-map.js"
 	},
 	"dependencies": {
 		"@gsap/react": "^2.1.1",
